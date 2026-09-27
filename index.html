@@ -237,11 +237,11 @@ td.low{color:var(--bad);font-weight:700}
 "use strict";
 /* ============ constants ============ */
 const SUBJ={
-  mat:{n:"Matemática",c:"var(--mat)",lang:"es-ES"},
+  mat:{n:"Matemática",c:"var(--mat)",lang:"es-US"},
   ing:{n:"Language Arts",c:"var(--ing)",lang:"en-US"},
   nat:{n:"Natural Science",c:"var(--nat)",lang:"en-US"},
-  len:{n:"Lengua y Literatura",c:"var(--len)",lang:"es-ES"},
-  soc:{n:"Estudios Sociales",c:"var(--soc)",lang:"es-ES"},
+  len:{n:"Lengua y Literatura",c:"var(--len)",lang:"es-US"},
+  soc:{n:"Estudios Sociales",c:"var(--soc)",lang:"es-US"},
   env:{n:"Environmental Science",c:"var(--env)",lang:"en-US"}
 };
 const SUBJ_ORDER=["mat","ing","nat","len","soc","env"];
@@ -267,17 +267,60 @@ const store={get(k,d){try{const v=localStorage.getItem("tc_"+k);return v?JSON.pa
 
 /* speech */
 let voices=[];
-function loadVoices(){try{voices=speechSynthesis.getVoices()}catch(e){}}
-if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+function loadVoices(){try{voices=speechSynthesis.getVoices()||[]}catch(e){voices=[]}}
+if("speechSynthesis" in window){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){speechSynthesis.onvoiceschanged=loadVoices}}
+/* Elige la voz más natural disponible en el dispositivo (no la primera que aparece). */
+function voiceScore(v,lang){
+  const n=(v.name||"")+" "+(v.voiceURI||""),l=(v.lang||"").replace("_","-").toLowerCase(),want=lang.toLowerCase(),pre=want.slice(0,2);
+  if(!l.startsWith(pre))return -1e9;
+  let sc=0;
+  if(/natural/i.test(n))sc+=120;                       // Edge: "Microsoft Ana Online (Natural)"
+  if(/neural|premium|enhanced|mejorad|siri/i.test(n))sc+=90; // iPad / Mac voces mejoradas
+  if(/google/i.test(n))sc+=70;                         // Chrome / Android
+  if(v.localService===false)sc+=25;
+  if(/espeak|desktop|compact/i.test(n))sc-=120;        // voces robóticas
+  if(/^microsoft /i.test(v.name||"")&&!/natural|online/i.test(n))sc-=60; // SAPI de Windows
+  if(pre==="es"){if(/es-(us|mx|419|ec|co)/.test(l))sc+=35;else if(l==="es-es")sc+=5;
+    if(/paulina|m[oó]nica|dalia|elvira|andrea|sabina|marisol/i.test(n))sc+=20}
+  if(pre==="en"){if(l==="en-us")sc+=30;else if(l==="en-gb")sc+=10;
+    if(/\bana\b|aria|jenny|samantha|ava|allison|emma/i.test(n))sc+=20}
+  return sc;
+}
+function bestVoice(lang){
+  const key=lang.startsWith("en")?"voiceEn":"voiceEs",saved=store.get(key,"");
+  if(saved){const v=voices.find(x=>x.name===saved);if(v)return v}
+  let best=null,bs=-1e9;voices.forEach(v=>{const sc=voiceScore(v,lang);if(sc>bs){bs=sc;best=v}});
+  return bs>-1e9?best:null;
+}
+function cleanForSpeech(text,lang){
+  const en=lang.startsWith("en");
+  return String(text)
+    .replace(/___+/g,en?" blank ":" espacio ")
+    .replace(/[·•]/g,", ").replace(/→/g,en?", ":", ")
+    .replace(/×/g,en?" times ":" por ").replace(/[«»"“”]/g,"")
+    .replace(/\(([^)]*)\)/g,", $1, ").replace(/\s*\/\s*/g,en?" or ":" o ")
+    .replace(/\s+/g," ").trim();
+}
+function splitSentences(t){return t.match(/[^.!?;:]+[.!?;:]*/g)||[t]}
+let sayGen=0;
 function say(text,lang,rate,onend){
-  if(!("speechSynthesis" in window))return;
+  lang=lang||"es-ES";
+  if(!("speechSynthesis" in window)){onend&&setTimeout(onend,600);return}
   try{
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(String(text).replace(/[·→×]/g,m=>({"·":",","→":",","×":lang==="en-US"?" times ":" por "}[m])));
-    u.lang=lang||"es-ES";const pre=lang&&lang.slice(0,2);
-    const v=voices.find(v=>v.lang&&v.lang.replace("_","-").startsWith(lang))||voices.find(v=>v.lang&&v.lang.startsWith(pre));
-    if(v)u.voice=v;u.rate=rate||.9;if(onend){let d=false;const f=()=>{if(!d){d=true;onend()}};u.onend=f;u.onerror=f;setTimeout(f,1500+String(text).split(" ").length*700/(rate||.9))}speechSynthesis.speak(u);
-  }catch(e){}
+    speechSynthesis.cancel();const gen=++sayGen;
+    if(!voices.length)loadVoices();
+    const v=bestVoice(lang),userRate=store.get("voiceRate",1);
+    // voces naturales suenan mejor cerca de su velocidad normal; "lento" no baja de 0.65
+    const r=Math.max(.65,Math.min(1.2,(rate||.9)*userRate+(v&&/natural|google|neural|premium|enhanced/i.test(v.name)?.05:0)));
+    const parts=splitSentences(cleanForSpeech(text,lang)).map(x=>x.trim()).filter(Boolean);
+    let done=false;const fin=()=>{if(!done&&gen===sayGen){done=true;onend&&onend()}};
+    parts.forEach((ptxt,i)=>{
+      const u=new SpeechSynthesisUtterance(ptxt);u.lang=v?v.lang:lang;if(v)u.voice=v;u.rate=r;u.pitch=1;u.volume=1;
+      if(i===parts.length-1){u.onend=fin;u.onerror=fin}
+      speechSynthesis.speak(u);
+    });
+    if(onend)setTimeout(fin,1800+String(text).split(" ").length*650/r);
+  }catch(e){onend&&onend()}
 }
 const EN="en-US";
 const SLOW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 16h14a4 4 0 0 0 4-4v0a2 2 0 0 0-2-2h-1"/><path d="M5 16a6 6 0 0 1 12 0"/><circle cx="19" cy="11" r=".6" fill="currentColor"/></svg>';
@@ -834,6 +877,7 @@ function viewPapas(){
   if(g){const rows=[["mat","Matemática"],["ing","Language Arts"],["nat","Natural Science"],["len","Lengua y Literatura"],["soc","Estudios Sociales"],["env","Environmental Science"],["total","Promedio"]];
     const cell=v=>'<td class="'+(v<8.5?'low':'')+'">'+(v!=null?v.toFixed(2):'—')+'</td>';
     h+='<section class="card"><h2>Notas 1er quimestre</h2><div class="tbl" style="margin-top:8px"><table><thead><tr><th>Materia</th><th>I P</th><th>II P</th><th>III P</th><th>Examen</th><th>Prom.</th></tr></thead><tbody>'+rows.filter(([k])=>g[k]).map(([k,n])=>'<tr><td>'+(k==="total"?'<b>'+n+'</b>':n)+'</td>'+cell(g[k].p1)+cell(g[k].p2)+cell(g[k].p3)+cell(g[k].ex)+cell(g[k].prom)+'</tr>').join("")+'</tbody></table></div><p class="muted small" style="margin-top:8px">En rojo: menos de 8.50. Prioridades del plan: Matemática, exámenes escritos en inglés (Language Arts y Natural Science).</p></section>';}
+  h+=voiceCardHtml();
   if(sch&&sch.days){const days=Object.keys(sch.days);h+='<section class="card"><h2>Horario de clases 4°C</h2><div class="tbl" style="margin-top:8px"><table><thead><tr><th>Hora</th>'+days.map(d=>'<th>'+esc(d)+'</th>').join("")+'</tr></thead><tbody>'+(sch.hours||[]).map((hr,i)=>'<tr><td>'+esc(hr)+'</td>'+days.map(d=>'<td>'+esc(sch.days[d][i]||"")+'</td>').join("")+'</tr>').join("")+'</tbody></table></div></section>';}
   h+='<section class="card" style="display:grid;gap:10px"><h2>Respaldo del progreso</h2><p class="muted small">El progreso se guarda en este dispositivo. Para pasarlo a otra tablet o computadora: descarga el respaldo aquí y cárgalo allá.</p><div class="row"><button class="btn small" id="bkDown">Descargar respaldo</button><label class="btn small ghost" for="bkUp" style="cursor:pointer">Cargar respaldo</label><input type="file" id="bkUp" accept=".json,application/json" hidden></div></section>';
   if(info.log&&info.log.length)h+='<section class="card"><h2>Registro de actualizaciones</h2><div style="margin-top:8px;display:grid;gap:6px">'+info.log.slice().reverse().map(l=>'<p><b>'+esc(l.date)+'</b> · '+esc(l.text)+'</p>').join("")+'</div></section>';
@@ -843,12 +887,35 @@ function viewPapas(){
   bindTopicButtons();
   main.querySelectorAll("[data-todo]").forEach(c=>c.onchange=()=>write(S.db.doc("todos/"+c.dataset.todo).update({done:c.checked})));
   main.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{const e=S.events[b.dataset.done];write(S.db.doc("events/"+b.dataset.done).update({done:!e.done}))});
+  bindVoice();
   $("#todoForm").onsubmit=ev=>{ev.preventDefault();const v=$("#todoIn").value.trim();if(!v)return;write(S.db.collection("todos").add({text:v,done:false,order:Date.now(),added:today()}),"Pendiente agregado")};
   $("#evForm").onsubmit=ev=>{ev.preventDefault();write(S.db.collection("events").add({date:$("#evDate").value,subject:$("#evSub").value,kind:$("#evKind").value,title:$("#evTitle").value.trim(),detail:$("#evDetail").value.trim(),topics:[],done:false}),"Fecha guardada")};
   $("#tpForm").onsubmit=ev=>{ev.preventDefault();write(S.db.collection("topics").add({subject:$("#tpSub").value,quim:2,status:"actual",priority:1,title:$("#tpTitle").value.trim(),kid:$("#tpKid").value.trim(),points:$("#tpPts").value.split("\n").map(s=>s.trim()).filter(Boolean),quiz:[],order:Date.now(),added:today(),source:"papas"}),"Tema guardado")};
 }
+function voiceCardHtml(){
+  const opts=pre=>voices.filter(v=>(v.lang||"").toLowerCase().startsWith(pre)).sort((a,b)=>voiceScore(b,pre==="en"?"en-US":"es-US")-voiceScore(a,pre==="en"?"en-US":"es-US"));
+  const sel=(id,pre,key,lang)=>{const cur=store.get(key,""),auto=bestVoice(lang);return '<select id="'+id+'"><option value="">Automática (la más natural: '+esc(auto?auto.name:"ninguna")+')</option>'+opts(pre).map(v=>'<option value="'+esc(v.name)+'"'+(cur===v.name?' selected':'')+'>'+esc(v.name)+' · '+esc(v.lang)+'</option>').join("")+'</select>'};
+  const rate=store.get("voiceRate",1);
+  return '<section class="card" style="display:grid;gap:12px"><h2>Voz de la plataforma</h2><p class="muted small">La voz sale del dispositivo. Elegimos automáticamente la más natural que tenga; aquí puedes cambiarla y probarla.</p>'+
+    '<label class="f" for="vEn">Voz en inglés'+sel("vEn","en","voiceEn","en-US")+'</label><button class="btn small soft" id="tEn">'+SPEAK+' Probar inglés</button>'+
+    '<label class="f" for="vEs">Voz en español'+sel("vEs","es","voiceEs","es-US")+'</label><button class="btn small soft" id="tEs">'+SPEAK+' Probar español</button>'+
+    '<label class="f" for="vRate">Velocidad: <span id="vRateL">'+Math.round(rate*100)+'%</span><input type="range" id="vRate" min="0.7" max="1.15" step="0.05" value="'+rate+'"></label>'+
+    '<details class="small"><summary><b>¿Suena robótica? Cómo conseguir voces más naturales</b></summary><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">'+
+    '<li><b>Computadora Windows:</b> abre la página en <b>Microsoft Edge</b>. Trae voces naturales como «Microsoft Ana Online (Natural)» en inglés y «Microsoft Dalia Online (Natural)» en español. En Chrome, elige «Google US English» y «Google español de Estados Unidos».</li>'+
+    '<li><b>Tablet Android:</b> Ajustes → Accesibilidad → Salida de texto a voz → motor de Google → instala los datos de voz de Español (Estados Unidos) e Inglés (Estados Unidos).</li>'+
+    '<li><b>iPad:</b> Ajustes → Accesibilidad → Contenido leído → Voces → descarga una voz «Mejorada» o «Premium» en español (Paulina o Mónica) y en inglés (Samantha o Ava). Luego recarga la página.</li></ul></details></section>';
+}
+function bindVoice(){
+  const vEn=$("#vEn"),vEs=$("#vEs"),vr=$("#vRate");if(!vEn)return;
+  vEn.onchange=()=>{store.set("voiceEn",vEn.value);say("Hello! This is a butterfly. It can fly.","en-US")};
+  vEs.onchange=()=>{store.set("voiceEs",vEs.value);say("¡Hola! Vamos a entrenar juntos.","es-US")};
+  $("#tEn").onclick=()=>say("Hello! This is a butterfly. It is small and colorful. It can fly.","en-US");
+  $("#tEs").onclick=()=>say("¡Hola! Hoy vamos a repasar las tablas de multiplicar. ¡Tú puedes!","es-US");
+  vr.oninput=()=>{store.set("voiceRate",+vr.value);$("#vRateL").textContent=Math.round(vr.value*100)+"%"};
+}
 function write(p,okMsg){p.then(()=>{if(okMsg)toast(okMsg)}).catch(e=>toast(e&&e.code==="invalid_argument"?"No tienes permiso para editar aquí.":"No se pudo guardar. Intenta de nuevo."))}
 
+if("speechSynthesis" in window){try{speechSynthesis.addEventListener("voiceschanged",()=>{loadVoices();if(S.view==="papas")render()})}catch(e){}}
 
 function localDB(BASE){
   const KEY="tc_db_v1";let ov={};try{ov=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){ov={}}
