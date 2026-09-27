@@ -184,6 +184,25 @@ td.low{color:var(--bad);font-weight:700}
 .weekcard{border-color:var(--ing);background:linear-gradient(0deg,var(--card),var(--card))}
 .toggle{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700}
 .toggle input{width:22px;height:22px;accent-color:var(--ing)}
+
+/* v3: cancha */
+.shots{font-family:var(--display);font-size:20px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:14px;color:#fff;font-variant-numeric:tabular-nums}
+.shots small{font-family:var(--body);font-size:12px;opacity:.75;display:block;letter-spacing:.04em}
+.court-wrap{position:relative;border-radius:20px;overflow:hidden;border:3px solid var(--court);background:#1B2A4A;touch-action:none}
+.court-wrap canvas{display:block;width:100%;height:auto;max-width:100%;touch-action:none;cursor:grab}
+.court-hud{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+.pill{font-family:var(--display);font-size:16px;padding:8px 14px;border-radius:14px;background:var(--soft);font-variant-numeric:tabular-nums}
+.pill.hot{background:var(--court);color:#fff}
+.energy{display:flex;gap:6px}
+.energy i{width:22px;height:22px;border-radius:50%;border:3px solid var(--court);background:transparent}
+.energy i.on{background:var(--court)}
+.badges{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.badge2{display:grid;justify-items:center;gap:4px;text-align:center;padding:14px 8px;border-radius:18px;border:2px solid var(--line);background:var(--card)}
+.badge2 .em{font-size:38px;line-height:1}
+.badge2.off{opacity:.4;filter:grayscale(1)}
+.badge2 b{font-size:15px}.badge2 span{font-size:12px;color:var(--muted)}
+.lock{display:grid;gap:12px;justify-items:center;text-align:center;padding:24px 16px}
+.lock .em{font-size:64px;line-height:1}
 @media (max-width:520px){.mission{grid-template-columns:52px 1fr}.mission .num{width:52px;height:52px;font-size:22px}.mission .btn{grid-column:1 / -1}}
 </style>
 </head>
@@ -195,6 +214,7 @@ td.low{color:var(--bad);font-weight:700}
       <div class="row spread"><span class="lvl" id="hudLevel">APRENDIZ</span><span class="small" style="opacity:.8" id="hudPower">Nivel de poder 0</span></div>
       <div class="power-bar"><i id="hudBar" style="width:0"></i></div>
     </div>
+    <button class="shots" id="hudShots" title="Tiros disponibles para la cancha"><span>🏀</span><div><span id="hudShotN">0</span><small>TIROS</small></div></button>
     <div class="stat" title="Canastas"><svg class="ball" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F26B1D"/><path d="M2 12h20M12 2v20M5 5c3 3 3 11 0 14M19 5c-3 3-3 11 0 14" stroke="#13213C" stroke-width="1.4" fill="none"/></svg><div><span id="hudBaskets">0</span><small>CANASTAS</small></div></div>
   </div>
 </header>
@@ -207,7 +227,7 @@ td.low{color:var(--bad);font-weight:700}
     <button data-view="materias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg>Materias</button>
     <button data-view="palabras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5"/></svg>Palabras</button>
     <button data-view="tablas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>Tablas</button>
-    <button data-view="poder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>Mi poder</button>
+    <button data-view="poder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10 0 13M18 5.5c-2.5 3-2.5 10 0 13"/></svg>Cancha</button>
     <button data-view="papas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14.6c2.3.2 3.9 1.8 4.5 4.4"/></svg>Papás</button>
   </div>
 </nav>
@@ -265,7 +285,7 @@ const SPEAK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 
 /* ============ state ============ */
 const S={topics:{},events:{},todos:{},meta:{},vocab:{},prog:{xp:0,baskets:0,topics:{},tables:{},sessions:{}},db:null,ready:{t:false,p:false},view:"hoy",sub:null,readonly:false};
-const defaultProg=()=>({xp:0,baskets:0,topics:{},tables:{},sessions:{},vocab:{},created:today()});
+const defaultProg=()=>({xp:0,baskets:0,topics:{},tables:{},sessions:{},vocab:{},shots:0,energy:0,game:{best:0,total:0,played:0,triples:0,bestStreak:0},days:{},created:today()});
 let saving=Promise.resolve();
 function saveProg(){
   if(!S.db||S.readonly)return;
@@ -282,8 +302,16 @@ function renderHud(){
   $("#hudPower").textContent="Nivel de poder "+(p.xp*10).toLocaleString("es-EC");
   $("#hudBar").style.width=(L.next?Math.min(100,100*(p.xp-L.from)/(L.to-L.from)):100)+"%";
   $("#hudBaskets").textContent=p.baskets;
+  const hs=$("#hudShotN");if(hs)hs.textContent=courtOpen()?(p.shots||0):"🔒";
 }
-function addXp(n){const before=levelOf(S.prog.xp).i;S.prog.xp+=n;const after=levelOf(S.prog.xp);renderHud();if(after.i>before)celebrate("¡Subiste de nivel!","Ahora eres "+after.name+". Tu nivel de poder sigue creciendo.")}
+function addXp(n){const before=levelOf(S.prog.xp).i;S.prog.xp+=n;const after=levelOf(S.prog.xp);
+  S.prog.days=S.prog.days||{};S.prog.days[today()]=true;
+  if(S.prog.xp>=LOCK_XP&&!S.prog.courtUnlocked){S.prog.courtUnlocked=true;S.prog.shots=(S.prog.shots||0)+3;renderHud();setTimeout(()=>celebrate("¡Cancha desbloqueada!","Llegaste a Guerrero. Te regalamos 3 tiros. Entra a la pestaña Cancha y encesta."),300);return}
+  renderHud();if(after.i>before)celebrate("¡Subiste de nivel!","Ahora eres "+after.name+"."+(after.i===3?" ¡Desbloqueaste la cancha PRO con aro en movimiento!":" Tu nivel de poder sigue creciendo."))}
+const LOCK_XP=200,MAX_SHOTS=15,ENERGY_PER_SHOT=3;
+const courtOpen=()=>!!(S.prog&&(S.prog.courtUnlocked||S.prog.xp>=LOCK_XP));
+function giveShots(n,why){const p=S.prog;const before=p.shots||0;p.shots=Math.min(MAX_SHOTS,before+n);const got=p.shots-before;renderHud();if(got>0)toast("+"+got+" tiro"+(got>1?"s":"")+" 🏀 "+(why||""));else if(before>=MAX_SHOTS)toast("Tienes el máximo de "+MAX_SHOTS+" tiros. ¡Ve a la cancha!")}
+function earn(n){const p=S.prog;p.energy=(p.energy||0)+n;while(p.energy>=ENERGY_PER_SHOT){p.energy-=ENERGY_PER_SHOT;giveShots(1,"por 3 respuestas correctas")}}
 function celebrate(title,text){
   const o=document.createElement("div");o.className="overlay";
   o.innerHTML='<div class="card pop"><svg viewBox="0 0 64 64" width="84" height="84" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#FFC233"/><path d="M32 14l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#fff"/></svg><h2>'+esc(title)+'</h2><p>'+esc(text)+'</p><button class="btn" id="ovOk">¡Vamos!</button></div>';
@@ -337,11 +365,12 @@ function sessionOf(date){S.prog.sessions[date]=S.prog.sessions[date]||{done:[]};
 
 /* ============ views ============ */
 function setView(v,sub){
-  S.view=v;S.sub=sub||null;stopTimer();
+  S.view=v;S.sub=sub||null;stopTimer();if(S.courtStop){S.courtStop();S.courtStop=null}
   document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.view===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   render();window.scrollTo(0,0);
 }
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+$("#hudShots").onclick=()=>setView("poder");
 
 function render(){
   renderHud();
@@ -370,10 +399,12 @@ function viewHoy(){
     html+='<h1>Hoy toca descansar del entrenamiento</h1><p class="muted">El entrenamiento es sábado y domingo. Si quieres, puedes practicar tablas o hacer una misión libre.</p><div class="row" style="margin-top:6px"><button class="btn" id="freeBtn">Misión libre</button><button class="btn ghost" id="tabBtn">Practicar tablas</button></div></section>';
     if(planDate)html+=planHtml(t);
   }
+  {const pr=S.prog,open=courtOpen();html+='<section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-color:var(--court)"><span style="font-size:42px">'+(open?'🏀':'🔒')+'</span><div style="flex:1;min-width:200px"><b style="font-size:19px">'+(open?'Tienes '+(pr.shots||0)+' tiros para la cancha':'Cancha cerrada')+'</b><p class="muted small">'+(open?'Cada 3 respuestas correctas ganas 1 tiro más. Misión completa = 1 tiro.':'Se abre al llegar a Guerrero. Te faltan '+(Math.max(0,LOCK_XP-pr.xp)*10).toLocaleString("es-EC")+' de poder.')+'</p></div>'+(open?'<button class="btn" id="goCourt">Ir a la cancha</button>':'')+'</section>'}
   html+=weekCardHtml();
   html+='<section class="card"><div class="row spread"><h2>Próximos partidos</h2><span class="muted small">lecciones y exámenes</span></div><div style="margin-top:8px">'+(up.length?up.map(e=>eventRow(e)).join(""):'<p class="muted">No hay evaluaciones cargadas para las próximas 2 semanas.</p>')+'</div></section>';
   main.innerHTML=html;
   bindPlan(t);bindTopicButtons();bindWeek();
+  const gc=$("#goCourt");if(gc)gc.onclick=()=>setView("poder");
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
   const tb=$("#tabBtn");if(tb)tb.onclick=()=>setView("tablas");
 }
@@ -403,8 +434,8 @@ function bindPlan(date){
 function completeBlock(){
   if(!S.activeBlock)return;
   const ses=sessionOf(S.activeBlock.date);
-  if(!ses.done.includes(S.activeBlock.i)){ses.done.push(S.activeBlock.i);addXp(XP_BLOCK);
-    if(S.plan&&ses.done.length>=S.plan.blocks.length)setTimeout(()=>celebrate("¡MVP del día!","Completaste todo el entrenamiento. Tu nivel de poder subió."),400);}
+  if(!ses.done.includes(S.activeBlock.i)){ses.done.push(S.activeBlock.i);addXp(XP_BLOCK);giveShots(1,"misión completa");
+    if(S.plan&&ses.done.length>=S.plan.blocks.length){giveShots(3,"¡MVP del día!");setTimeout(()=>celebrate("¡MVP del día!","Completaste todo el entrenamiento. Ganaste 3 tiros extra para la cancha."),400);}}
   S.activeBlock=null;
 }
 
@@ -493,7 +524,7 @@ function viewQuiz(){
     if(Q.answered)return;Q.answered=true;const k=+b.dataset.k,ok=k===q.a;
     main.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(j===q.a)x.classList.add("ok")});
     if(!ok)b.classList.add("no");
-    Q.res.push(ok);if(ok){S.prog.baskets+=1;addXp(XP_OK)}
+    Q.res.push(ok);if(ok){S.prog.baskets+=1;addXp(XP_OK);earn(1)}
     if(q.lang===EN)say(q.o[q.a],EN,.85);
     $("#fb").innerHTML='<div class="feedback '+(ok?'ok':'no')+' pop"><b>'+(ok?'¡Canasta! +2 ':'Casi. ')+'</b>'+esc(q.e||"")+(q.listen?'<br><span class="small">Audio: «'+esc(q.listen)+'»</span>':'')+'</div><button class="btn" id="nextQ" style="width:100%;margin-top:12px">'+(Q.i+1<Q.qs.length?'Siguiente':'Ver resultado')+'</button>';
     $("#nextQ").onclick=()=>{Q.i++;Q.answered=false;viewQuiz();window.scrollTo(0,0)};
@@ -502,7 +533,7 @@ function viewQuiz(){
 function quizEnd(){
   const Q=S.quiz,ok=Q.res.filter(Boolean).length,n=Q.res.length,ratio=n?ok/n:0;
   if(Q.mode!=="mix"&&Q.id){const prev=S.prog.topics[Q.id]||{best:0,tries:0};S.prog.topics[Q.id]={best:Math.max(prev.best||0,ratio),tries:(prev.tries||0)+1,last:today()}}
-  const perfect=ok===n&&n>0;if(perfect)addXp(XP_PERFECT);
+  const perfect=ok===n&&n>0;if(perfect){addXp(XP_PERFECT);giveShots(1,"¡todo perfecto!")}
   const wasBlock=!!S.activeBlock;completeBlock();saveProg();stopTimer();
   const msg=perfect?"¡Triple! Todo perfecto":ratio>=.8?"¡Gran partido!":ratio>=.5?"Buen entrenamiento":"Hay que entrenar más este tema";
   main.innerHTML='<section class="card big-result pop"><p class="eyebrow">Resultado</p><div class="score">'+ok+' / '+n+'</div><h2>'+msg+'</h2><p class="muted">+'+(ok*2)+' puntos en canastas'+(perfect?' · bono triple +'+XP_PERFECT*10+' de poder':'')+'</p><div class="row" style="justify-content:center;margin-top:8px">'+(wasBlock?'<button class="btn" id="goPlan">Pausa y siguiente misión</button>':'<button class="btn" id="again">Otra vez</button>')+(Q.id?'<button class="btn ghost" id="study">Volver a estudiar</button>':'')+'</div></section>';
@@ -606,7 +637,7 @@ function viewVGame(){
   main.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{
     if(V.answered)return;V.answered=true;const k=+b.dataset.k,ok=k===r.a;
     main.querySelectorAll("[data-k]").forEach((x,j)=>{x.disabled=true;if(j===r.a)x.classList.add(V.mode==="listen"?"known":"ok")});
-    if(!ok)b.classList.add("no");V.res.push(ok);if(ok){S.prog.baskets+=1;addXp(XP_OK)}
+    if(!ok)b.classList.add("no");V.res.push(ok);if(ok){S.prog.baskets+=1;addXp(XP_OK);earn(1)}
     say(r.w.w+". "+r.w.ex,EN,.8);
     $("#fb").innerHTML='<div class="feedback '+(ok?'ok':'no')+' pop"><b>'+(ok?'¡Canasta! ':'Era: ')+esc(r.w.w)+'</b> = '+esc(r.w.es)+'<br><span class="small">'+esc(r.w.ex)+'</span><br><span class="small muted">Repítelo en voz alta.</span></div><button class="btn" id="nx" style="width:100%;margin-top:12px">'+(V.i+1<V.rounds.length?'Siguiente':'Ver resultado')+'</button>';
     $("#nx").onclick=()=>{V.i++;V.answered=false;viewVGame();window.scrollTo(0,0)};
@@ -614,7 +645,7 @@ function viewVGame(){
 }
 function vgEnd(){
   const V=S.vg,ok=V.res.filter(Boolean).length,n=V.res.length;
-  if(ok===n&&n)addXp(XP_PERFECT);
+  if(ok===n&&n){addXp(XP_PERFECT);giveShots(1,"¡todo perfecto!")}
   const wasBlock=!!S.activeBlock;completeBlock();saveProg();stopTimer();
   main.innerHTML='<section class="card big-result pop"><p class="eyebrow">Palabras en inglés</p><div class="score">'+ok+' / '+n+'</div><h2>'+(ok===n?'¡Perfecto!':ok>=n*.7?'¡Muy bien!':'Sigue escuchando y repitiendo')+'</h2><div class="row" style="justify-content:center">'+(wasBlock?'<button class="btn" id="goPlan">Pausa y siguiente misión</button>':'<button class="btn" id="again">Otra vez</button><button class="btn ghost" id="back">Palabras</button>')+'</div></section>';
   const g=$("#goPlan");if(g)g.onclick=()=>{S.vg=null;setView("hoy")};
@@ -643,7 +674,7 @@ function viewEnsayo(){
   const run=turn=>{stop=false;let i=0;const next=()=>{if(stop||i>=lines.length){mark(-1);msg.textContent=stop?"":(turn?"¡Ahora dila tú solo, de principio a fin!":"");return}mark(i);msg.textContent="";say(lines[i],EN,.8,()=>{if(stop)return;if(turn){msg.textContent="Tu turno: repite la frase";setTimeout(()=>{i++;next()},Math.max(3500,lines[i].split(" ").length*900))}else setTimeout(()=>{i++;next()},500)})};next()};
   $("#enAll").onclick=()=>run(false);$("#enTurn").onclick=()=>run(true);
   $("#enStop").onclick=()=>{stop=true;try{speechSynthesis.cancel()}catch(e){}mark(-1);msg.textContent=""};
-  $("#enDone").onclick=()=>{addXp(30);S.prog.ensayos=(S.prog.ensayos||0)+1;saveProg();celebrate("¡Exposición lista!","Practicaste tu presentación completa. ¡Vas a hacerlo muy bien!")};
+  $("#enDone").onclick=()=>{addXp(30);S.prog.ensayos=(S.prog.ensayos||0)+1;S.prog.ensayoDays=S.prog.ensayoDays||{};if(!S.prog.ensayoDays[today()]){S.prog.ensayoDays[today()]=true;giveShots(1,"exposición practicada")}saveProg();celebrate("¡Exposición lista!","Practicaste tu presentación completa. ¡Vas a hacerlo muy bien!")};
 }
 
 /* tables */
@@ -668,7 +699,7 @@ function viewDrill(){
     const d=btn.dataset.d;if(D.lock)return;
     if(d==="del")D.val=D.val.slice(0,-1);else if(d==="ok"){if(!D.val)return;const ok=+D.val===a*b;D.res.push(ok);D.lock=true;
       $("#fb").innerHTML=ok?'<span style="color:var(--good)">¡Canasta! '+a+' × '+b+' = '+a*b+'</span>':'<span style="color:var(--bad)">'+a+' × '+b+' = '+a*b+'</span>';
-      if(ok){S.prog.baskets+=1;addXp(5)}
+      if(ok){S.prog.baskets+=1;addXp(5);earn(1)}
       setTimeout(()=>{D.i++;D.val="";D.lock=false;viewDrill()},ok?700:1600);return}
     else if(D.val.length<3)D.val+=d;
     $("#ans").textContent=D.val;
@@ -677,7 +708,7 @@ function viewDrill(){
 function drillEnd(){
   const D=S.drill,ok=D.res.filter(Boolean).length;
   if(D.n!=="mix"){const prev=S.prog.tables[D.n]||{best:0,tries:0};S.prog.tables[D.n]={best:Math.max(prev.best||0,ok/10),tries:(prev.tries||0)+1,last:today()}}
-  if(ok===10)addXp(XP_PERFECT);
+  if(ok===10){addXp(XP_PERFECT);giveShots(1,"¡tabla perfecta!")}
   const wasBlock=!!S.activeBlock;completeBlock();saveProg();stopTimer();
   main.innerHTML='<section class="card big-result pop"><p class="eyebrow">'+(D.n==="mix"?"Mezcla":"Tabla del "+D.n)+'</p><div class="score">'+ok+' / 10</div><h2>'+(ok===10?'¡Tabla dominada!':ok>=7?'¡Muy bien!':'Sigue entrenando esta tabla')+'</h2><div class="row" style="justify-content:center">'+(wasBlock?'<button class="btn" id="goPlan">Pausa y siguiente misión</button>':'<button class="btn" id="again">Otra ronda</button><button class="btn ghost" id="back">Tablas</button>')+'</div></section>';
   const g=$("#goPlan");if(g)g.onclick=()=>{S.drill=null;setView("hoy")};
@@ -686,6 +717,96 @@ function drillEnd(){
 }
 
 /* poder */
+function badgeList(p){
+  const g=p.game||{},tb=p.tables||{},vk=Object.keys(p.vocab||{}).length;
+  const mvp=Object.values(p.sessions||{}).filter(s=>s.done&&s.done.length>=4).length;
+  const days=Object.keys(p.days||{}).length;
+  return [
+    ["🏀","Primer tiro","Lanza en la cancha",(g.played||0)>=1],
+    ["🎯","Encestador","10 canastas en la cancha",(g.total||0)>=10],
+    ["🔥","En racha","3 canastas seguidas",(g.bestStreak||0)>=3],
+    ["💫","Triplista","Encesta un triple",(g.triples||0)>=1],
+    ["✖️","Tabla dominada","Una tabla con 9/10 o más",Object.values(tb).some(x=>x.best>=.9)],
+    ["🧮","Rey de las tablas","Todas las tablas dominadas",Object.values(tb).filter(x=>x.best>=.9).length>=9],
+    ["🏆","MVP","Completa las 4 misiones de un día",mvp>=1],
+    ["🗣️","Speaker","Practica tu exposición",(p.ensayos||0)>=1],
+    ["📚","20 palabras","Marca 20 palabras en inglés",vk>=20],
+    ["📅","Constante","Entrena 8 días distintos",days>=8],
+    ["⭐","Guerrero Dorado","Llega a Guerrero Dorado",p.xp>=1000],
+    ["👑","Leyenda","Llega a Leyenda",p.xp>=4500]];
+}
+function courtHtml(){
+  const p=S.prog;
+  if(!courtOpen()){const falta=Math.max(0,LOCK_XP-p.xp);return '<section class="card lock"><div class="em">🔒🏀</div><h2>La cancha está cerrada</h2><p class="muted">Se abre cuando llegues a <b>Guerrero</b> (nivel de poder '+(LOCK_XP*10).toLocaleString("es-EC")+'). Te faltan <b>'+(falta*10).toLocaleString("es-EC")+'</b>.</p><div class="power-bar" style="width:100%;max-width:360px;background:var(--line)"><i style="width:'+Math.round(100*p.xp/LOCK_XP)+'%"></i></div><p class="small muted">Tiros guardados para cuando abra: '+(p.shots||0)+'</p><button class="btn" id="goTrain">Ir a entrenar</button></section>'}
+  const g=p.game||{},pro=levelOf(p.xp).i>=3,en=p.energy||0;
+  return '<section class="card" style="display:grid;gap:12px"><div class="row spread"><h1>Cancha'+(pro?' PRO':'')+'</h1><span class="chip">Récord: '+(g.best||0)+' pts</span></div>'+
+    '<div class="court-hud"><span class="pill hot" id="cShots">🏀 '+(p.shots||0)+' tiros</span><span class="pill" id="cPts">0 pts</span><span class="pill" id="cStreak">Racha 0</span></div>'+
+    '<div class="court-wrap"><canvas id="court" width="800" height="500" aria-label="Cancha de básquet: arrastra hacia atrás y suelta para lanzar"></canvas></div>'+
+    '<p class="small muted" id="cMsg">Pon el dedo en la cancha, arrastra hacia atrás (lejos del aro) y suelta. Los puntitos amarillos muestran el camino. Desde la línea lejana vale 3.'+(pro?' En la cancha PRO el aro se mueve.':'')+'</p>'+
+    '<div class="row spread"><div><p class="small"><b>Próximo tiro:</b> '+en+' de '+ENERGY_PER_SHOT+' respuestas correctas</p><div class="energy">'+Array.from({length:ENERGY_PER_SHOT},(_,i)=>'<i class="'+(i<en?'on':'')+'"></i>').join("")+'</div></div><button class="btn small ghost" id="goTrain">Ganar más tiros</button></div>'+
+    '<details class="small"><summary><b>¿Cómo gano tiros?</b></summary><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7"><li>3 respuestas correctas = 1 tiro</li><li>Misión completa = 1 tiro · MVP del día = 3 tiros extra</li><li>Quiz o tabla perfecta = 1 tiro</li><li>Practicar la exposición = 1 tiro por día</li><li>Máximo guardado: '+MAX_SHOTS+' tiros</li></ul></details></section>';
+}
+function initCourt(){
+  const cv=$("#court");if(!cv)return;
+  const ctx=cv.getContext("2d"),W=800,H=500,FLOOR=462,R=18,G=0.45,MAXV=25;
+  const p=S.prog;p.game=p.game||{best:0,total:0,played:0,triples:0,bestStreak:0};
+  const pro=levelOf(p.xp).i>=3;
+  const SPOTS=[{x:120,pts:3},{x:230,pts:2},{x:320,pts:2},{x:170,pts:3}];
+  let spot=SPOTS[Math.floor(Math.random()*SPOTS.length)];
+  let ball={x:spot.x,y:FLOOR-R-40,vx:0,vy:0},state="ready",drag=null,score=0,streak=0,t=0,scored=false,bounces=0,msg="",msgT=0,raf=0,alive=true;
+  const rimY=235;let rimX=520;
+  const upd=()=>{$("#cShots").textContent="🏀 "+(p.shots||0)+" tiros";$("#cPts").textContent=score+" pts";$("#cStreak").textContent="Racha "+streak;$("#cStreak").classList.toggle("hot",streak>=2)};
+  let actx=null;
+  const beep=(f,d)=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),gn=actx.createGain();o.frequency.value=f;o.connect(gn);gn.connect(actx.destination);gn.gain.setValueAtTime(.12,actx.currentTime);gn.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d)}catch(e){}};
+  const toLogic=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}};
+  function reset(){spot=SPOTS[Math.floor(Math.random()*SPOTS.length)];ball={x:spot.x,y:FLOOR-R-40,vx:0,vy:0};state=(p.shots||0)>0?"ready":"empty";scored=false;bounces=0}
+  function launch(vx,vy){if((p.shots||0)<=0){state="empty";return}
+    p.shots-=1;p.game.played=(p.game.played||0)+1;state="fly";ball.vx=vx;ball.vy=vy;scored=false;bounces=0;renderHud();upd();saveProg();beep(300,.08)}
+  function endShot(){
+    if(scored){const pts=spot.pts;score+=pts;streak+=1;p.game.total=(p.game.total||0)+1;if(pts===3)p.game.triples=(p.game.triples||0)+1;
+      if(streak>(p.game.bestStreak||0))p.game.bestStreak=streak;
+      if(score>(p.game.best||0))p.game.best=score;
+      msg=pts===3?"¡TRIPLE!":streak>=3?"¡EN RACHA!":"¡CANASTA!";msgT=70;beep(660,.12);setTimeout(()=>beep(880,.15),120)}
+    else{streak=0;msg="¡Casi!";msgT=50}
+    saveProg();upd();
+    if((p.shots||0)<=0){$("#cMsg").innerHTML="<b>Se acabaron los tiros.</b> Responde preguntas y completa misiones para ganar más. Puntaje de hoy: "+score+"."}
+    setTimeout(reset,700);
+  }
+  function rimPts(){return[{x:rimX,y:rimY},{x:rimX+76,y:rimY}]}
+  function collide(pt){const dx=ball.x-pt.x,dy=ball.y-pt.y,d=Math.hypot(dx,dy),min=R+4;if(d<min&&d>0){const nx=dx/d,ny=dy/d;ball.x=pt.x+nx*min;ball.y=pt.y+ny*min;const dot=ball.vx*nx+ball.vy*ny;if(dot<0){ball.vx=(ball.vx-2*dot*nx)*.72;ball.vy=(ball.vy-2*dot*ny)*.72;beep(180,.05)}}}
+  function step(){
+    t+=1;if(pro)rimX=505+Math.sin(t/70)*50;
+    if(state==="fly"){
+      const py=ball.y;ball.vy+=G;ball.x+=ball.vx;ball.y+=ball.vy;
+      rimPts().forEach(collide);
+      const BX=rimX+88;if(ball.y>145&&ball.y<285&&ball.x+R>BX&&ball.x<BX+4&&ball.vx>0){ball.x=BX-R;ball.vx=-ball.vx*.55;beep(140,.05)}
+      if(!scored&&py<rimY&&ball.y>=rimY&&ball.vy>0&&ball.x>rimX+8&&ball.x<rimX+68){scored=true;msg="";}
+      if(ball.y+R>FLOOR){ball.y=FLOOR-R;ball.vy=-ball.vy*.5;ball.vx*=.75;bounces++;if(bounces>=2||Math.abs(ball.vy)<2){state="done";endShot()}}
+      if(ball.x>W+60||ball.x<-60){state="done";endShot()}
+    }
+    draw();if(alive)raf=requestAnimationFrame(step);
+  }
+  function draw(){
+    const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#16233F");gr.addColorStop(1,"#243B6B");ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="#C8773A";ctx.fillRect(0,FLOOR,W,H-FLOOR);
+    ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(195,FLOOR);ctx.lineTo(195,FLOOR+38);ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.85)";ctx.font="bold 16px sans-serif";ctx.fillText("3 PTS",120,FLOOR+28);ctx.fillText("2 PTS",250,FLOOR+28);
+    ctx.fillStyle="#E9EEF7";ctx.fillRect(rimX+88,145,8,140);ctx.strokeStyle="#F26B1D";ctx.lineWidth=3;ctx.strokeRect(rimX+88,190,8,45);
+    ctx.fillStyle="#9AA7BF";ctx.fillRect(rimX+96,215,40,8);ctx.fillRect(rimX+128,215,8,FLOOR-215);
+    ctx.strokeStyle="rgba(255,255,255,.8)";ctx.lineWidth=2;for(let i=0;i<=5;i++){const x1=rimX+i*15.2,x2=rimX+13+i*10;ctx.beginPath();ctx.moveTo(x1,rimY);ctx.lineTo(x2,rimY+42);ctx.stroke()}
+    ctx.beginPath();ctx.moveTo(rimX+8,rimY+20);ctx.lineTo(rimX+68,rimY+20);ctx.stroke();
+    ctx.strokeStyle="#F26B1D";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(rimX,rimY);ctx.lineTo(rimX+78,rimY);ctx.stroke();
+    if(state==="ready"&&drag){const vx=(drag.sx-drag.x)*.13,vy=(drag.sy-drag.y)*.13;const m=Math.hypot(vx,vy),k=m>MAXV?MAXV/m:1;let x=ball.x,y=ball.y,ux=vx*k,uy=vy*k;ctx.fillStyle="rgba(255,194,51,.9)";for(let i=0;i<42;i++){ux=ux;uy+=G;x+=ux;y+=uy;if(i%2===0){ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill()}}}
+    ctx.save();ctx.translate(ball.x,ball.y);ctx.rotate((ball.x+ball.y)/40);ctx.fillStyle="#F26B1D";ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.strokeStyle="#5A2A0A";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-R,0);ctx.lineTo(R,0);ctx.moveTo(0,-R);ctx.lineTo(0,R);ctx.stroke();ctx.beginPath();ctx.arc(-R*1.1,0,R*.9,-1,1);ctx.stroke();ctx.beginPath();ctx.arc(R*1.1,0,R*.9,2.14,4.14);ctx.stroke();ctx.restore();
+    if(state==="empty"){ctx.fillStyle="rgba(0,0,0,.55)";ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 30px sans-serif";ctx.fillText("Sin tiros por ahora",W/2,H/2-10);ctx.font="18px sans-serif";ctx.fillText("Responde preguntas para ganar más",W/2,H/2+24);ctx.textAlign="left"}
+    if(msgT>0){msgT--;ctx.fillStyle="#FFC233";ctx.textAlign="center";ctx.font="bold 54px sans-serif";ctx.fillText(msg,W/2,120);ctx.textAlign="left"}
+  }
+  cv.onpointerdown=e=>{if(state!=="ready")return;const q=toLogic(e);drag={sx:q.x,sy:q.y,x:q.x,y:q.y};try{cv.setPointerCapture(e.pointerId)}catch(_){}};
+  cv.onpointermove=e=>{if(!drag)return;const q=toLogic(e);drag.x=q.x;drag.y=q.y};
+  cv.onpointerup=e=>{if(!drag)return;let vx=(drag.sx-drag.x)*.13,vy=(drag.sy-drag.y)*.13;drag=null;const m=Math.hypot(vx,vy);if(m<3)return;if(m>MAXV){vx*=MAXV/m;vy*=MAXV/m}launch(vx,vy)};
+  reset();upd();step();
+  S.courtStop=()=>{alive=false;cancelAnimationFrame(raf)};
+}
 function viewPoder(){
   const p=S.prog,L=levelOf(p.xp);
   const tb=p.tables||{},tablesDone=Object.values(tb).filter(x=>x.best>=.9).length;
@@ -693,8 +814,11 @@ function viewPoder(){
   let h='<section class="card" style="display:grid;gap:10px;text-align:center;justify-items:center"><p class="eyebrow">Tu rango</p><h1 style="font-size:36px;color:var(--court)">'+L.name+'</h1><p class="stat" style="justify-content:center">Nivel de poder '+(p.xp*10).toLocaleString("es-EC")+'</p>'+(L.next?'<p class="muted">Te faltan '+((L.to-p.xp)*10).toLocaleString("es-EC")+' para llegar a <b>'+L.next+'</b></p>':'<p class="muted">¡Rango máximo!</p>')+'</section>';
   h+='<section class="grid"><div class="card"><p class="eyebrow">Canastas</p><p class="stat" style="font-size:34px">'+p.baskets+'</p></div><div class="card"><p class="eyebrow">Tablas dominadas</p><p class="stat" style="font-size:34px">'+tablesDone+' / 9</p></div><div class="card"><p class="eyebrow">Días MVP</p><p class="stat" style="font-size:34px">'+sessions+'</p></div></section>';
   h+='<section class="card" style="display:grid;gap:12px"><h2>Dominio por materia</h2>'+SUBJ_ORDER.map(s=>{const st=subjStats(s);if(!st.total)return"";return '<div style="display:grid;gap:4px"><div class="row spread"><b>'+SUBJ[s].n+'</b><span class="small muted">'+st.mastered+'/'+st.total+'</span></div><div class="mbar"><i style="width:'+Math.round(st.pct*100)+'%;background:'+SUBJ[s].c+'"></i></div></div>'}).join("")+'</section>';
-  h+='<section class="card"><h2>Rangos</h2><div class="row" style="margin-top:10px">'+LEVELS.map((l,i)=>'<span class="chip" style="'+(i<=L.i?'background:var(--gold);color:#3A2A00':'')+'">'+l[1]+'</span>').join("")+'</div></section>';
-  main.innerHTML=h;
+  h+='<section class="card"><h2>Rangos</h2><div class="row" style="margin-top:10px">'+LEVELS.map((l,i)=>'<span class="chip" style="'+(i<=L.i?'background:var(--gold);color:#3A2A00':'')+'">'+l[1]+'</span>').join("")+'</div><p class="small muted" style="margin-top:8px">Guerrero abre la cancha · Guerrero Dorado abre la cancha PRO (aro en movimiento).</p></section>';
+  const bl=badgeList(p);h+='<section class="card" style="display:grid;gap:12px"><div class="row spread"><h2>Trofeos</h2><span class="chip">'+bl.filter(b=>b[3]).length+' / '+bl.length+'</span></div><div class="badges">'+bl.map(b=>'<div class="badge2'+(b[3]?'':' off')+'"><span class="em">'+b[0]+'</span><b>'+esc(b[1])+'</b><span>'+esc(b[2])+'</span></div>').join("")+'</div></section>';
+  h=courtHtml()+h;
+  main.innerHTML=h;initCourt();
+  main.querySelectorAll("#goTrain").forEach(b=>b.onclick=()=>setView("hoy"));
 }
 
 /* papás */
