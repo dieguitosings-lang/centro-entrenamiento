@@ -185,6 +185,15 @@ td.low{color:var(--bad);font-weight:700}
 .toggle{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700}
 .toggle input{width:22px;height:22px;accent-color:var(--ing)}
 
+
+/* v5: instrucciones claras */
+.how{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:start;padding:14px 16px;border-radius:18px;background:var(--gold-soft,#FFF4D6);border:2px solid var(--gold,#F2B705)}
+.how h3{margin:0;font-size:17px;letter-spacing:.02em;color:var(--gold-ink,#6B4E00)}
+.how ol{grid-column:1 / -1;margin:0;padding-left:26px;display:grid;gap:6px;font-size:19px;line-height:1.4;font-weight:600}
+.how .tip{grid-column:1 / -1;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:var(--card);font-size:18px;line-height:1.4}
+.how.compact ol{font-size:17px}
+.blank{display:inline-block;min-width:3.2em;height:1.05em;margin:0 .25em;border-bottom:4px solid var(--court);vertical-align:-.1em;border-radius:2px;background:var(--court-soft)}
+.mission .what{display:block;font-size:15px;color:var(--muted);font-weight:600;margin-top:2px}
 /* v3: cancha */
 .shots{font-family:var(--display);font-size:20px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:14px;color:#fff;font-variant-numeric:tabular-nums}
 .shots small{font-family:var(--body);font-size:12px;opacity:.75;display:block;letter-spacing:.04em}
@@ -292,36 +301,65 @@ function bestVoice(lang){
   let best=null,bs=-1e9;voices.forEach(v=>{const sc=voiceScore(v,lang);if(sc>bs){bs=sc;best=v}});
   return bs>-1e9?best:null;
 }
+/* Marca interna de pausa: los espacios en blanco (___) y los "…" se convierten en silencio, no se leen. */
+const PAUSE_MARK="‖";
 function cleanForSpeech(text,lang){
   const en=lang.startsWith("en");
   return String(text)
-    .replace(/___+/g,en?" blank ":" espacio ")
-    .replace(/[·•]/g,", ").replace(/→/g,en?", ":", ")
+    .replace(/_{2,}|…|\.{3}/g," "+PAUSE_MARK+" ")                  // blanco o puntos suspensivos = pausa
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}\u{2B00}-\u{2BFF}]/gu,"") // emojis fuera
+    .replace(/(\d)[   ](?=\d{3}\b)/g,"$1")                        // 2 536 -> 2536
+    .replace(/=\s*\?/g,en?" equals what?":" es igual a ¿cuánto?")
+    .replace(/\s=\s/g,en?" equals ":" es igual a ")
+    .replace(/[−–](?=\s*\d)/g,en?" minus ":" menos ").replace(/\s\+\s/g,en?" plus ":" más ")
+    .replace(/[·•]/g,", ").replace(/→/g,", ")
     .replace(/×/g,en?" times ":" por ").replace(/[«»"“”]/g,"")
     .replace(/\(([^)]*)\)/g,", $1, ").replace(/\s*\/\s*/g,en?" or ":" o ")
     .replace(/\s+/g," ").trim();
 }
-function splitSentences(t){return t.match(/[^.!?;:]+[.!?;:]*/g)||[t]}
-let sayGen=0;
-function say(text,lang,rate,onend){
-  lang=lang||"es-ES";
-  if(!("speechSynthesis" in window)){onend&&setTimeout(onend,600);return}
-  try{
-    speechSynthesis.cancel();const gen=++sayGen;
-    if(!voices.length)loadVoices();
-    const v=bestVoice(lang),userRate=store.get("voiceRate",1);
-    // voces naturales suenan mejor cerca de su velocidad normal; "lento" no baja de 0.65
-    const r=Math.max(.65,Math.min(1.2,(rate||.9)*userRate+(v&&/natural|google|neural|premium|enhanced/i.test(v.name)?.05:0)));
-    const parts=splitSentences(cleanForSpeech(text,lang)).map(x=>x.trim()).filter(Boolean);
-    let done=false;const fin=()=>{if(!done&&gen===sayGen){done=true;onend&&onend()}};
-    parts.forEach((ptxt,i)=>{
-      const u=new SpeechSynthesisUtterance(ptxt);u.lang=v?v.lang:lang;if(v)u.voice=v;u.rate=r;u.pitch=1;u.volume=1;
-      if(i===parts.length-1){u.onend=fin;u.onerror=fin}
-      speechSynthesis.speak(u);
-    });
-    if(onend)setTimeout(fin,1800+String(text).split(" ").length*650/r);
-  }catch(e){onend&&onend()}
+/* Parte el texto en trozos cortos. Cada trozo sabe cuánto silencio va después. */
+function speechChunks(text,lang){
+  const out=[];
+  cleanForSpeech(text,lang).split(PAUSE_MARK).forEach((seg,si,arr)=>{
+    const sent=(seg.match(/[^.!?;:¿¡]+[.!?;:]*|[¿¡][^.!?;:]*[.!?;:]*/g)||[]).map(x=>x.trim()).filter(x=>/[\p{L}\p{N}]/u.test(x));
+    sent.forEach((t,k)=>out.push({t,gap:k<sent.length-1?280:0}));
+    if(si<arr.length-1){if(out.length)out[out.length-1].gap=950;else out.push({t:"",gap:950})}
+  });
+  return out;
 }
+function hasVoice(lang){return !!bestVoice(lang)}
+let sayGen=0;
+/* say(): habla uno o varios textos (cada uno con su idioma) en orden, con pausas reales. */
+function sayParts(list,onend){
+  if(!("speechSynthesis" in window)){onend&&setTimeout(onend,600);return}
+  const gen=++sayGen;
+  try{speechSynthesis.cancel()}catch(e){}
+  if(!voices.length)loadVoices();
+  const userRate=store.get("voiceRate",1),q=[];
+  list.forEach(it=>{
+    if(!it||!it.t)return;const lang=it.lang||"es-US",v=bestVoice(lang);
+    const r=Math.max(.6,Math.min(1.2,(it.rate||.9)*userRate+(v&&/natural|google|neural|premium|enhanced/i.test(v.name)?.05:0)));
+    speechChunks(it.t,lang).forEach(c=>q.push({...c,lang,v,r}));
+    if(q.length&&it.gapAfter)q[q.length-1].gap=Math.max(q[q.length-1].gap,it.gapAfter);
+  });
+  let i=0;
+  const step=()=>{
+    if(gen!==sayGen)return;
+    if(i>=q.length){onend&&onend();return}
+    const c=q[i++];let moved=false;
+    const go=()=>{if(moved||gen!==sayGen)return;moved=true;clearTimeout(guard);setTimeout(step,c.gap)};
+    if(!c.t){go();return}
+    const u=new SpeechSynthesisUtterance(c.t);
+    u.lang=c.v?c.v.lang.replace("_","-"):c.lang;if(c.v)u.voice=c.v;u.rate=c.r;u.pitch=1;u.volume=1;
+    u.onend=go;u.onerror=go;
+    // respaldo: algunas tablets no avisan cuando terminan de hablar
+    const guard=setTimeout(go,1500+c.t.split(/\s+/).length*520/c.r);
+    try{speechSynthesis.speak(u)}catch(e){go()}
+  };
+  setTimeout(step,60);
+}
+function say(text,lang,rate,onend){sayParts([{t:text,lang:lang||"es-US",rate}],onend)}
+function stopSpeech(){sayGen++;try{speechSynthesis.cancel()}catch(e){}}
 const EN="en-US";
 const SLOW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 16h14a4 4 0 0 0 4-4v0a2 2 0 0 0-2-2h-1"/><path d="M5 16a6 6 0 0 1 12 0"/><circle cx="19" cy="11" r=".6" fill="currentColor"/></svg>';
 const SPEAK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M19 6a9 9 0 0 1 0 12"/></svg>';
@@ -408,7 +446,7 @@ function sessionOf(date){S.prog.sessions[date]=S.prog.sessions[date]||{done:[]};
 
 /* ============ views ============ */
 function setView(v,sub){
-  S.view=v;S.sub=sub||null;stopTimer();if(S.courtStop){S.courtStop();S.courtStop=null}
+  S.view=v;S.sub=sub||null;stopTimer();stopSpeech();if(S.courtStop){S.courtStop();S.courtStop=null}
   document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.view===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   render();window.scrollTo(0,0);
 }
@@ -451,6 +489,12 @@ function viewHoy(){
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
   const tb=$("#tabBtn");if(tb)tb.onclick=()=>setView("tablas");
 }
+function missionWhat(b){
+  if(b.kind==="tabla")return "Resuelve 10 multiplicaciones: escribe el resultado y toca OK.";
+  if(b.kind==="vocab")return "Escucha 10 palabras en inglés y toca lo que significan.";
+  if(b.kind==="partido")return "Responde 10 preguntas de todas las materias.";
+  const t=S.topics[b.id]||{};return (t.quiz||[]).length?"Lee o escucha el tema y responde "+Math.min(t.quiz.length,6)+" preguntas.":"Lee el tema y repásalo con papá o mamá.";
+}
 function planHtml(date){
   const blocks=planFor(date),ses=sessionOf(date);
   S.plan={date,blocks};
@@ -458,7 +502,7 @@ function planHtml(date){
   let h='<section style="display:grid;gap:8px">';
   blocks.forEach((b,i)=>{
     const done=ses.done.includes(i),S2=b.sub==="mix"?{n:"Todas las materias",c:"var(--court)"}:SUBJ[b.sub];
-    h+='<div class="mission'+(done?' done':'')+(i===nextIdx?' next':'')+'"><div class="num" style="background:'+S2.c+'">'+(done?'✓':i+1)+'</div><div><div class="eyebrow" style="color:'+S2.c+'">'+esc(S2.n)+' · 10 min</div><b style="font-size:19px">'+esc(b.title)+'</b></div><button class="btn'+(done?' ghost':'')+'" data-block="'+i+'">'+(done?'Otra vez':'Empezar')+'</button></div>';
+    h+='<div class="mission'+(done?' done':'')+(i===nextIdx?' next':'')+'"><div class="num" style="background:'+S2.c+'">'+(done?'✓':i+1)+'</div><div><div class="eyebrow" style="color:'+S2.c+'">'+esc(S2.n)+' · 10 min</div><b style="font-size:19px">'+esc(b.title)+'</b><span class="what">'+esc(missionWhat(b))+'</span></div><button class="btn'+(done?' ghost':'')+'" data-block="'+i+'">'+(done?'Otra vez':'Empezar')+'</button></div>';
     if(i<blocks.length-1)h+='<div class="pause">'+esc(PAUSES[i%PAUSES.length])+'</div>';
   });
   if(ses.done.length>=blocks.length)h+='<div class="card" style="text-align:center;border-color:var(--gold)"><h2>MVP del día</h2><p class="muted">Terminaste las 4 misiones. ¡Entrenamiento completo!</p></div>';
@@ -517,18 +561,79 @@ function viewTopic(){
   let h='<section class="card" style="display:grid;gap:14px;border-top:8px solid '+sj.c+'">'+timerHtml()+
     '<div class="row spread"><button class="btn small ghost" id="back">← Volver</button><span class="chip dot" style="color:'+sj.c+'">'+esc(sj.n)+'</span></div>'+
     '<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><h1 style="flex:1">'+esc(t.title)+'</h1><button class="iconbtn" id="sayAll" aria-label="Escuchar">'+SPEAK+'</button></div>'+
-    '<p class="study-kid">'+esc(t.kid)+'</p>'+
+    howHtml(HOW.topic(t),TIPS[id])+'<p class="study-kid">'+esc(t.kid)+'</p>'+
     (t.table?tableHtml(t.table):'')+
     ((t.points||[]).length?'<ul class="points">'+t.points.map(p=>'<li>'+esc(p)+'</li>').join("")+'</ul>':'')+
     ((t.listen||[]).length?listenHtml(t.listen,sj.lang):'')+
     ((t.videos||[]).length?videosHtml(t.videos,t.subject==="ing"?t.title:null):'')+
     (hasQuiz?'<button class="btn" id="train" style="width:100%">Entrenar: '+Math.min(t.quiz.length,6)+' preguntas</button>':'<button class="btn good" id="reviewed" style="width:100%">Lo repasé con papá o mamá</button><p class="muted small">Este tema todavía no tiene preguntas. Pídele a papá que lo repase contigo en el cuaderno.</p>')+
     '</section>';
-  main.innerHTML=h;startTimer();bindListen(sj.lang);bindVideos();
+  main.innerHTML=h;startTimer();bindListen(sj.lang);bindVideos();bindHow(HOW.topic(t),TIPS[id]);
   $("#back").onclick=()=>{S.activeBlock?setView("hoy"):setView("materias",t.subject)};
   $("#sayAll").onclick=()=>say(t.title+". "+t.kid+". "+(t.points||[]).join(". "),sj.lang);
   if(hasQuiz)$("#train").onclick=()=>startQuiz(id);
   else $("#reviewed").onclick=()=>{S.prog.topics[id]={best:.8,tries:((S.prog.topics[id]||{}).tries||0)+1,last:today()};addXp(XP_OK*2);completeBlock();saveProg();toast("¡Bien! +20 de poder");setView("hoy")};
+}
+
+/* ===== v5: instrucciones claras para cada ejercicio ===== */
+const TIPS={
+  "e-garden":"Pista: can = puede hacer algo. is = cómo es. has = qué partes tiene.",
+  "e-waswere":"Pista: I, he, she, it van con was. You, we, they van con were.",
+  "e-pronouns":"Pista: un niño es he. Una niña es she. Un animal o una cosa es it. Tú y yo somos we. Varios son they.",
+  "e-simple":"Pista: con he, she o it el verbo lleva s al final: he plays. Con I, you, we o they va sin s: I play.",
+  "e-continuous":"Pista: es lo que pasa ahora. Se forma con am, is o are más el verbo con ing: she is flying.",
+  "e-progressive":"Pista: si dice now o look, usa la forma con ing. Si dice every day, always o never, usa el verbo normal.",
+  "e-tobe":"Pista: I va con am. He, she, it van con is. You, we, they van con are.",
+  "e-routines":"Pista: always es siempre, usually es casi siempre, sometimes es a veces y never es nunca.",
+  "e-someany":"Pista: some va en oraciones normales. Any va en preguntas y en oraciones con not.",
+  "e-comparatives":"Pista: palabra corta más er y than: bigger than. Palabra larga: more, la palabra y than.",
+  "e-instrucciones":"Pista: son las palabras que salen en las instrucciones del examen. Piensa qué te piden hacer.",
+  "l-pronombres":"Pista: un niño es él. Una niña es ella. Tú y yo somos nosotros. Varios son ellos o ellas.",
+  "l-adjetivo":"Pista: el adjetivo debe combinar con la palabra: si es niña, roja; si son varios, rojos.",
+  "l-articulo":"Pista: el y la son para uno. Los y las son para varios.",
+  "m-probmult":"Pista: si hay grupos iguales, multiplica: cuántos grupos por cuántos hay en cada grupo.",
+  "m-reparto":"Pista: repartir en partes iguales. Pregúntate: ¿qué número por los niños da el total?",
+  "m-suma":"Pista: suma de derecha a izquierda. Si te pasas de 9, llevas 1 a la columna de al lado.",
+  "m-resta":"Pista: resta de derecha a izquierda. Si arriba es más pequeño, pide prestado a la columna de al lado.",
+  "m-redondeo":"Pista: mira el número de las unidades. De 0 a 4 baja; de 5 a 9 sube.",
+  "m-secuencias":"Pista: mira cuánto sube de un número al siguiente y sigue igual.",
+  "m-perimetro":"Pista: el perímetro es sumar todos los lados de la figura.",
+  "m-conversiones":"Pista: 1 kilómetro tiene 1000 metros. 1 metro tiene 100 centímetros.",
+  "m-monedas":"Pista: 1 dólar tiene 100 centavos."
+};
+const hasBlank=t=>/_{2,}/.test(t||"");
+function qTextHtml(t){return esc(t).replace(/_{2,}/g,'<span class="blank" aria-label="espacio en blanco"></span>')}
+/* Pasos para cada tipo de ejercicio. Cortos, en orden y con verbos de acción. */
+function howQuiz(q,t){
+  const en=q.lang===EN,math=(t&&t.subject)==="mat";
+  if(q.listen)return["Toca el botón azul «Escuchar». Oye la frase en inglés.","Si no la entiendes, toca la tortuga para oírla lento.","Toca la respuesta que dice lo mismo que escuchaste."];
+  if(hasBlank(q.q))return en
+    ?["Lee la oración. La raya naranja es una palabra que falta.","Toca el parlante para oírla. La voz hace silencio donde va la palabra.","Prueba cada opción en la raya y toca la que suena bien."]
+    :["Lee la oración. La raya naranja es una palabra que falta.","Prueba cada opción en la raya.","Toca la que completa bien la oración."];
+  if(math)return["Lee el problema despacio. Si quieres, toca el parlante.","Haz la cuenta en tu cuaderno.","Toca la respuesta correcta."];
+  if(en)return["Lee la pregunta en inglés. Toca el parlante para oírla.","Lee todas las respuestas antes de elegir.","Toca la respuesta correcta."];
+  return["Lee la pregunta. Si quieres, toca el parlante.","Lee todas las respuestas antes de elegir.","Toca la respuesta correcta."];
+}
+const HOW={
+  topic:t=>["Lee la explicación. Si quieres, toca el parlante para escucharla."].concat(t.table?["Mira la tabla con los ejemplos."]:[],(t.listen||[]).length?["En «Escucha y repite», toca cada frase y repítela en voz alta."]:[],(t.videos||[]).length?["Si algo no se entiende, mira un video."]:[],[(t.quiz||[]).length?"Cuando estés listo, toca «Entrenar» y responde las preguntas.":"Repásalo con papá o mamá en el cuaderno."]),
+  vListen:["Escucha la palabra en inglés. Puedes tocar «Escuchar» otra vez.","Busca la tarjeta que tiene lo que significa en español.","Toca esa tarjeta. Después repite la palabra en voz alta."],
+  vSay:["Mira el dibujo y la palabra en español.","Piensa cómo se dice en inglés.","Toca la palabra correcta. Después repítela en voz alta."],
+  drill:["Lee la multiplicación.","Escribe el resultado con los números de abajo.","Toca OK. Si te equivocas, toca la flecha para borrar antes de OK."],
+  ensayo:["Toca el animal que hiciste con plastilina.","Toca «Escuchar todo» para oír la presentación completa.","Toca «Mi turno». La voz dice una frase y tú la repites en el silencio.","Al final, dila tú solo, con voz fuerte, y toca «¡La dije completa!»."],
+  palabras:["Toca una tarjeta para escuchar la palabra.","Repítela en voz alta 3 veces.","Cuando ya la sepas sin mirar, toca «Ya la sé»."]
+};
+function howHtml(steps,tip,compact){
+  return '<div class="how'+(compact?' compact':'')+'"><h3>¿QUÉ TENGO QUE HACER?</h3><button class="iconbtn" data-howsay aria-label="Escuchar las instrucciones">'+SPEAK+'</button><ol>'+steps.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>'+(tip?'<p class="tip">'+esc(tip)+'</p>':'')+'</div>';
+}
+function howSpeech(steps,tip){return steps.map((x,i)=>"Paso "+(i+1)+", "+x).join(" ")+(tip?" "+tip:"")}
+function bindHow(steps,tip){main.querySelectorAll("[data-howsay]").forEach(b=>b.onclick=()=>say(howSpeech(steps,tip),"es-US",.9))}
+/* Lee las instrucciones solo la primera vez (o si cambia el tipo de ejercicio), para no cansar. */
+function autoHow(key,steps,tip,then){
+  const on=store.get("autoInstr",true)&&hasVoice("es-US");
+  S.howSeen=S.howSeen||{};
+  if(on&&!S.howSeen[key]){S.howSeen[key]=1;sayParts([{t:howSpeech(steps,tip),lang:"es-US",rate:.9,gapAfter:600}].concat(then||[]));return true}
+  if(then&&then.length)sayParts(then);
+  return false;
 }
 
 /* quiz */
@@ -554,22 +659,25 @@ function viewQuiz(){
   let h='<section class="card" style="display:grid;gap:16px;border-top:8px solid '+sj.c+'">'+timerHtml()+
     '<div class="row spread"><button class="btn small ghost" id="quit">Salir</button><div class="dots">'+Q.qs.map((_,k)=>'<i class="'+(k<Q.res.length?(Q.res[k]?'ok':'no'):(k===Q.i?'now':''))+'"></i>').join("")+'</div></div>'+
     (Q.mode==="mix"?'<span class="chip dot" style="color:'+sj.c+'">'+esc(t.title||"")+'</span>':'')+
-    (q.listen?'<div class="card" style="display:grid;gap:10px;justify-items:center;background:var(--sky-soft,var(--soft));border-color:var(--ing)"><p class="eyebrow" style="color:var(--ing)">Listening</p><div class="row" style="justify-content:center"><button class="btn" id="playL" style="background:var(--ing)">'+SPEAK+' Escuchar</button><button class="btn soft" id="slowL">'+SLOW+' Lento</button></div></div>':'')+
-    '<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><p class="q" style="flex:1">'+esc(q.q)+'</p><button class="iconbtn" id="sayQ" aria-label="Escuchar la pregunta">'+SPEAK+'</button>'+(q.lang===EN?'<button class="iconbtn" id="slowQ" aria-label="Escuchar lento">'+SLOW+'</button>':'')+'</div>'+
+    howHtml(howQuiz(q,t),TIPS[q.tid],true)+(q.listen?'<div class="card" style="display:grid;gap:10px;justify-items:center;background:var(--sky-soft,var(--soft));border-color:var(--ing)"><p class="eyebrow" style="color:var(--ing)">Listening</p><div class="row" style="justify-content:center"><button class="btn" id="playL" style="background:var(--ing)">'+SPEAK+' Escuchar</button><button class="btn soft" id="slowL">'+SLOW+' Lento</button></div></div>':'')+
+    '<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><p class="q" style="flex:1">'+qTextHtml(q.q)+'</p><button class="iconbtn" id="sayQ" aria-label="Escuchar la pregunta">'+SPEAK+'</button>'+(q.lang===EN?'<button class="iconbtn" id="slowQ" aria-label="Escuchar lento">'+SLOW+'</button>':'')+'</div>'+
     '<div class="opts">'+q.o.map((o,k)=>'<button class="opt" data-k="'+k+'">'+esc(o)+'</button>').join("")+'</div><div id="fb"></div></section>';
   main.innerHTML=h;startTimer();
   $("#quit").onclick=()=>{S.quiz=null;S.activeBlock?setView("hoy"):(q.tid&&Q.mode!=="mix"?openTopic(q.tid):setView("hoy"))};
-  $("#sayQ").onclick=()=>say(q.q.replace(/___/g,"blank")+". "+q.o.join(". "),q.lang);
-  const sq=$("#slowQ");if(sq)sq.onclick=()=>say(q.q.replace(/___/g,"blank")+". "+q.o.join(". "),q.lang,.6);
-  if(q.listen){$("#playL").onclick=()=>say(q.listen,EN,.85);$("#slowL").onclick=()=>say(q.listen,EN,.55);setTimeout(()=>say(q.listen,EN,.85),350)}
-  else if(q.lang===EN&&store.get("autoread",true))setTimeout(()=>say(q.q.replace(/___/g,"blank"),EN,.85),350);
+  const steps=howQuiz(q,t),tip=TIPS[q.tid];bindHow(steps,tip);
+  const readQ=r=>({t:q.q+" "+PAUSE_MARK+" "+q.o.join(". ")+".",lang:q.lang||"es-US",rate:r});
+  $("#sayQ").onclick=()=>sayParts([readQ(q.lang===EN?.85:.9)]);
+  const sq=$("#slowQ");if(sq)sq.onclick=()=>sayParts([readQ(.6)]);
+  const kind=(q.listen?"L":hasBlank(q.q)?"B":"M")+(q.lang===EN?"en":"es")+(Q.mode==="mix"?"":q.tid);
+  if(q.listen){$("#playL").onclick=()=>say(q.listen,EN,.85);$("#slowL").onclick=()=>say(q.listen,EN,.55);setTimeout(()=>autoHow(kind,steps,tip,[{t:q.listen,lang:EN,rate:.85}]),350)}
+  else setTimeout(()=>autoHow(kind,steps,tip,(q.lang===EN&&store.get("autoread",true))?[{t:q.q,lang:EN,rate:.85}]:[]),350);
   main.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
     if(Q.answered)return;Q.answered=true;const k=+b.dataset.k,ok=k===q.a;
     main.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(j===q.a)x.classList.add("ok")});
     if(!ok)b.classList.add("no");
     Q.res.push(ok);if(ok){S.prog.baskets+=1;addXp(XP_OK);earn(1)}
-    if(q.lang===EN)say(q.o[q.a],EN,.85);
-    $("#fb").innerHTML='<div class="feedback '+(ok?'ok':'no')+' pop"><b>'+(ok?'¡Canasta! +2 ':'Casi. ')+'</b>'+esc(q.e||"")+(q.listen?'<br><span class="small">Audio: «'+esc(q.listen)+'»</span>':'')+'</div><button class="btn" id="nextQ" style="width:100%;margin-top:12px">'+(Q.i+1<Q.qs.length?'Siguiente':'Ver resultado')+'</button>';
+    if(q.lang===EN)say(hasBlank(q.q)?q.q.replace(/_{2,}/,q.o[q.a]):q.o[q.a],EN,.85);
+    $("#fb").innerHTML='<div class="feedback '+(ok?'ok':'no')+' pop"><b>'+(ok?'¡Canasta! +2 ':'Casi. ')+'</b>'+esc(q.e||"")+(q.listen?'<br><span class="small">Audio: «'+esc(q.listen)+'»</span>':'')+'<br><span class="small muted">Lee la explicación y toca «'+(Q.i+1<Q.qs.length?'Siguiente':'Ver resultado')+'».</span></div><button class="btn" id="nextQ" style="width:100%;margin-top:12px">'+(Q.i+1<Q.qs.length?'Siguiente':'Ver resultado')+'</button>';
     $("#nextQ").onclick=()=>{Q.i++;Q.answered=false;viewQuiz();window.scrollTo(0,0)};
   });
 }
@@ -633,7 +741,7 @@ function viewPalabras(){
   const ids=sel==="week"?wk:[sel];
   const words=[];ids.forEach(g=>{const G=S.vocab[g];if(G)(G.words||[]).forEach(w=>words.push({...w,g}))});
   const total=groups.reduce((n,[,g])=>n+(g.words||[]).length,0),known=Object.keys(S.prog.vocab||{}).filter(k=>S.prog.vocab[k]).length;
-  let h='<section class="card" style="display:grid;gap:10px;border-top:8px solid var(--ing)"><div class="row spread"><h1>Palabras en inglés</h1><span class="chip">'+known+' / '+total+' aprendidas</span></div><p class="muted">Toca una tarjeta para escucharla. Repítela en voz alta 3 veces. Cuando la sepas, márcala con ✓.</p>'+
+  let h='<section class="card" style="display:grid;gap:10px;border-top:8px solid var(--ing)"><div class="row spread"><h1>Palabras en inglés</h1><span class="chip">'+known+' / '+total+' aprendidas</span></div>'+howHtml(HOW.palabras,"Los botones de colores son juegos: «Escucha y elige» y «¿Cómo se dice?». Cada 3 aciertos ganas 1 tiro.",true)+
     '<label class="toggle" for="autoread"><input type="checkbox" id="autoread"'+(store.get("autoread",true)?' checked':'')+'> Leer en voz alta las preguntas en inglés</label>'+
     '<div class="row"><button class="btn small'+(sel==="week"?'':' soft')+'" data-vg="week">Esta semana</button>'+groups.map(([id,g])=>'<button class="btn small'+(sel===id?'':' soft')+'" data-vg="'+esc(id)+'">'+esc(g.name)+'</button>').join("")+'</div></section>';
   const G=sel!=="week"&&S.vocab[sel];
@@ -641,7 +749,7 @@ function viewPalabras(){
   h+='<section class="row"><button class="btn" id="vgListen" style="background:var(--ing)">🎧 Escucha y elige</button><button class="btn soft" id="vgSay">¿Cómo se dice?</button><button class="btn soft" id="vgEnsayo">Ensayo de la exposición</button></section>';
   h+='<section class="words">'+words.map((w,i)=>'<button class="word'+(vKnown(w.w)?' known':'')+'" data-wi="'+i+'"><span class="em">'+esc(w.emoji)+'</span><span class="w">'+esc(w.w)+'</span><span class="es">'+esc(w.es)+'</span></button>').join("")+'</section>';
   h+='<section class="card" id="wdetail" hidden></section>';
-  main.innerHTML=h;
+  main.innerHTML=h;bindHow(HOW.palabras,"Los botones de colores son juegos: «Escucha y elige» y «¿Cómo se dice?». Cada 3 aciertos ganas 1 tiro.");
   $("#autoread").onchange=e=>store.set("autoread",e.target.checked);
   main.querySelectorAll("[data-vg]").forEach(b=>b.onclick=()=>{store.set("vgroup",b.dataset.vg);setView("palabras",b.dataset.vg)});
   $("#vgListen").onclick=()=>startVGame(ids,"listen");
@@ -668,6 +776,7 @@ function viewVGame(){
   if(V.i>=V.rounds.length)return vgEnd();
   const r=V.rounds[V.i];
   let h='<section class="card" style="display:grid;gap:16px;border-top:8px solid var(--ing)">'+timerHtml()+'<div class="row spread"><button class="btn small ghost" id="quit">Salir</button><div class="dots">'+V.rounds.map((_,k)=>'<i class="'+(k<V.res.length?(V.res[k]?'ok':'no'):(k===V.i?'now':''))+'"></i>').join("")+'</div></div>';
+  h+=howHtml(V.mode==="listen"?HOW.vListen:HOW.vSay,null,true);
   if(V.mode==="listen"){
     h+='<p class="eyebrow" style="color:var(--ing)">Escucha y elige</p><div class="row" style="justify-content:center"><button class="btn" id="pl" style="background:var(--ing)">'+SPEAK+' Escuchar</button><button class="btn soft" id="sl">'+SLOW+' Lento</button></div><div class="words">'+r.o.map((w,k)=>'<button class="word" data-k="'+k+'"><span class="em">'+esc(w.emoji)+'</span><span class="es">'+esc(w.es)+'</span></button>').join("")+'</div>';
   }else{
@@ -676,7 +785,9 @@ function viewVGame(){
   h+='<div id="fb"></div></section>';
   main.innerHTML=h;startTimer();
   $("#quit").onclick=()=>{S.vg=null;S.activeBlock?setView("hoy"):setView("palabras")};
-  if(V.mode==="listen"){$("#pl").onclick=()=>say(r.w.w,EN,.8);$("#sl").onclick=()=>say(r.w.w,EN,.5);setTimeout(()=>say(r.w.w,EN,.8),300)}
+  bindHow(V.mode==="listen"?HOW.vListen:HOW.vSay);
+  if(V.mode==="listen"){$("#pl").onclick=()=>say(r.w.w,EN,.8);$("#sl").onclick=()=>say(r.w.w,EN,.5);setTimeout(()=>autoHow("vListen",HOW.vListen,null,[{t:r.w.w,lang:EN,rate:.8}]),300)}
+  else setTimeout(()=>autoHow("vSay",HOW.vSay,null,[]),300);
   main.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{
     if(V.answered)return;V.answered=true;const k=+b.dataset.k,ok=k===r.a;
     main.querySelectorAll("[data-k]").forEach((x,j)=>{x.disabled=true;if(j===r.a)x.classList.add(V.mode==="listen"?"known":"ok")});
@@ -703,20 +814,20 @@ function viewEnsayo(){
   const pick=store.get("ensayoAnimal",animals[0].w);const A=animals.find(a=>a.w===pick)||animals[0];
   const art=/^[aeiou]/.test(A.w)?"an":"a";
   const nm=store.get("kidname","Leo");const lines=["Hello! My name is "+nm+".","This is "+art+" "+A.w+".","It is "+A.is+".","It has "+A.has+".","It can "+A.can+".","It lives in the garden.","Thank you!"];
-  let h='<section class="card" style="display:grid;gap:12px;border-top:8px solid var(--ing)"><div class="row spread"><button class="btn small ghost" id="back">← Volver</button><span class="chip dot" style="color:var(--ing)">Oral presentation</span></div><h1>Ensayo: My Garden Animal</h1><p class="muted">Elige tu animal. Escucha cada frase y repítela. Después dila tú solo, con voz fuerte, mostrando tu animal de plastilina.</p>'+
+  let h='<section class="card" style="display:grid;gap:12px;border-top:8px solid var(--ing)"><div class="row spread"><button class="btn small ghost" id="back">← Volver</button><span class="chip dot" style="color:var(--ing)">Oral presentation</span></div><h1>Ensayo: My Garden Animal</h1>'+howHtml(HOW.ensayo,"Pista: habla fuerte, mira al público y muestra tu animal de plastilina mientras hablas.")+
     '<div class="row">'+animals.map(a=>'<button class="btn small'+(a.w===A.w?'':' soft')+'" data-an="'+esc(a.w)+'">'+esc(a.emoji)+' '+esc(a.w)+'</button>').join("")+'</div>'+
     '<div class="bigemoji">'+esc(A.emoji)+'</div>'+
     '<div class="row" style="justify-content:center"><button class="btn" id="enAll" style="background:var(--ing)">'+SPEAK+' Escuchar todo</button><button class="btn" id="enTurn">Mi turno: repito</button><button class="btn ghost" id="enStop">Parar</button></div><p class="turn muted" id="enMsg" style="text-align:center;min-height:24px;font-weight:700"></p>'+
     lines.map((l,i)=>'<div class="lrow" data-li="'+i+'"><span>'+esc(l)+'</span><button class="mini" data-say="'+i+'">'+SPEAK+'</button><button class="mini" data-slow="'+i+'">'+SLOW+'</button></div>').join("")+
     '<button class="btn good" id="enDone">¡La dije completa! (+30 de poder)</button><p class="muted small">Rúbrica: modelo completo, habla clara, vocabulario, 3 o más características, seguridad. 2 puntos cada una.</p></section>';
-  main.innerHTML=h;bindListen(EN);
+  main.innerHTML=h;bindListen(EN);bindHow(HOW.ensayo,"Pista: habla fuerte, mira al público y muestra tu animal de plastilina mientras hablas.");
   $("#back").onclick=()=>setView(S.activeBlock?"hoy":"palabras");
   main.querySelectorAll("[data-an]").forEach(b=>b.onclick=()=>{store.set("ensayoAnimal",b.dataset.an);viewEnsayo()});
   const rows=[...main.querySelectorAll(".lrow")],msg=$("#enMsg");let stop=false;
   const mark=i=>rows.forEach((r,k)=>r.classList.toggle("now",k===i));
   const run=turn=>{stop=false;let i=0;const next=()=>{if(stop||i>=lines.length){mark(-1);msg.textContent=stop?"":(turn?"¡Ahora dila tú solo, de principio a fin!":"");return}mark(i);msg.textContent="";say(lines[i],EN,.8,()=>{if(stop)return;if(turn){msg.textContent="Tu turno: repite la frase";setTimeout(()=>{i++;next()},Math.max(3500,lines[i].split(" ").length*900))}else setTimeout(()=>{i++;next()},500)})};next()};
   $("#enAll").onclick=()=>run(false);$("#enTurn").onclick=()=>run(true);
-  $("#enStop").onclick=()=>{stop=true;try{speechSynthesis.cancel()}catch(e){}mark(-1);msg.textContent=""};
+  $("#enStop").onclick=()=>{stop=true;stopSpeech();mark(-1);msg.textContent=""};
   $("#enDone").onclick=()=>{addXp(30);S.prog.ensayos=(S.prog.ensayos||0)+1;S.prog.ensayoDays=S.prog.ensayoDays||{};if(!S.prog.ensayoDays[today()]){S.prog.ensayoDays[today()]=true;giveShots(1,"exposición practicada")}saveProg();celebrate("¡Exposición lista!","Practicaste tu presentación completa. ¡Vas a hacerlo muy bien!")};
 }
 
@@ -735,8 +846,10 @@ function startDrill(n){
 function viewDrill(){
   const D=S.drill;if(D.i>=D.qs.length)return drillEnd();
   const [a,b]=D.qs[D.i];
-  main.innerHTML='<section class="card" style="display:grid;gap:16px">'+timerHtml()+'<div class="row spread"><button class="btn small ghost" id="quit">Salir</button><div class="dots">'+D.qs.map((_,k)=>'<i class="'+(k<D.res.length?(D.res[k]?'ok':'no'):(k===D.i?'now':''))+'"></i>').join("")+'</div></div><div class="mult">'+a+' × '+b+'</div><div class="answer" id="ans">'+esc(D.val)+'</div><div id="fb" style="min-height:30px;text-align:center;font-weight:700"></div><div class="pad">'+[1,2,3,4,5,6,7,8,9].map(d=>'<button data-d="'+d+'">'+d+'</button>').join("")+'<button data-d="del" aria-label="Borrar">⌫</button><button data-d="0">0</button><button class="go" data-d="ok">OK</button></div></section>';
-  startTimer();
+  main.innerHTML='<section class="card" style="display:grid;gap:16px">'+timerHtml()+'<div class="row spread"><button class="btn small ghost" id="quit">Salir</button><div class="dots">'+D.qs.map((_,k)=>'<i class="'+(k<D.res.length?(D.res[k]?'ok':'no'):(k===D.i?'now':''))+'"></i>').join("")+'</div></div>'+howHtml(HOW.drill,null,true)+'<div class="row" style="justify-content:center;gap:10px"><div class="mult">'+a+' × '+b+'</div><button class="iconbtn" id="sayM" aria-label="Escuchar la multiplicación">'+SPEAK+'</button></div><div class="answer" id="ans">'+esc(D.val)+'</div><div id="fb" style="min-height:30px;text-align:center;font-weight:700"></div><div class="pad">'+[1,2,3,4,5,6,7,8,9].map(d=>'<button data-d="'+d+'">'+d+'</button>').join("")+'<button data-d="del" aria-label="Borrar">⌫</button><button data-d="0">0</button><button class="go" data-d="ok">OK</button></div></section>';
+  startTimer();bindHow(HOW.drill);
+  $("#sayM").onclick=()=>say(a+" por "+b,"es-US",.9);
+  if(D.i===0)setTimeout(()=>autoHow("drill",HOW.drill,null,[]),300);
   $("#quit").onclick=()=>{S.drill=null;S.activeBlock?setView("hoy"):setView("tablas")};
   main.querySelectorAll(".pad button").forEach(btn=>btn.onclick=()=>{
     const d=btn.dataset.d;if(D.lock)return;
@@ -899,9 +1012,13 @@ function voiceCardHtml(){
   return '<section class="card" style="display:grid;gap:12px"><h2>Voz de la plataforma</h2><p class="muted small">La voz sale del dispositivo. Elegimos automáticamente la más natural que tenga; aquí puedes cambiarla y probarla.</p>'+
     '<label class="f" for="vEn">Voz en inglés'+sel("vEn","en","voiceEn","en-US")+'</label><button class="btn small soft" id="tEn">'+SPEAK+' Probar inglés</button>'+
     '<label class="f" for="vEs">Voz en español'+sel("vEs","es","voiceEs","es-US")+'</label><button class="btn small soft" id="tEs">'+SPEAK+' Probar español</button>'+
+    (hasVoice("es-US")?'':'<p class="feedback no small"><b>Este equipo no tiene voz en español.</b> Las instrucciones se muestran escritas pero no se leen. Instala una voz en español (mira las guías de abajo) y recarga la página.</p>')+
+    '<label class="toggle" for="autoInstr"><input type="checkbox" id="autoInstr"'+(store.get("autoInstr",true)?' checked':'')+'> Leer en voz alta las instrucciones la primera vez que aparece cada ejercicio</label>'+
+    '<button class="btn small soft" id="tBlank">'+SPEAK+' Probar pausa en espacio en blanco</button>'+
     '<label class="f" for="vRate">Velocidad: <span id="vRateL">'+Math.round(rate*100)+'%</span><input type="range" id="vRate" min="0.7" max="1.15" step="0.05" value="'+rate+'"></label>'+
     '<details class="small"><summary><b>¿Suena robótica? Cómo conseguir voces más naturales</b></summary><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">'+
     '<li><b>Computadora Windows:</b> abre la página en <b>Microsoft Edge</b>. Trae voces naturales como «Microsoft Ana Online (Natural)» en inglés y «Microsoft Dalia Online (Natural)» en español. En Chrome, elige «Google US English» y «Google español de Estados Unidos».</li>'+
+    '<li><b>Tablet Amazon Fire:</b> Configuración → Accesibilidad → Texto a voz (Text-to-Speech). Revisa el motor que tiene, elige el idioma y descarga la voz si te lo pide (instala español e inglés). Abre la página en el navegador <b>Silk</b>, recarga, y aquí arriba elige la voz que suene mejor con «Probar».</li>'+
     '<li><b>Tablet Android:</b> Ajustes → Accesibilidad → Salida de texto a voz → motor de Google → instala los datos de voz de Español (Estados Unidos) e Inglés (Estados Unidos).</li>'+
     '<li><b>iPad:</b> Ajustes → Accesibilidad → Contenido leído → Voces → descarga una voz «Mejorada» o «Premium» en español (Paulina o Mónica) y en inglés (Samantha o Ava). Luego recarga la página.</li></ul></details></section>';
 }
@@ -911,6 +1028,8 @@ function bindVoice(){
   vEs.onchange=()=>{store.set("voiceEs",vEs.value);say("¡Hola! Vamos a entrenar juntos.","es-US")};
   $("#tEn").onclick=()=>say("Hello! This is a butterfly. It is small and colorful. It can fly.","en-US");
   $("#tEs").onclick=()=>say("¡Hola! Hoy vamos a repasar las tablas de multiplicar. ¡Tú puedes!","es-US");
+  $("#autoInstr").onchange=e=>store.set("autoInstr",e.target.checked);
+  $("#tBlank").onclick=()=>say("She ___ happy yesterday.","en-US",.85);
   vr.oninput=()=>{store.set("voiceRate",+vr.value);$("#vRateL").textContent=Math.round(vr.value*100)+"%"};
 }
 function write(p,okMsg){p.then(()=>{if(okMsg)toast(okMsg)}).catch(e=>toast(e&&e.code==="invalid_argument"?"No tienes permiso para editar aquí.":"No se pudo guardar. Intenta de nuevo."))}
@@ -950,6 +1069,7 @@ render();
   try{const p=await db.doc("progress/thiago").get();S.prog=p.exists?Object.assign(defaultProg(),JSON.parse(JSON.stringify(p.data()))):defaultProg()}catch(e){S.prog=defaultProg()}
   S.ready.p=true;render();
 })();
+window.__tc={speechChunks,startQuiz,openTopic,startDrill,startVGame,setView,S,$:q=>document.querySelector(q)};
 })();
 </script>
 
