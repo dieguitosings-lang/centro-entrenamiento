@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Russo+One&display=swap">
 <style>
 :root{
-  --bg:#EEF2F8; --card:#FFFFFF; --ink:#13213C; --muted:#56637D; --line:#D5DCE8; --soft:#F5F7FB;
+  --bg:#FBF6EE; --card:#FFFFFF; --ink:#1F2640; --muted:#5B6278; --line:#EADFCF; --soft:#F6EFE4; --shadow:0 6px 18px rgba(92,64,20,.08);
   --court:#F26B1D; --court-soft:#FDE6D8; --gold:#FFC233; --gold-ink:#6B4A00; --good:#159A63; --good-soft:#D8F3E6;
   --bad:#D2433A; --bad-soft:#FBE1DF; --warn:#C98200; --warn-soft:#FFF1CC;
   --mat:#F26B1D; --len:#7C4DFF; --ing:#2F6FED; --nat:#1E9E61; --env:#0E9AA7; --soc:#D94848;
@@ -194,6 +194,71 @@ td.low{color:var(--bad);font-weight:700}
 .how.compact ol{font-size:17px}
 .blank{display:inline-block;min-width:3.2em;height:1.05em;margin:0 .25em;border-bottom:4px solid var(--court);vertical-align:-.1em;border-radius:2px;background:var(--court-soft)}
 .mission .what{display:block;font-size:15px;color:var(--muted);font-weight:600;margin-top:2px}
+
+/* v6: interfaz simple y orgánica (TDAH): una acción principal por pantalla */
+.card{border:0;box-shadow:var(--shadow);border-radius:26px}
+.hud-in{flex-wrap:nowrap}
+.parents{display:grid;justify-items:center;gap:0;color:#fff;opacity:.85;font-size:11px;font-weight:700;padding:4px 8px;border-radius:12px;min-width:48px;min-height:48px}
+.parents svg{width:22px;height:22px}
+nav.tabs .in{grid-template-columns:repeat(4,1fr)!important}
+nav.tabs button{font-size:14px;min-height:62px}
+nav.tabs button svg{width:30px;height:30px}
+.hello{display:flex;align-items:center;gap:14px;padding:4px 4px 0}
+.hello h1{font-size:clamp(26px,5vw,34px)}
+.track{display:flex;gap:10px;align-items:center}
+.track .b{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--soft);border:3px dashed var(--line);font-family:var(--display);font-size:16px;color:var(--muted)}
+.track .b.done{background:var(--court);border:3px solid var(--court);color:#fff}
+.track .b.now{border:3px solid var(--court);color:var(--court);background:var(--court-soft)}
+.track .b svg{width:24px;height:24px}
+.hero{position:relative;overflow:hidden;display:grid;gap:14px;padding:26px 22px;border-radius:32px;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.12)}
+.hero::before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:46% 54% 58% 42%/48% 44% 56% 52%;background:rgba(255,255,255,.14)}
+.hero::after{content:"";position:absolute;left:-40px;bottom:-70px;width:180px;height:180px;border-radius:58% 42% 45% 55%/52% 58% 42% 48%;background:rgba(255,255,255,.1)}
+.hero>*{position:relative;z-index:1}
+.hero .top{display:flex;align-items:center;gap:14px}
+.hero .ic{width:68px;height:68px;border-radius:22px;background:rgba(255,255,255,.22);display:grid;place-items:center;flex:0 0 auto}
+.hero .ic svg{width:40px;height:40px}
+.hero .lab{font-family:var(--display);font-size:14px;letter-spacing:.08em;opacity:.9;text-transform:uppercase}
+.hero h2{font-size:clamp(26px,5vw,34px);color:#fff}
+.hero p{font-size:19px;opacity:.95}
+.hero .go{justify-self:start;font-family:var(--display);font-size:24px;letter-spacing:.03em;background:#fff;color:var(--ink);padding:16px 34px;border-radius:999px;min-height:64px;box-shadow:0 6px 0 rgba(0,0,0,.15);display:inline-flex;gap:12px;align-items:center}
+.hero .go:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.hero .go svg{width:26px;height:26px}
+.breath{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:22px;background:var(--good-soft);font-size:17px;font-weight:600}
+.breath svg{width:30px;height:30px;flex:0 0 auto;color:var(--good)}
+.soon{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:14px 16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
+.soon .d{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;color:#fff;font-family:var(--display);line-height:1;text-align:center;flex:0 0 auto}
+.soon .d small{display:block;font-size:11px;font-family:var(--body);font-weight:700;letter-spacing:.06em}
+.soon b{display:block;font-size:18px}
+.soon>span>span{color:var(--muted);font-size:15px}.soon b{color:var(--ink)}
+.linkbtn{justify-self:center;color:var(--muted);font-weight:700;font-size:16px;text-decoration:underline;text-underline-offset:4px;min-height:44px;padding:8px 12px}
+.doors{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+@media (min-width:760px){.doors{grid-template-columns:repeat(3,1fr)}}
+.door{position:relative;overflow:hidden;display:grid;gap:8px;justify-items:start;text-align:left;padding:18px;border-radius:28px;min-height:150px;background:var(--c);color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.10)}
+.door::after{content:"";position:absolute;right:-30px;bottom:-40px;width:120px;height:120px;border-radius:50% 45% 55% 50%/55% 50% 50% 45%;background:rgba(255,255,255,.16)}
+.door .ic{width:52px;height:52px;border-radius:18px;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.door .ic svg{width:32px;height:32px}
+.door b{font-family:var(--display);font-weight:400;font-size:22px;line-height:1.1}
+.door span{font-size:13px;opacity:.9;font-weight:700}
+.door .stars{position:relative;z-index:1;font-size:15px;font-weight:700;background:rgba(0,0,0,.14);padding:3px 10px;border-radius:99px}
+.door .flag{position:absolute;top:12px;right:12px;z-index:1;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px}
+.shead{display:flex;gap:14px;align-items:center;padding:18px;border-radius:28px;color:#fff;background:var(--c)}
+.shead .ic{width:60px;height:60px;border-radius:20px;background:rgba(255,255,255,.22);display:grid;place-items:center;flex:0 0 auto}
+.shead .ic svg{width:36px;height:36px}
+.shead h1{color:#fff}
+.shead .back{margin-left:auto;background:rgba(255,255,255,.22);color:#fff;border-radius:16px;padding:10px 14px;font-weight:700;min-height:48px}
+.grp{display:grid;gap:10px}
+.grp>h2{display:flex;align-items:center;gap:10px;font-size:20px}
+.grp>h2 i{width:14px;height:14px;border-radius:50%;background:var(--c)}
+.grp>p{color:var(--muted);font-size:15px;margin-top:-4px}
+details.grp>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:20px;padding:12px 16px;border-radius:20px;background:var(--card);box-shadow:var(--shadow);min-height:56px}
+details.grp>summary::-webkit-details-marker{display:none}
+details.grp>summary::after{content:"+";margin-left:auto;font-size:26px;color:var(--muted)}
+details.grp[open]>summary::after{content:"–"}
+.topic{border:0;box-shadow:var(--shadow);border-radius:22px;min-height:64px}
+.topic .st{font-size:18px;letter-spacing:1px;color:var(--gold);white-space:nowrap}
+.topic .st .off{color:var(--line)}
+.topic .tag{display:inline-block;margin-left:6px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--court-soft);color:var(--court);vertical-align:2px}
+@media (prefers-reduced-motion:no-preference){.hero{animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.97);opacity:.4}to{transform:none;opacity:1}}}
 /* v3: cancha */
 .shots{font-family:var(--display);font-size:20px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:14px;color:#fff;font-variant-numeric:tabular-nums}
 .shots small{font-family:var(--body);font-size:12px;opacity:.75;display:block;letter-spacing:.04em}
@@ -223,8 +288,8 @@ td.low{color:var(--bad);font-weight:700}
       <div class="row spread"><span class="lvl" id="hudLevel">APRENDIZ</span><span class="small" style="opacity:.8" id="hudPower">Nivel de poder 0</span></div>
       <div class="power-bar"><i id="hudBar" style="width:0"></i></div>
     </div>
-    <button class="shots" id="hudShots" title="Tiros disponibles para la cancha"><span>🏀</span><div><span id="hudShotN">0</span><small>TIROS</small></div></button>
-    <div class="stat" title="Canastas"><svg class="ball" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F26B1D"/><path d="M2 12h20M12 2v20M5 5c3 3 3 11 0 14M19 5c-3 3-3 11 0 14" stroke="#13213C" stroke-width="1.4" fill="none"/></svg><div><span id="hudBaskets">0</span><small>CANASTAS</small></div></div>
+    <button class="shots" id="hudShots" aria-label="Tiros para la cancha"><svg class="ball" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F26B1D"/><path d="M2 12h20M12 2v20M5 5c3 3 3 11 0 14M19 5c-3 3-3 11 0 14" stroke="#1F2640" stroke-width="1.4" fill="none"/></svg><div><span id="hudShotN">0</span><small>TIROS</small></div></button>
+    <button class="parents" id="hudPapas" aria-label="Panel de papás"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14.6c2.3.2 3.9 1.8 4.5 4.4"/></svg><span>Papás</span></button>
   </div>
 </header>
 
@@ -232,12 +297,10 @@ td.low{color:var(--bad);font-weight:700}
 
 <nav class="tabs" aria-label="Secciones">
   <div class="in">
-    <button data-view="hoy" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Hoy</button>
-    <button data-view="materias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg>Materias</button>
-    <button data-view="palabras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5"/></svg>Palabras</button>
-    <button data-view="tablas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>Tablas</button>
-    <button data-view="poder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10 0 13M18 5.5c-2.5 3-2.5 10 0 13"/></svg>Cancha</button>
-    <button data-view="papas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14.6c2.3.2 3.9 1.8 4.5 4.4"/></svg>Papás</button>
+    <button data-view="hoy" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>Hoy</button>
+    <button data-view="materias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6"/></svg>Estudiar</button>
+    <button data-view="palabras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 13l2-6 2 6M9.2 11h2.6M15 9.5h2.5"/></svg>Palabras</button>
+    <button data-view="poder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10 0 13M18 5.5c-2.5 3-2.5 10 0 13"/></svg>Cancha</button>
   </div>
 </nav>
 
@@ -382,8 +445,7 @@ function renderHud(){
   $("#hudLevel").textContent=L.name.toUpperCase();
   $("#hudPower").textContent="Nivel de poder "+(p.xp*10).toLocaleString("es-EC");
   $("#hudBar").style.width=(L.next?Math.min(100,100*(p.xp-L.from)/(L.to-L.from)):100)+"%";
-  $("#hudBaskets").textContent=p.baskets;
-  const hs=$("#hudShotN");if(hs)hs.textContent=courtOpen()?(p.shots||0):"🔒";
+    const hs=$("#hudShotN");if(hs)hs.textContent=courtOpen()?(p.shots||0):"🔒";
 }
 function addXp(n){const before=levelOf(S.prog.xp).i;S.prog.xp+=n;const after=levelOf(S.prog.xp);
   S.prog.days=S.prog.days||{};S.prog.days[today()]=true;
@@ -445,13 +507,14 @@ function planFor(dateStr){
 function sessionOf(date){S.prog.sessions[date]=S.prog.sessions[date]||{done:[]};return S.prog.sessions[date]}
 
 /* ============ views ============ */
+const NAV_OF={tablas:"materias",topic:"materias",quiz:"materias",drill:"materias",vgame:"palabras",ensayo:"palabras"};
 function setView(v,sub){
   S.view=v;S.sub=sub||null;stopTimer();stopSpeech();if(S.courtStop){S.courtStop();S.courtStop=null}
-  document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.view===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  const tab=NAV_OF[v]||v;document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.view===tab)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   render();window.scrollTo(0,0);
 }
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
-$("#hudShots").onclick=()=>setView("poder");
+$("#hudShots").onclick=()=>setView("poder");$("#hudPapas").onclick=()=>setView("papas");
 
 function render(){
   renderHud();
@@ -468,23 +531,58 @@ function eventRow([id,e],extra){
 }
 function bindTopicButtons(root){(root||main).querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>openTopic(b.dataset.topic))}
 
+/* ===== v6: inicio simple — una sola acción principal ===== */
+const IC={
+  mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 4v6M4 7h6M14 7h6M5 15l4 4M9 15l-4 4M14 16h6M14 19h6"/></svg>',
+  ing:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 13l2-6 2 6M9.2 11h2.6M15 9.5h2.5"/></svg>',
+  nat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15z"/><path d="M5 19 14 10"/></svg>',
+  env:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M4 9c3 0 4 2 6 2s2-3 5-3M8 20c0-3 2-4 4-4s3-2 3-4 2-2 5-2"/></svg>',
+  len:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/></svg>',
+  soc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  tab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  mix:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10 0 13M18 5.5c-2.5 3-2.5 10 0 13"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+  rest:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 21c-5 0-8-3-8-8 5 0 8 3 8 8zM12 21c5 0 8-3 8-8-5 0-8 3-8 8zM12 21V9M12 9c-2-2-2-4 0-6 2 2 2 4 0 6z"/></svg>'
+};
+/* Nombres cortos para el niño + nombre oficial chiquito. Colores más profundos para buen contraste con texto blanco. */
+const KID={mat:{k:"Matemática",o:"Números y problemas",c:"#D4560F"},ing:{k:"Inglés",o:"Language Arts",c:"#2A62D6"},nat:{k:"Ciencias",o:"Natural Science",c:"#16804F"},
+  env:{k:"Ambiente",o:"Environmental Science",c:"#0B7C87"},len:{k:"Lengua",o:"Lengua y Literatura",c:"#6A3FE0"},soc:{k:"Sociales",o:"Estudios Sociales",c:"#C23636"},
+  tab:{k:"Tablas",o:"Multiplicar rápido",c:"#9C3F0C"},mix:{k:"Partido",o:"Todas las materias",c:"#1F2640"}};
+const kidOf=s=>KID[s]||{k:s,o:"",c:"#1F2640"};
+function stars(b){const n=b<0?0:b>=.8?3:b>=.5?2:1;return '<span class="st" aria-label="'+n+' de 3 estrellas">'+"★★★".slice(0,n)+'<span class="off">'+"★★★".slice(n)+'</span></span>'}
+function soonHtml(){
+  const up=upcoming(14);if(!up.length)return "";
+  const [id,e]=up[0],n=daysUntil(e.date),d=parseD(e.date),K=kidOf(e.subject);
+  const when=n===0?"¡Es hoy!":n===1?"Mañana":"En "+n+" días";
+  return '<button class="soon" id="soonBtn" data-sid="'+esc(id)+'"><span class="d" style="background:'+K.c+'">'+d.getDate()+'<small>'+MES[d.getMonth()]+'</small></span><span style="flex:1"><b>'+esc(e.title)+'</b><span>'+esc(K.k)+' · '+when+' · toca para repasar</span></span><span class="muted" style="font-size:26px">›</span></button>';
+}
+function bindSoon(){const b=$("#soonBtn");if(!b)return;b.onclick=()=>{const e=S.events[b.dataset.sid];const t=(e.topics||[]).find(x=>S.topics[x]);if(t)openTopic(t);else setView("materias",e.subject)}}
 function viewHoy(){
   const t=today(),dow=new Date().getDay(),weekend=dow===0||dow===6;
-  const planDate=weekend?t:store.get("freeDate",null)===t?t:null;
-  const up=upcoming(14);
-  let html='<section class="card" style="display:grid;gap:8px"><p class="eyebrow">'+DIA[dow]+' '+new Date().getDate()+' de '+MES[new Date().getMonth()].toLowerCase()+'</p>';
-  if(weekend){
-    html+='<h1>Entrenamiento de '+(dow===6?'sábado':'domingo')+'</h1><p class="muted">4 misiones de 10 minutos. Pausa activa entre cada una. Termina las 4 y ganas el MVP del día.</p></section>';
-    html+=planHtml(t);
+  const nm=store.get("kidname","Leo");
+  const active=weekend||store.get("freeDate",null)===t;
+  let h='<section class="hello"><div><h1>¡Hola, '+esc(nm)+'!</h1><p class="muted">'+(weekend?(dow===6?'Sábado':'Domingo')+' de entrenamiento':'Hoy '+DIA[dow]+' es día de descanso')+'</p></div></section>';
+  if(active){
+    const blocks=planFor(t),ses=sessionOf(t);S.plan={date:t,blocks};
+    const nextIdx=blocks.findIndex((b,i)=>!ses.done.includes(i));
+    h+='<div class="track" aria-label="Misiones de hoy">'+blocks.map((b,i)=>{const done=ses.done.includes(i);return '<button class="b'+(done?' done':i===nextIdx?' now':'')+'" '+(done?'data-block="'+i+'" aria-label="Misión '+(i+1)+' hecha, repetir"':'aria-label="Misión '+(i+1)+'" disabled')+'>'+(done?'✓':i+1)+'</button>'}).join("")+'<span class="muted small" style="margin-left:4px">'+ses.done.length+' de '+blocks.length+'</span></div>';
+    if(nextIdx>=0){
+      const b=blocks[nextIdx],K=kidOf(b.kind==="tabla"?"tab":b.sub);
+      if(ses.done.length)h+='<div class="breath">'+IC.leaf+'<span><b>Antes de seguir:</b> '+esc(PAUSES[(ses.done.length-1)%PAUSES.length].replace(/^Pausa( activa)?: /,""))+'</span></div>';
+      h+='<section class="hero" style="background:'+K.c+'"><div class="top"><span class="ic">'+(IC[b.kind==="tabla"?"tab":b.sub]||IC.mix)+'</span><div><p class="lab">Misión '+(nextIdx+1)+' · '+esc(K.k)+' · 10 min</p><h2>'+esc(b.title)+'</h2></div></div><p>'+esc(missionWhat(b))+'</p><button class="go" data-block="'+nextIdx+'">'+IC.play+'¡Vamos!</button></section>';
+    }else{
+      const open=courtOpen();
+      h+='<section class="hero" style="background:#B8860B"><div class="top"><span class="ic">'+IC.mix+'</span><div><p class="lab">Entrenamiento completo</p><h2>¡MVP del día!</h2></div></div><p>Terminaste las '+blocks.length+' misiones. '+(open?'Tienes '+(S.prog.shots||0)+' tiros para la cancha.':'Sigue así para abrir la cancha.')+'</p><button class="go" id="goCourt">'+IC.play+(open?'Ir a la cancha':'Ver mi poder')+'</button></section>';
+    }
   }else{
-    html+='<h1>Hoy toca descansar del entrenamiento</h1><p class="muted">El entrenamiento es sábado y domingo. Si quieres, puedes practicar tablas o hacer una misión libre.</p><div class="row" style="margin-top:6px"><button class="btn" id="freeBtn">Misión libre</button><button class="btn ghost" id="tabBtn">Practicar tablas</button></div></section>';
-    if(planDate)html+=planHtml(t);
+    h+='<section class="hero" style="background:#3F4A7A"><div class="top"><span class="ic">'+IC.rest+'</span><div><p class="lab">Entre semana</p><h2>El entrenamiento es sábado y domingo</h2></div></div><p>Si tienes ganas, haz una misión libre de 10 minutos.</p><button class="go" id="freeBtn">'+IC.play+'Misión libre</button></section>';
+    h+='<button class="linkbtn" id="tabBtn">o practica las tablas</button>';
   }
-  {const pr=S.prog,open=courtOpen();html+='<section class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-color:var(--court)"><span style="font-size:42px">'+(open?'🏀':'🔒')+'</span><div style="flex:1;min-width:200px"><b style="font-size:19px">'+(open?'Tienes '+(pr.shots||0)+' tiros para la cancha':'Cancha cerrada')+'</b><p class="muted small">'+(open?'Cada 3 respuestas correctas ganas 1 tiro más. Misión completa = 1 tiro.':'Se abre al llegar a Guerrero. Te faltan '+(Math.max(0,LOCK_XP-pr.xp)*10).toLocaleString("es-EC")+' de poder.')+'</p></div>'+(open?'<button class="btn" id="goCourt">Ir a la cancha</button>':'')+'</section>'}
-  html+=weekCardHtml();
-  html+='<section class="card"><div class="row spread"><h2>Próximos partidos</h2><span class="muted small">lecciones y exámenes</span></div><div style="margin-top:8px">'+(up.length?up.map(e=>eventRow(e)).join(""):'<p class="muted">No hay evaluaciones cargadas para las próximas 2 semanas.</p>')+'</div></section>';
-  main.innerHTML=html;
-  bindPlan(t);bindTopicButtons();bindWeek();
+  h+=soonHtml();
+  main.innerHTML=h;
+  bindPlan(t);bindSoon();
   const gc=$("#goCourt");if(gc)gc.onclick=()=>setView("poder");
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
   const tb=$("#tabBtn");if(tb)tb.onclick=()=>setView("tablas");
@@ -535,23 +633,36 @@ const timerHtml=()=>S.activeBlock?'<div class="row" style="gap:8px"><div class="
 /* materias */
 function viewMaterias(){
   if(S.sub){return viewSubject(S.sub)}
-  const g=S.meta.grades&&S.meta.grades.q1||{};
-  let h='<section class="card"><h1>Materias</h1><p class="muted">Toca una materia para ver sus temas. El círculo dice cuánto dominas cada tema.</p></section><section class="grid">';
-  SUBJ_ORDER.forEach(s=>{const st=subjStats(s),gr=g[s];if(!st.total)return;
-    h+='<button class="subj" data-sub="'+s+'" style="border-left-color:'+SUBJ[s].c+'"><div class="row spread"><h3>'+SUBJ[s].n+'</h3>'+(gr?'<span class="chip">1Q '+gr.prom.toFixed(2)+'</span>':'')+'</div><div class="bar"><i style="width:'+Math.round(st.pct*100)+'%;background:'+SUBJ[s].c+'"></i></div><span class="small muted">'+st.mastered+' de '+st.total+' temas dominados</span></button>';});
+  const soonSubj=new Set(upcoming(7).map(([,e])=>e.subject));
+  let h='<section class="hello"><div><h1>¿Qué quieres estudiar?</h1><p class="muted">Cada color es una materia. Las estrellas son los temas que ya dominas.</p></div></section><section class="doors">';
+  SUBJ_ORDER.forEach(s=>{const st=subjStats(s);if(!st.total)return;const K=kidOf(s);
+    h+='<button class="door" data-sub="'+s+'" style="--c:'+K.c+'">'+(soonSubj.has(s)?'<span class="flag">Lección pronto</span>':'')+'<span class="ic">'+IC[s]+'</span><b>'+K.k+'</b><span>'+esc(K.o)+'</span><span class="stars">★ '+st.mastered+' de '+st.total+'</span></button>';});
+  const tb=S.prog.tables||{},td=Object.values(tb).filter(x=>x.best>=.9).length;
+  h+='<button class="door" id="doorTab" style="--c:'+KID.tab.c+'"><span class="ic">'+IC.tab+'</span><b>Tablas</b><span>Multiplicar rápido</span><span class="stars">★ '+td+' de 9</span></button>';
   main.innerHTML=h+'</section>';
   main.querySelectorAll("[data-sub]").forEach(b=>b.onclick=()=>setView("materias",b.dataset.sub));
+  $("#doorTab").onclick=()=>setView("tablas");
 }
+function topicRow(id,t,tag){return '<button class="topic" data-topic="'+esc(id)+'">'+stars(best(id))+'<span><b>'+esc(t.title)+'</b>'+(tag?'<span class="tag">'+esc(tag)+'</span>':'')+'</span><span class="muted" style="font-size:24px">›</span></button>'}
 function viewSubject(s){
-  const list=sortedTopics(s);
-  const groups=[["Ahora en clase (2do quimestre)",list.filter(([,t])=>t.status==="actual")],["Base: repasar siempre",list.filter(([,t])=>t.status==="base")],["Repaso del 1er quimestre",list.filter(([,t])=>t.status!=="actual"&&t.status!=="base")]];
-  let h='<section class="card" style="border-left:10px solid '+SUBJ[s].c+'"><button class="btn small ghost" id="back">← Materias</button><h1 style="margin-top:10px">'+SUBJ[s].n+'</h1></section>';
-  groups.forEach(([name,items])=>{if(!items.length)return;
-    h+='<section style="display:grid;gap:10px"><p class="eyebrow">'+name+'</p>'+items.map(([id,t])=>{const b=best(id);return '<button class="topic" data-topic="'+esc(id)+'"><span class="mastery '+mClass(b)+'">'+mText(b)+'</span><span><b>'+esc(t.title)+'</b>'+(t.priority===1?' <span class="chip" style="color:var(--court)">prioridad</span>':'')+'</span><span class="muted">›</span></button>'}).join("")+'</section>';});
-  if(s==="ing")h=h.replace('</section>','<div class="row" style="margin-top:12px"><button class="btn small" id="goWords">Palabras en inglés</button><button class="btn small soft" id="goEnsayo">Ensayo de la exposición</button></div></section>');
-  main.innerHTML=h;$("#back").onclick=()=>setView("materias");bindTopicButtons();
+  const K=kidOf(s),list=sortedTopics(s);
+  const exam={};upcoming(14).forEach(([,e])=>{if(e.subject!==s)return;const n=daysUntil(e.date),lab=n===0?"hoy":n===1?"mañana":e.date.slice(8,10)+"/"+e.date.slice(5,7);(e.topics||[]).forEach(t=>{if(S.topics[t]&&!exam[t])exam[t]=(e.kind==="exposicion"?"exposición ":"lección ")+lab})});
+  const inExam=list.filter(([id])=>exam[id]);
+  const now=list.filter(([id,t])=>!exam[id]&&t.status==="actual");
+  const base=list.filter(([id,t])=>!exam[id]&&t.status==="base");
+  const old=list.filter(([id,t])=>!exam[id]&&t.status!=="actual"&&t.status!=="base");
+  let h='<section class="shead" style="--c:'+K.c+'"><span class="ic">'+IC[s]+'</span><div><h1>'+K.k+'</h1><p style="opacity:.9">'+esc(K.o)+'</p></div><button class="back" id="back">← Volver</button></section>';
+  if(s==="ing")h+=weekCardHtml();
+  if(s==="mat")h+='<button class="topic" id="goTab" style="background:var(--court-soft)"><span class="st">×</span><span><b>Tablas de multiplicar</b><span class="tag">todos los días</span></span><span class="muted" style="font-size:24px">›</span></button>';
+  const grp=(title,sub,items,tagf)=>items.length?'<section class="grp" style="--c:'+K.c+'"><h2><i></i>'+title+'</h2>'+(sub?'<p>'+sub+'</p>':'')+items.map(([id,t])=>topicRow(id,t,tagf&&tagf(id))).join("")+'</section>':'';
+  h+=grp("Para la próxima evaluación","Empieza por aquí.",inExam,id=>exam[id]);
+  h+=grp("Ahora en clase","Lo que están viendo estas semanas.",now);
+  h+=grp("Siempre repasar","Temas base que se usan todo el año.",base);
+  if(old.length)h+='<details class="grp" style="--c:'+K.c+'"><summary>Lo que ya viste (1er quimestre) · '+old.length+'</summary>'+old.map(([id,t])=>topicRow(id,t)).join("")+'</details>';
+  main.innerHTML=h;$("#back").onclick=()=>setView("materias");bindTopicButtons();bindWeek();
   const gw=$("#goWords");if(gw)gw.onclick=()=>setView("palabras");
   const ge=$("#goEnsayo");if(ge)ge.onclick=()=>setView("ensayo");
+  const gt=$("#goTab");if(gt)gt.onclick=()=>setView("tablas");
 }
 function openTopic(id){if(!S.topics[id])return;S.topicId=id;S.view="topic";render();window.scrollTo(0,0)}
 function viewTopic(){
@@ -622,7 +733,7 @@ const HOW={
   vSay:["Mira el dibujo y la palabra en español.","Piensa cómo se dice en inglés.","Toca la palabra correcta. Después repítela en voz alta."],
   drill:["Lee la multiplicación.","Escribe el resultado con los números de abajo.","Toca OK. Si te equivocas, toca la flecha para borrar antes de OK."],
   ensayo:["Toca el animal que hiciste con plastilina.","Toca «Escuchar todo» para oír la presentación completa.","Toca «Mi turno». La voz dice una frase y tú la repites en el silencio.","Al final, dila tú solo, con voz fuerte, y toca «¡La dije completa!»."],
-  palabras:["Toca una tarjeta para escuchar la palabra.","Repítela en voz alta 3 veces.","Cuando ya la sepas sin mirar, toca «Ya la sé»."]
+  palabras:["Toca una palabra para escucharla.","Repítela en voz alta 3 veces.","Cuando ya la sepas sin mirar, toca «Ya la sé»."]
 };
 function howHtml(steps,tip,compact){
   return '<div class="how'+(compact?' compact':'')+'"><h3>¿QUÉ TENGO QUE HACER?</h3><button class="iconbtn" data-howsay aria-label="Escuchar las instrucciones">'+SPEAK+'</button><ol>'+steps.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>'+(tip?'<p class="tip">'+esc(tip)+'</p>':'')+'</div>';
@@ -719,8 +830,7 @@ function weekCardHtml(){
   const w=curWeek();if(!w||!w.ing)return "";
   const tops=(w.ing.topics||[]).filter(t=>S.topics[t]);
   return '<section class="card weekcard" style="display:grid;gap:10px;border-top:8px solid var(--ing)"><p class="eyebrow" style="color:var(--ing)">Inglés de esta semana · '+esc(w.label||"")+'</p><h2>Lo que tienes que dominar</h2><ul class="points">'+(w.ing.goals||[]).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+
-    '<div class="row"><button class="btn small" id="wkWords" style="background:var(--ing)">'+SPEAK+' Palabras de la semana</button><button class="btn small" id="wkEnsayo">Ensayo de la exposición</button><button class="btn small soft" id="wkQuiz">Práctica del quiz</button></div>'+
-    '<div class="row">'+tops.map(t=>'<button class="btn small soft" data-topic="'+esc(t)+'">'+esc(S.topics[t].title)+'</button>').join("")+'</div></section>';
+    '<div class="row"><button class="btn small" id="wkWords" style="background:var(--ing)">'+SPEAK+' Palabras de la semana</button><button class="btn small" id="wkEnsayo">Ensayo de la exposición</button><button class="btn small soft" id="wkQuiz">Práctica del quiz</button></div>'+'</section>';
 }
 function bindWeek(){
   const a=$("#wkWords");if(a)a.onclick=()=>setView("palabras","week");
@@ -743,16 +853,16 @@ function viewPalabras(){
   const ids=sel==="week"?wk:[sel];
   const words=[];ids.forEach(g=>{const G=S.vocab[g];if(G)(G.words||[]).forEach(w=>words.push({...w,g}))});
   const total=groups.reduce((n,[,g])=>n+(g.words||[]).length,0),known=Object.keys(S.prog.vocab||{}).filter(k=>S.prog.vocab[k]).length;
-  let h='<section class="card" style="display:grid;gap:10px;border-top:8px solid var(--ing)"><div class="row spread"><h1>Palabras en inglés</h1><span class="chip">'+known+' / '+total+' aprendidas</span></div>'+howHtml(HOW.palabras,"Los botones de colores son juegos: «Escucha y elige» y «¿Cómo se dice?». Cada 3 aciertos ganas 1 tiro.",true)+
-    '<label class="toggle" for="autoread"><input type="checkbox" id="autoread"'+(store.get("autoread",true)?' checked':'')+'> Leer en voz alta las preguntas en inglés</label>'+
-    '<div class="row"><button class="btn small'+(sel==="week"?'':' soft')+'" data-vg="week">Esta semana</button>'+groups.map(([id,g])=>'<button class="btn small'+(sel===id?'':' soft')+'" data-vg="'+esc(id)+'">'+esc(g.name)+'</button>').join("")+'</div></section>';
-  const G=sel!=="week"&&S.vocab[sel];
-  if(G&&G.note)h+='<p class="muted small">'+esc(G.note)+'</p>';
-  h+='<section class="row"><button class="btn" id="vgListen" style="background:var(--ing)">🎧 Escucha y elige</button><button class="btn soft" id="vgSay">¿Cómo se dice?</button><button class="btn soft" id="vgEnsayo">Ensayo de la exposición</button></section>';
+  const PT="Toca un juego de colores para jugar. Abajo están todas las palabras: tócalas para escucharlas.";
+  let h='<section class="hello"><div><h1>Palabras en inglés</h1><p class="muted">Ya sabes '+known+' de '+total+' palabras</p></div></section>';
+  h+='<section class="doors"><button class="door" id="vgListen" style="--c:'+KID.ing.c+'"><span class="ic">'+SPEAK+'</span><b>Escucha y elige</b><span>Oye la palabra y toca su significado</span></button>'+
+    '<button class="door" id="vgSay" style="--c:#16804F"><span class="ic">'+IC.ing+'</span><b>¿Cómo se dice?</b><span>Mira el dibujo y elige en inglés</span></button>'+
+    '<button class="door" id="vgEnsayo" style="--c:#6A3FE0"><span class="ic">'+IC.mic+'</span><b>Ensayo</b><span>Practica tu exposición</span></button></section>';
+  h+=howHtml(HOW.palabras,PT,true);
+  h+='<div class="row"><button class="btn small'+(sel==="week"?'':' soft')+'" data-vg="week">Esta semana</button>'+groups.map(([id,g])=>'<button class="btn small'+(sel===id?'':' soft')+'" data-vg="'+esc(id)+'">'+esc(g.name)+'</button>').join("")+'</div>';
   h+='<section class="words">'+words.map((w,i)=>'<button class="word'+(vKnown(w.w)?' known':'')+'" data-wi="'+i+'"><span class="em">'+esc(w.emoji)+'</span><span class="w">'+esc(w.w)+'</span><span class="es">'+esc(w.es)+'</span></button>').join("")+'</section>';
   h+='<section class="card" id="wdetail" hidden></section>';
-  main.innerHTML=h;bindHow(HOW.palabras,"Los botones de colores son juegos: «Escucha y elige» y «¿Cómo se dice?». Cada 3 aciertos ganas 1 tiro.");
-  $("#autoread").onchange=e=>store.set("autoread",e.target.checked);
+  main.innerHTML=h;bindHow(HOW.palabras,PT);
   main.querySelectorAll("[data-vg]").forEach(b=>b.onclick=()=>{store.set("vgroup",b.dataset.vg);setView("palabras",b.dataset.vg)});
   $("#vgListen").onclick=()=>startVGame(ids,"listen");
   $("#vgSay").onclick=()=>startVGame(ids,"say");
@@ -836,10 +946,10 @@ function viewEnsayo(){
 /* tables */
 function viewTablas(){
   const tb=S.prog.tables||{};
-  let h='<section class="card"><h1>Entrenamiento de tablas</h1><p class="muted">La profe toma las tablas todos los días. 10 multiplicaciones por ronda. Verde = dominada (9 o 10 bien).</p></section><section class="tgrid">';
+  let h='<section class="shead" style="--c:'+KID.tab.c+'"><span class="ic">'+IC.tab+'</span><div><h1>Tablas</h1><p style="opacity:.9">Elige una tabla. Son 10 multiplicaciones.</p></div><button class="back" id="back">← Volver</button></section><p class="muted">Verde = tabla dominada (9 o 10 bien).</p><section class="tgrid">';
   for(let n=2;n<=10;n++){const b=tb[n]?tb[n].best:-1;h+='<button class="tbtn'+(b>=.9?' best':'')+'" data-n="'+n+'">×'+n+'<small>'+(b<0?'nueva':Math.round(b*10)+'/10')+'</small></button>'}
   h+='<button class="tbtn" data-n="mix" style="background:var(--court);color:#fff;border-color:var(--court)">MIX<small style="color:#fff">todas</small></button></section>';
-  main.innerHTML=h;main.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>startDrill(b.dataset.n));
+  main.innerHTML=h;main.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>startDrill(b.dataset.n));$("#back").onclick=()=>setView("materias");
 }
 function startDrill(n){
   const qs=[];for(let k=0;k<10;k++){const a=n==="mix"?2+Math.floor(Math.random()*9):+n,b=1+Math.floor(Math.random()*10);qs.push(Math.random()<.5?[a,b]:[b,a])}
@@ -1015,6 +1125,7 @@ function voiceCardHtml(){
     '<label class="f" for="vEn">Voz en inglés'+sel("vEn","en","voiceEn","en-US")+'</label><button class="btn small soft" id="tEn">'+SPEAK+' Probar inglés</button>'+
     '<label class="f" for="vEs">Voz en español'+sel("vEs","es","voiceEs","es-US")+'</label><button class="btn small soft" id="tEs">'+SPEAK+' Probar español</button>'+
     (hasVoice("es-US")?'':'<p class="feedback no small"><b>Este equipo no tiene voz en español.</b> Las instrucciones se muestran escritas pero no se leen. Instala una voz en español (mira las guías de abajo) y recarga la página.</p>')+
+    '<label class="toggle" for="autoread"><input type="checkbox" id="autoread"'+(store.get("autoread",true)?' checked':'')+'> Leer en voz alta las preguntas en inglés</label>'+
     '<label class="toggle" for="autoInstr"><input type="checkbox" id="autoInstr"'+(store.get("autoInstr",true)?' checked':'')+'> Leer en voz alta las instrucciones la primera vez que aparece cada ejercicio</label>'+
     '<button class="btn small soft" id="tBlank">'+SPEAK+' Probar pausa en espacio en blanco</button>'+
     '<label class="f" for="vRate">Velocidad: <span id="vRateL">'+Math.round(rate*100)+'%</span><input type="range" id="vRate" min="0.7" max="1.15" step="0.05" value="'+rate+'"></label>'+
@@ -1030,6 +1141,7 @@ function bindVoice(){
   vEs.onchange=()=>{store.set("voiceEs",vEs.value);say("¡Hola! Vamos a entrenar juntos.","es-US")};
   $("#tEn").onclick=()=>say("Hello! This is a butterfly. It is small and colorful. It can fly.","en-US");
   $("#tEs").onclick=()=>say("¡Hola! Hoy vamos a repasar las tablas de multiplicar. ¡Tú puedes!","es-US");
+  $("#autoread").onchange=e=>store.set("autoread",e.target.checked);
   $("#autoInstr").onchange=e=>store.set("autoInstr",e.target.checked);
   $("#tBlank").onclick=()=>say("She ___ happy yesterday.","en-US",.85);
   vr.oninput=()=>{store.set("voiceRate",+vr.value);$("#vRateL").textContent=Math.round(vr.value*100)+"%"};
