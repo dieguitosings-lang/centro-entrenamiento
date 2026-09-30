@@ -208,9 +208,10 @@ nav.tabs button svg{width:30px;height:30px}
 .hello{display:flex;align-items:center;gap:14px;padding:4px 4px 0}
 .hello h1{font-size:clamp(26px,5vw,34px)}
 .track{display:flex;gap:10px;align-items:center}
-.track .b{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--soft);border:3px dashed var(--line);font-family:var(--display);font-size:16px;color:var(--muted)}
+.track .b{width:48px;height:48px;cursor:pointer;border-radius:50%;display:grid;place-items:center;background:var(--soft);border:3px dashed var(--line);font-family:var(--display);font-size:16px;color:var(--muted)}
 .track .b.done{background:var(--aqua);border:3px solid var(--aqua);color:#fff}
-.track .b.now{border:3px solid var(--brand);color:var(--brand);background:var(--brand-soft)}
+.track .b.now{border:3px solid var(--brand);color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 3px var(--brand-soft)}
+.track .b.done.now{background:var(--aqua);color:#fff;border-color:var(--brand)}
 .track .b svg{width:24px;height:24px}
 .hero{position:relative;overflow:hidden;display:grid;gap:14px;padding:26px 22px;border-radius:32px;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.12)}
 .hero::before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:46% 54% 58% 42%/48% 44% 56% 52%;background:rgba(255,255,255,.14)}
@@ -604,11 +605,13 @@ function viewHoy(){
   if(active){
     const blocks=planFor(t),ses=sessionOf(t);S.plan={date:t,blocks};
     const nextIdx=blocks.findIndex((b,i)=>!ses.done.includes(i));
-    h+='<div class="track" aria-label="Misiones de hoy">'+blocks.map((b,i)=>{const done=ses.done.includes(i);return '<button class="b'+(done?' done':i===nextIdx?' now':'')+'" '+(done?'data-block="'+i+'" aria-label="Misión '+(i+1)+' hecha, repetir"':'aria-label="Misión '+(i+1)+'" disabled')+'>'+(done?'✓':i+1)+'</button>'}).join("")+'<span class="muted small" style="margin-left:4px">'+ses.done.length+' de '+blocks.length+'</span></div>';
-    if(nextIdx>=0){
-      const b=blocks[nextIdx],K=kidOf(b.kind==="tabla"?"tab":b.sub);/*v9*/
-      if(ses.done.length)h+='<div class="breath">'+IC.leaf+'<span><b>Antes de seguir:</b> '+esc(PAUSES[(ses.done.length-1)%PAUSES.length].replace(/^Pausa( activa)?: /,""))+'</span></div>';
-      h+='<section class="hero" style="background:var(--hero)"><div class="top"><span class="ic">'+(IC[b.kind==="tabla"?"tab":b.sub]||IC.mix)+'</span><div><p class="lab">Misión '+(nextIdx+1)+' · 10 min</p><span class="subj-pill"><i style="background:'+K.c+'"></i>'+esc(K.k)+'</span><h2>'+esc(b.title)+'</h2></div></div><p>'+esc(missionWhat(b))+'</p><button class="go" data-block="'+nextIdx+'">'+IC.play+'¡Vamos!</button></section>';
+    /* v11: todas las misiones se pueden tocar; la tocada pasa a la tarjeta grande */
+    const pick=S.pick&&S.pick.date===t&&S.pick.i<blocks.length?S.pick.i:-1,sel=pick>=0?pick:nextIdx;
+    h+='<div class="track" aria-label="Misiones de hoy. Toca una para elegirla">'+blocks.map((b,i)=>{const done=ses.done.includes(i);return '<button class="b'+(done?' done':'')+(i===sel?' now':'')+'" data-pick="'+i+'" aria-label="Misión '+(i+1)+': '+esc(b.title)+(done?' (hecha)':'')+'"'+(i===sel?' aria-current="true"':'')+'>'+(done?'✓':i+1)+'</button>'}).join("")+'<span class="muted small" style="margin-left:4px">'+ses.done.length+' de '+blocks.length+'</span></div>';
+    if(sel>=0){
+      const b=blocks[sel],K=kidOf(b.kind==="tabla"?"tab":b.sub),again=ses.done.includes(sel);
+      if(ses.done.length&&!again)h+='<div class="breath">'+IC.leaf+'<span><b>Antes de seguir:</b> '+esc(PAUSES[(ses.done.length-1)%PAUSES.length].replace(/^Pausa( activa)?: /,""))+'</span></div>';
+      h+='<section class="hero" style="background:var(--hero)"><div class="top"><span class="ic">'+(IC[b.kind==="tabla"?"tab":b.sub]||IC.mix)+'</span><div><p class="lab">Misión '+(sel+1)+' · 10 min'+(again?' · ya la hiciste':'')+'</p><span class="subj-pill"><i style="background:'+K.c+'"></i>'+esc(K.k)+'</span><h2>'+esc(b.title)+'</h2></div></div><p>'+esc(missionWhat(b))+'</p><button class="go" data-block="'+sel+'">'+IC.play+(again?'Otra vez':'¡Vamos!')+'</button></section>';
     }else{
       const open=courtOpen();
       h+='<section class="hero" style="background:linear-gradient(135deg,#0FA697,#1F63D6)"><div class="top"><span class="ic">'+IC.mix+'</span><div><p class="lab">Entrenamiento completo</p><h2>¡MVP del día!</h2></div></div><p>Terminaste las '+blocks.length+' misiones. '+(open?'Tienes '+(S.prog.shots||0)+' tiros para la cancha.':'Sigue así para abrir la cancha.')+'</p><button class="go" id="goCourt">'+IC.play+(open?'Ir a la cancha':'Ver mi poder')+'</button></section>';
@@ -620,6 +623,7 @@ function viewHoy(){
   h+=soonHtml();
   main.innerHTML=h;
   bindPlan(t);bindSoon();
+  main.querySelectorAll("[data-pick]").forEach(x=>x.onclick=()=>{S.pick={date:t,i:+x.dataset.pick};viewHoy()});
   const gc=$("#goCourt");if(gc)gc.onclick=()=>setView("poder");
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
   const tb=$("#tabBtn");if(tb)tb.onclick=()=>startDrill(sunday0()?"mix":weakestTable());
@@ -660,7 +664,7 @@ function bindPlan(date){
   });
 }
 function completeBlock(){
-  if(!S.activeBlock)return;
+  if(!S.activeBlock)return;S.pick=null;
   const ses=sessionOf(S.activeBlock.date);
   if(!ses.done.includes(S.activeBlock.i)){ses.done.push(S.activeBlock.i);addXp(XP_BLOCK);giveShots(1,"misión completa");
     if(S.plan&&ses.done.length>=S.plan.blocks.length){giveShots(3,"¡MVP del día!");setTimeout(()=>celebrate("¡MVP del día!","Completaste todo el entrenamiento. Ganaste 3 tiros extra para la cancha."),400);}}
