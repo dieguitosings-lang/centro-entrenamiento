@@ -20,7 +20,8 @@ def put(coll, did, data):
 
 # Fecha en que cada tema llegó desde Teams (los nuevos salen primero en el plan).
 ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-valise", "f-activites", "f-jours", "d-word")},
-         **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")}, "s-historia": "2026-10-06", "s-apelativos": "2026-10-06"}
+         **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
+         "m-mult2": "2026-10-06"}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -67,7 +68,11 @@ events = [
  ("ev-1006-stem", "2026-10-06", "nat", "otro", "AquaMisión: ¡Que no se hunda! (School Projects)",
   "Proyecto STEM: construir en grupo un barquito que flote y lleve carga. Llevar papel aluminio, unidades de carga iguales (monedas, pompones o fichas), una hoja, lápiz y algo de color verde.", []),
  ("ev-1007-soc", "2026-10-07", "soc", "leccion", "Lección #1 de Sociales (9:30)",
-  "Temas: «Muchas provincias juntas hacen nuestro país» y «¿Cómo se llaman las provincias del Ecuador?». La profe pide estudiar el Trabajo individual y la Tarea #1. Del cuaderno: de 8 a 24 provincias (24 sep), de dónde vienen los nombres de las provincias (1 oct) y los apelativos de las capitales — 3 departamentos (Guayaquil, Quito y Azuay), cambios de 1861, 1925 y 2007, y por qué se crearon nuevas provincias. Unidad 4 sigue con: símbolos de las provincias, autoridades, y lugares, personas y tradiciones.", ["s-historia", "s-nombres", "s-apelativos", "s-provincias"]),
+  "Temas: «Muchas provincias juntas hacen nuestro país» y «¿Cómo se llaman las provincias del Ecuador?». La profe pide estudiar el Trabajo individual y la Tarea #1.", ["s-nombres", "s-provincias"]),
+ ("ev-1007-nat", "2026-10-07", "nat", "tarea", "Natural Science: llevar impresa la hoja «Human Body Worksheet 1st part»",
+  "Tarea «Coeducation» de Miss Sheyla: «Please bring the following worksheet!». Vence el miércoles 7 a las 7:30.", []),
+ ("ev-1008-mat", "2026-10-08", "mat", "tarea", "Tarea N°3 de Matemática (en hojas de carpeta, NO imprimir)",
+  "Propiedad conmutativa, asociativa y distributiva; multiplicaciones por una cifra (como 22 × 3) y 2 problemas. Se entrega en la hora de clase, el jueves 8. Debe hacerla él solo, con buena letra y números claros.", ["m-propiedades", "m-mult2", "m-probmult"]),
  ("ev-1008-hw3", "2026-10-08", "ing", "tarea", "Homework #3: Wellness Book pág. 14", "Language Arts. Vence el jueves 8 a las 7:00.", []),
  ("ev-1008-hw4", "2026-10-08", "ing", "tarea", "Homework #4: Highlights (libros #9 y #10)", "Leer en la plataforma Highlights: «The Ghost Room» y «Ray's Rough Day». Vence el jueves 8 a las 7:00.", []),
  ("ev-0928-oral", "2026-09-28", "ing", "exposicion", "Oral presentation: My Garden Animal",
@@ -87,9 +92,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-03", "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-06", "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
