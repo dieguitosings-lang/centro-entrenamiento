@@ -21,7 +21,8 @@ def put(coll, did, data):
 # Fecha en que cada tema llegó desde Teams (los nuevos salen primero en el plan).
 ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-valise", "f-activites", "f-jours", "d-word")},
          **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
-         "m-mult2": "2026-10-06"}
+         "m-mult2": "2026-10-06",
+         **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -53,10 +54,8 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-10-05", "end": "2026-10-09", "label": "Semana del 5 al 9 de octubre",
-  "ing": {"goals": ["Jueves 8: Homework #3 — página 14 del Wellness Book",
-                    "Jueves 8: Homework #4 — leer en Highlights los libros #9 «The Ghost Room» y #10 «Ray's Rough Day»",
-                    "Repasar: Unit 5 (12 animales) y was / were / wasn't / weren't",
+put("meta", "week", {"start": "2026-10-12", "end": "2026-10-16", "label": "Semana del 12 al 16 de octubre",
+  "ing": {"goals": ["Repasar: Unit 5 (12 animales) y was / were / wasn't / weren't",
                     "Siempre: pronouns, present simple y present continuous"],
           "topics": ["e-garden", "e-waswere", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
           "vocab": ["garden", "animalparts", "describe"]},
@@ -65,6 +64,20 @@ put("meta", "week", {"start": "2026-10-05", "end": "2026-10-09", "label": "Seman
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
 events = [
+ ("ev-1013-len", "2026-10-13", "len", "leccion", "Lección #2 de Lengua",
+  "Temas (canal 5. EVALUACIONES): anuncio publicitario (concepto, elementos y ejemplos), el verbo y los tiempos verbales, y conjugar verbos con los pronombres personales. Ojo con las tildes.", ["l-anuncio", "l-verbo", "l-conjugacion", "l-pronombres"]),
+ ("ev-1013-lt2", "2026-10-13", "len", "tarea", "Lengua: Tarea #2 El anuncio publicitario (libro págs. 112-113)",
+  "La pág. 112 se hizo en clase; completar lo que falte. Vence el martes 13 a las 23:59.", ["l-anuncio"]),
+ ("ev-1013-lt3", "2026-10-13", "len", "tarea", "Lengua: Tarea #3 El verbo y sus tiempos (en el cuaderno)",
+  "Copiar los ejercicios en el cuaderno, resolverlos, tomar foto y subirla a Teams. Pronombres, verbos en presente y conjugación en pasado y futuro, con tildes. Vence el martes 13 a las 23:59.", ["l-conjugacion", "l-verbo", "l-pronombres"]),
+ ("ev-1014-fr", "2026-10-14", "fr", "tarea", "Francés: Tache 1 (activité 1, pages 1-2)",
+  "Completar la actividad 1, páginas 1 y 2 (la hoja está en su carpeta, tema «Mes vacances») y presentarla en la próxima clase. Vence el miércoles 14 a las 7:00.", ["f-lieux", "f-temps"]),
+ ("ev-1014-soc", "2026-10-14", "soc", "tarea", "Tarea de Sociales: autoridades de la provincia (imprimir y pegar en el cuaderno)",
+  "Mapa de autoridades provinciales (elegidas por votación y la que nombra el presidente), 3 responsabilidades, crucigrama de ciudades y recortar y pegar la bandera y el escudo de la provincia que más te gusta. Vence el miércoles 14 a las 8:30.", ["s-autoridades", "s-provincias"]),
+ ("ev-1016-mat", "2026-10-16", "mat", "leccion", "Lección semanal N°2 de Matemática",
+  "Temas: la multiplicación (concepto y términos), propiedades de la multiplicación (concepto y ejercicios), problemas de razonamiento y TABLAS DE MULTIPLICAR.", ["m-mult", "m-propiedades", "m-probmult", "m-mult2"]),
+ ("ev-1008-soc", "2026-10-08", "soc", "tarea", "Sociales: llevar los anexos «Símbolos y autoridades de mi provincia» y el Trabajo individual",
+  "Tarea «Recursos»: «Traer para mañana los siguientes archivos». Vencía el jueves 8 a las 8:00.", ["s-autoridades"]),
  ("ev-1006-stem", "2026-10-06", "nat", "otro", "AquaMisión: ¡Que no se hunda! (School Projects)",
   "Proyecto STEM: construir en grupo un barquito que flote y lleve carga. Llevar papel aluminio, unidades de carga iguales (monedas, pompones o fichas), una hoja, lápiz y algo de color verde.", []),
  ("ev-1007-soc", "2026-10-07", "soc", "leccion", "Lección #1 de Sociales (9:30)",
@@ -92,9 +105,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-06", "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-09", "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
