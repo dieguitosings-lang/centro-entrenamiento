@@ -283,6 +283,25 @@ details.grp[open]>summary::after{content:"–"}
 .lock{display:grid;gap:12px;justify-items:center;text-align:center;padding:24px 16px}
 .lock .em{font-size:64px;line-height:1}
 @media (max-width:520px){.mission{grid-template-columns:52px 1fr}.mission .num{width:52px;height:52px;font-size:22px}.mission .btn{grid-column:1 / -1}}
+
+/* v12: agenda en el menú principal: todo lo que viene, con anticipación */
+.agenda{display:grid;gap:10px}
+.agenda>h2{display:flex;align-items:center;gap:10px;font-size:22px}
+.agenda>p{color:var(--muted);font-size:15px;margin-top:-4px}
+.ag{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:14px;border-radius:22px;background:var(--card);box-shadow:var(--shadow);border-left:8px solid var(--c)}
+.ag.done{opacity:.55}
+.ag .d{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;color:#fff;background:var(--c);font-family:var(--display);line-height:1;text-align:center;font-size:24px}
+.ag .d small{display:block;font-size:11px;font-family:var(--body);font-weight:700;letter-spacing:.06em}
+.ag .k{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--c);text-transform:uppercase}
+.ag .k .when{color:var(--ink);background:var(--soft);padding:2px 8px;border-radius:99px;margin-left:6px;text-transform:none;letter-spacing:0}
+.ag .k .when.hot{background:var(--bad);color:#fff}
+.ag b.t{display:block;font-size:18px;line-height:1.3;margin-top:2px}
+.ag .det{font-size:16px;line-height:1.4;margin-top:4px}
+.ag .tops{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ag .tops button{font-size:14px;font-weight:700;padding:6px 10px;border-radius:99px;background:var(--soft);min-height:36px}
+.ag .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ag .acts .btn{min-height:44px}
+@media (max-width:520px){.ag{grid-template-columns:1fr}.ag .d{width:auto;height:auto;padding:8px;justify-self:start;font-size:18px}}
 </style>
 </head>
 <body>
@@ -534,6 +553,8 @@ function planFor(dateStr){
   let evs=evalsAhead(wide?7:1);
   /* entre semana: si mañana no hay nada que repasar, mira pasado mañana */
   if(!wide&&!evs.some(([id,e])=>evalBlocks(id,e).length))evs=evalsAhead(2);
+  /* v12: con anticipación: si en 2 días no hay nada, repasa lo de los próximos 7 días */
+  if(!wide&&!evs.some(([id,e])=>evalBlocks(id,e).length))evs=evalsAhead(7);
   for(const [id,e] of evs){for(const b of evalBlocks(id,e)){if(blocks.length<max)blocks.push(b)}}
   if(weekend||store.get("freeDate",null)===dateStr){
     const used=[];
@@ -597,6 +618,29 @@ const KID={mat:{k:"Matemática",o:"Números y problemas",c:"#D4560F"},ing:{k:"In
   tab:{k:"Tablas",o:"Multiplicar rápido",c:"#9C3F0C"},mix:{k:"Partido",o:"Todas las materias",c:"#1F2640"}};
 const kidOf=s=>KID[s]||{k:s,o:"",c:"#1F2640"};
 function stars(b){const n=b<0?0:b>=.8?3:b>=.5?2:1;return '<span class="st" aria-label="'+n+' de 3 estrellas">'+"★★★".slice(0,n)+'<span class="off">'+"★★★".slice(n)+'</span></span>'}
+function agendaHtml(){
+  const up=upcoming(21);if(!up.length)return "";
+  const dn=S.prog.evDone||{};
+  const KL={leccion:"Lección",examen:"Examen",exposicion:"Exposición",tarea:"Tarea",otro:"Actividad"};
+  let h='<section class="agenda" id="agenda"><h2>📋 Lo que viene</h2><p>Todo lo que tienes que hacer y estudiar, por fecha. Adelántate: toca «Repasar ahora».</p>';
+  up.forEach(([id,e])=>{
+    const n=daysUntil(e.date),d=parseD(e.date),K=kidOf(e.subject),tops=evalTopics(e),done=!!dn[id];
+    const when=n===0?"¡Es hoy!":n===1?"Mañana":DIA[d.getDay()]+" · en "+n+" días";
+    const quiz=tops.some(t=>(S.topics[t].quiz||[]).length);
+    h+='<article class="ag'+(done?' done':'')+'" style="--c:'+K.c+'"><div class="d">'+d.getDate()+'<small>'+MES[d.getMonth()]+'</small></div><div>';
+    h+='<div class="k">'+esc(K.k)+' · '+esc(KL[e.kind]||"Actividad")+'<span class="when'+(n<=1?' hot':'')+'">'+esc(when)+'</span></div>';
+    h+='<b class="t">'+esc(e.title)+'</b>'+(e.detail?'<p class="det">'+esc(e.detail)+'</p>':'');
+    if(tops.length)h+='<div class="tops"><span class="small muted" style="align-self:center">Estudiar:</span>'+tops.map(t=>'<button data-topic="'+esc(t)+'">'+esc(S.topics[t].title)+' ›</button>').join("")+'</div>';
+    h+='<div class="acts">'+(quiz?'<button class="btn small" data-agev="'+esc(id)+'">'+IC.play+'Repasar ahora</button>':'')+'<button class="btn small '+(done?'good':'ghost')+'" data-agdone="'+esc(id)+'">'+(done?'✓ Listo':'Marcar listo')+'</button></div>';
+    h+='</div></article>';
+  });
+  return h+'</section>';
+}
+function bindAgenda(){
+  bindTopicButtons($("#agenda")||main);
+  main.querySelectorAll("[data-agev]").forEach(b=>b.onclick=()=>{S.evtId=b.dataset.agev;setView("evento")});
+  main.querySelectorAll("[data-agdone]").forEach(b=>b.onclick=()=>{const id=b.dataset.agdone;S.prog.evDone=S.prog.evDone||{};if(S.prog.evDone[id])delete S.prog.evDone[id];else S.prog.evDone[id]=today();saveProg();viewHoy()});
+}
 function soonHtml(){
   const up=upcoming(14);if(!up.length)return "";
   const [id,e]=up[0],n=daysUntil(e.date),d=parseD(e.date),K=kidOf(e.subject);
@@ -609,8 +653,9 @@ function viewHoy(){
   const t=today(),dow=new Date().getDay(),weekend=dow===0||dow===6;
   const nm=store.get("kidname","Thiago");
   const tmr=evalTomorrow(),two=evalsAhead(2).filter(([id,e])=>daysUntil(e.date)===2&&evalBlocks(id,e).length);
-  const active=weekend||store.get("freeDate",null)===t||tmr.length>0||two.length>0;
-  const sub=weekend?(dow===6?'Sábado':'Domingo')+' de entrenamiento'+(tmr.length?' · mañana: '+tmr[0][1].title:''):tmr.length?'Mañana tienes: '+tmr[0][1].title:two.length?'Pasado mañana: '+two[0][1].title:'Hoy '+DIA[dow]+' es día de descanso';
+  const week=evalsAhead(7).filter(([id,e])=>evalBlocks(id,e).length);
+  const active=weekend||store.get("freeDate",null)===t||tmr.length>0||two.length>0||week.length>0;
+  const sub=weekend?(dow===6?'Sábado':'Domingo')+' de entrenamiento'+(tmr.length?' · mañana: '+tmr[0][1].title:''):tmr.length?'Mañana tienes: '+tmr[0][1].title:two.length?'Pasado mañana: '+two[0][1].title:week.length?'Adelántate: '+week[0][1].title+' ('+DIA[parseD(week[0][1].date).getDay()]+')':'Hoy '+DIA[dow]+' es día de descanso';
   let h='<section class="hello"><div><h1>¡Hola, '+esc(nm)+'!</h1><p class="muted">'+esc(sub)+'</p></div></section>';
   if(active){
     const blocks=planFor(t),ses=sessionOf(t);S.plan={date:t,blocks};
@@ -630,9 +675,9 @@ function viewHoy(){
     h+='<section class="hero" style="background:var(--hero)"><div class="top"><span class="ic">'+IC.tab+'</span><div><p class="lab">Entre semana · 5 min</p><h2>Tablas del día</h2></div></div><p>La profe toma las tablas todos los días en clase. Practica 10 multiplicaciones.</p><button class="go" id="tabBtn">'+IC.play+'¡Vamos!</button></section>';
     h+='<button class="linkbtn" id="freeBtn">o haz una misión libre de 10 minutos</button>';
   }
-  h+=soonHtml();
+  h+=agendaHtml();
   main.innerHTML=h;
-  bindPlan(t);bindSoon();
+  bindPlan(t);bindAgenda();
   main.querySelectorAll("[data-pick]").forEach(x=>x.onclick=()=>{S.pick={date:t,i:+x.dataset.pick};viewHoy()});
   const gc=$("#goCourt");if(gc)gc.onclick=()=>setView("poder");
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
