@@ -74,6 +74,10 @@ events = [
   "Completar la actividad 1, páginas 1 y 2 (la hoja está en su carpeta, tema «Mes vacances») y presentarla en la próxima clase. Vence el miércoles 14 a las 7:00.", ["f-lieux", "f-temps"]),
  ("ev-1014-soc", "2026-10-14", "soc", "tarea", "Tarea de Sociales: autoridades de la provincia (imprimir y pegar en el cuaderno)",
   "Mapa de autoridades provinciales (elegidas por votación y la que nombra el presidente), 3 responsabilidades, crucigrama de ciudades y recortar y pegar la bandera y el escudo de la provincia que más te gusta. Vence el miércoles 14 a las 8:30.", ["s-autoridades", "s-provincias"]),
+ ("ev-1014-mat", "2026-10-14", "mat", "tarea", "Tarea N°4 de Matemática (en hojas de carpeta, NO imprimir)",
+  "Completar productos de las tablas, propiedad asociativa, propiedad distributiva, 4 multiplicaciones de 3 cifras por 1 cifra y 2 problemas (datos, operación y respuesta). Con nombre y paralelo, buena letra y números claros. Ojo: la profe escribió que se recibe el miércoles 14 en clase, pero Teams dice jueves 15 a las 13:30. Tenerla lista el miércoles.", ["m-mult2", "m-propiedades", "m-probmult", "m-mult"]),
+ ("ev-1016-pleno", "2026-10-16", "mat", "tarea", "Matemática: actividad en PLENO",
+  "La profe pide enviar la actividad en PLENO hasta el viernes 16/10.", []),
  ("ev-1016-mat", "2026-10-16", "mat", "leccion", "Lección semanal N°2 de Matemática",
   "Temas: la multiplicación (concepto y términos), propiedades de la multiplicación (concepto y ejercicios), problemas de razonamiento y TABLAS DE MULTIPLICAR.", ["m-mult", "m-propiedades", "m-probmult", "m-mult2"]),
  ("ev-1008-soc", "2026-10-08", "soc", "tarea", "Sociales: llevar los anexos «Símbolos y autoridades de mi provincia» y el Trabajo individual",
@@ -105,9 +109,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-09", "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-12" or eid in ("ev-1013-lt3", "ev-1014-soc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
