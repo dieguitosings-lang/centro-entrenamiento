@@ -22,7 +22,8 @@ def put(coll, did, data):
 ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-valise", "f-activites", "f-jours", "d-word")},
          **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
          "m-mult2": "2026-10-06",
-         **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")}}
+         **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
+         **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -64,6 +65,18 @@ put("meta", "week", {"start": "2026-10-12", "end": "2026-10-16", "label": "Seman
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
 events = [
+ ("ev-1020-env2", "2026-10-20", "env", "tarea", "Env. Science: Homework #2 Magnetics (Wordwall)",
+  "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y publicar el puntaje en la tarea. Vence el martes 20 a las 7:00.", ["v-magnets"]),
+ ("ev-1020-env1", "2026-10-20", "env", "tarea", "Env. Science: Homework #1 Forces: Push and Pull (Wordwall)",
+  "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y publicar el puntaje en la tarea. 10 puntos. Vence el martes 20 a las 7:30.", ["v-forces"]),
+ ("ev-1015-hw5", "2026-10-15", "ing", "tarea", "Language Arts: Homework #5 Listening (llevar la hoja impresa)",
+  "Imprimir la hoja, escuchar los audios 5.1 y 5.2, resolverla y llevarla a clase. Cuenta como actividad de recuperación (pág. 66 del workbook). Vence el jueves 15 a las 7:00.", []),
+ ("ev-1015-lt4", "2026-10-15", "len", "tarea", "Lengua: Tarea #4 (libro págs. 118, 119 y 120)",
+  "Realizar las actividades del libro, tomar foto y subirla a Teams. Vence el jueves 15 a las 23:59.", []),
+ ("ev-1014-ws4", "2026-10-14", "nat", "tarea", "Natural Science: Worksheet #4 (llevar impresa)",
+  "«Please print the following page and bring it to class». Vencía el miércoles 14 a las 7:00.", []),
+ ("ev-1014-socti4", "2026-10-14", "soc", "leccion", "Trabajo individual N°4 de Sociales (en clase)",
+  "Tarea «Recursos»: llevar impresos el Trabajo individual N°4 y el anexo de la semana 25 con nombre y apellido, más goma en barra y tijeras. Temas: tradiciones, lugares y personajes emblemáticos de las provincias.", ["s-tradiciones"]),
  ("ev-1013-len", "2026-10-13", "len", "leccion", "Lección #2 de Lengua",
   "Temas (canal 5. EVALUACIONES): anuncio publicitario (concepto, elementos y ejemplos), el verbo y los tiempos verbales, y conjugar verbos con los pronombres personales. Ojo con las tildes.", ["l-anuncio", "l-verbo", "l-conjugacion", "l-pronombres"]),
  ("ev-1013-lt2", "2026-10-13", "len", "tarea", "Lengua: Tarea #2 El anuncio publicitario (libro págs. 112-113)",
@@ -109,9 +122,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d < "2026-10-12" or eid in ("ev-1013-lt3", "ev-1014-soc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-14" or eid in ("ev-1015-hw5", "ev-1015-lt4"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
