@@ -23,7 +23,8 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
          "m-mult2": "2026-10-06",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
-         **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")}}
+         **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
+         "m-azar": "2026-10-18"}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -55,7 +56,7 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-10-12", "end": "2026-10-16", "label": "Semana del 12 al 16 de octubre",
+put("meta", "week", {"start": "2026-10-19", "end": "2026-10-23", "label": "Semana del 19 al 23 de octubre",
   "ing": {"goals": ["Repasar: Unit 5 (12 animales) y was / were / wasn't / weren't",
                     "Siempre: pronouns, present simple y present continuous"],
           "topics": ["e-garden", "e-waswere", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
@@ -65,6 +66,8 @@ put("meta", "week", {"start": "2026-10-12", "end": "2026-10-16", "label": "Seman
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
 events = [
+ ("ev-1019-proyecto", "2026-10-19", "len", "otro", "Semana del proyecto interdisciplinario (Lengua, Matemática y Sociales)",
+  "La Miss de Lengua avisó el 15/10 que esta semana harán un proyecto en grupos, pero con nota individual. Cuenta como la lección acumulativa del I parcial del II quimestre en las 3 materias. No publicaron el día exacto. Materiales: marcadores gruesos, lápices de colores, imágenes de productos agrícolas de las 4 regiones del Ecuador, tijeras y gomero. No dijeron qué temas entran.", []),
  ("ev-1020-env2", "2026-10-20", "env", "tarea", "Env. Science: Homework #2 Magnetics (Wordwall)",
   "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y publicar el puntaje en la tarea. Vence el martes 20 a las 7:00.", ["v-magnets"]),
  ("ev-1020-env1", "2026-10-20", "env", "tarea", "Env. Science: Homework #1 Forces: Push and Pull (Wordwall)",
@@ -124,7 +127,7 @@ events = [
 ]
 PRIO = {"ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-14" or eid in ("ev-1015-hw5", "ev-1015-lt4"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-18" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
