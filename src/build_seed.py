@@ -24,7 +24,7 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          "m-mult2": "2026-10-06",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
-         "m-azar": "2026-10-18", "s-turismo": "2026-10-20"}
+         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22"}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -66,6 +66,14 @@ put("meta", "week", {"start": "2026-10-19", "end": "2026-10-23", "label": "Seman
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
 events = [
+ ("ev-1027-mat5", "2026-10-27", "mat", "tarea", "Matemática: Tarea N°5 (en la carpeta, NO imprimir, vence 12:30)",
+  "La profe la volvió a subir el 22/10 porque la pregunta 2 tenía un error. Se recibe el martes en clase. Temas: posibilidades al lanzar dos monedas, seguro / posible / imposible con un dado y tabla de frecuencia (conteo con rayitas).", ["m-azar"]),
+ ("ev-1027-hl", "2026-10-27", "ing", "tarea", "Language Arts: Highlights Books (plataforma Highlights, vence 23:59)",
+  "Leer en la plataforma Highlights los libros «When Cat and Rat Were Friends» y «Omar and the Camel».", []),
+ ("ev-1026-lt5", "2026-10-26", "len", "tarea", "Lengua: Tarea #5 Sílaba tónica (vence 23:59)",
+  "Copiar en el cuaderno, resolver las actividades, tomar foto y subirla a Teams.", ["l-silaba"]),
+ ("ev-1020-dig", "2026-10-20", "dig", "leccion", "Computación: fichas de iconos de Word y lección",
+  "Publicado el 13/10: fichas de cartulina de 10 × 5 cm, adelante el icono y atrás el nombre (cursiva, subrayado, tachado, subíndice, superíndice, resaltado, color, tamaño y tipo de letra, alinear izquierda, centrar, derecha, justificar). Presentar y dar lección «el próximo martes».", ["d-iconos"]),
  ("ev-1028-fr", "2026-10-28", "fr", "tarea", "Francés: Tache «Dossier: Activité 4» (presentar en la próxima clase, vence 7:00)",
   "Completar la actividad 4 en la carpeta (dossier) y presentarla en la próxima clase. La pregunta 1 se hace en clase. Tema: «Quel temps fait-il ?» (el clima): verdadero o falso con el mapa de Francia, qué tiempo hace cada día y qué tiempo hay según los dibujos. 10 puntos.", ["f-temps", "f-jours"]),
  ("ev-1021-nat", "2026-10-21", "nat", "tarea", "Natural Science: Worksheet 6 «The Digestion» (llevar impresa a la Coeducative Class, 7:00)",
@@ -75,7 +83,7 @@ events = [
  ("ev-1026-pleno", "2026-10-26", "mat", "tarea", "Matemática: Actividad de refuerzo en PLENO (plataforma Santillana)",
   "Hacer la actividad en la plataforma Santillana. Se cierra el lunes 26 de octubre a las 23:59.", []),
  ("ev-1019-proyecto", "2026-10-19", "len", "otro", "Semana del proyecto interdisciplinario (Lengua, Matemática y Sociales)",
-  "La Miss de Lengua avisó el 15/10 que esta semana harán un proyecto en grupos, pero con nota individual. Cuenta como la lección acumulativa del I parcial del II quimestre en las 3 materias. No publicaron el día exacto. Materiales: marcadores gruesos, lápices de colores, imágenes de productos agrícolas de las 4 regiones del Ecuador, tijeras y gomero. No dijeron qué temas entran.", []),
+  "La Miss de Lengua avisó el 15/10 que esta semana harán un proyecto en grupos, pero con nota individual. Cuenta como la lección acumulativa del I parcial del II quimestre en las 3 materias. No publicaron el día exacto. Materiales: marcadores gruesos, lápices de colores, imágenes de productos agrícolas de las 4 regiones del Ecuador, tijeras y gomero. Comunicado del 22/10 (Sociales): se llama «Sabores que forman parte de nuestra cultura». Cada niño diseña, calcula y hace la publicidad de un producto saludable (un waffle o un snack nutritivo). Lengua: texto publicitario, adjetivos llamativos, eslogan, nombre de la marca y mensaje para el afiche. Sociales: origen de los ingredientes (frutas locales, maíz, quinua) y la comida de cada región. Matemática: porciones, figuras geométricas en los empaques, precios y encuestas sencillas.", []),
  ("ev-1020-env2", "2026-10-20", "env", "tarea", "Env. Science: Homework #2 Magnetics (Wordwall)",
   "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y publicar el puntaje en la tarea. Vence el martes 20 a las 7:00.", ["v-magnets"]),
  ("ev-1020-env1", "2026-10-20", "env", "tarea", "Env. Science: Homework #1 Forces: Push and Pull (Wordwall)",
@@ -133,9 +141,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-21" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-22" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
