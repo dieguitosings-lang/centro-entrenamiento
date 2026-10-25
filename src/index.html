@@ -273,6 +273,10 @@ details.grp[open]>summary::after{content:"–"}
 .badge2 .em{font-size:38px;line-height:1}
 .badge2.off{opacity:.4;filter:grayscale(1)}
 .badge2 b{font-size:15px}.badge2 span{font-size:12px;color:var(--muted)}
+.badge2.t1{border-color:#C98B5A}.badge2.t2{border-color:#A8B3C7}.badge2.t3{border-color:var(--gold);background:linear-gradient(180deg,var(--card),rgba(255,194,51,.16))}
+.medals{display:flex;gap:5px}.medals i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);background:transparent}
+.medals i.m0.on{background:#C98B5A;border-color:#9A6338}.medals i.m1.on{background:#C9D2E0;border-color:#8A97AD}.medals i.m2.on{background:var(--gold);border-color:#C79100}
+#cClutch:disabled{opacity:.5;cursor:not-allowed}
 .lock{display:grid;gap:12px;justify-items:center;text-align:center;padding:24px 16px}
 .lock .em{font-size:64px;line-height:1}
 @media (max-width:520px){.mission{grid-template-columns:52px 1fr}.mission .num{width:52px;height:52px;font-size:22px}.mission .btn{grid-column:1 / -1}}
@@ -337,7 +341,7 @@ const SUBJ_ORDER=["mat","ing","nat","len","soc","env","fr","dig"];
 const KINDS={leccion:"Lección",examen:"Examen",exposicion:"Exposición",tarea:"Tarea",otro:"Otro"};
 /* v9: rangos 7 veces más altos. Guerrero (abre la cancha) ≈ 2 fines de semana completos (16 misiones). */
 const OLD_LEVELS=[0,200,500,1000,1800,3000,4500,6500];
-const LEVELS=[[0,"Aprendiz"],[1400,"Guerrero"],[3500,"Guerrero Élite"],[7000,"Guerrero Dorado"],[12600,"Maestro"],[21000,"Gran Maestro"],[31500,"Leyenda"],[45500,"Leyenda Suprema"]];
+const LEVELS=[[0,"Aprendiz"],[1400,"Guerrero"],[3500,"Guerrero Élite"],[7000,"Guerrero Dorado"],[12600,"Maestro"],[21000,"Gran Maestro"],[31500,"Leyenda"],[45500,"Leyenda Suprema"],[65000,"Titán"],[90000,"Inmortal"],[120000,"Salón de la Fama"]];
 const PAUSES=["Pausa activa: 10 tiros libres (o 10 lanzamientos de pelota a una caja) y toma agua.","Pausa: 15 saltos de tijera y 3 respiraciones lentas.","Pausa: estírate como el cóndor y camina 1 minuto.","Pausa: rebota la pelota 20 veces y vuelve."];
 const XP_OK=10, XP_PERFECT=30, XP_BLOCK=20;
 
@@ -1160,98 +1164,234 @@ function drillEnd(){
   const b=$("#back");if(b)b.onclick=()=>setView("tablas");
 }
 
-/* poder */
-function badgeList(p){
+/* poder · Temporada 2: trofeos por niveles (bronce, plata, oro) */
+const TIERS=["Bronce","Plata","Oro"];
+function weekStreak(days){
+  const ws=[...new Set(Object.keys(days||{}).map(d=>{const t=parseD(d).getTime();return Math.floor((t/864e5+3)/7)}))].sort((a,b)=>a-b);
+  let best=0,run=0,prev=null;ws.forEach(w=>{run=(prev!==null&&w===prev+1)?run+1:1;prev=w;if(run>best)best=run});return best;
+}
+function trophyList(p){
   const g=p.game||{},tb=p.tables||{},vk=Object.keys(p.vocab||{}).length;
   const mvp=Object.values(p.sessions||{}).filter(s=>s.done&&s.done.length>=4).length;
   const days=Object.keys(p.days||{}).length;
+  const vocabTotal=Object.values(S.vocab||{}).reduce((a,v)=>a+((v.words||[]).length),0)||100;
+  const topicsMastered=Object.keys(S.topics||{}).filter(id=>best(id)>=.8).length;
+  const subjFull=SUBJ_ORDER.filter(s=>{const st=subjStats(s);return st.total>0&&st.mastered===st.total}).length;
+  const perfect=Object.values(tb).filter(x=>x.best>=1).length;
+  const vg=Math.min(100,vocabTotal);
   return [
-    ["🏀","Primer tiro","Lanza en la cancha",(g.played||0)>=1],
-    ["🎯","Encestador","10 canastas en la cancha",(g.total||0)>=10],
-    ["🔥","En racha","3 canastas seguidas",(g.bestStreak||0)>=3],
-    ["💫","Triplista","Encesta un triple",(g.triples||0)>=1],
-    ["✖️","Tabla dominada","Una tabla con 9/10 o más",Object.values(tb).some(x=>x.best>=.9)],
-    ["🧮","Rey de las tablas","Todas las tablas dominadas",Object.values(tb).filter(x=>x.best>=.9).length>=9],
-    ["🏆","MVP","Completa las 4 misiones de un día",mvp>=1],
-    ["🗣️","Speaker","Practica tu exposición",(p.ensayos||0)>=1],
-    ["📚","20 palabras","Marca 20 palabras en inglés",vk>=20],
-    ["📅","Constante","Entrena 8 días distintos",days>=8],
-    ["⭐","Guerrero Dorado","Llega a Guerrero Dorado",p.xp>=1000],
-    ["👑","Leyenda","Llega a Leyenda",p.xp>=4500]];
+    ["🏀","Encestador","Canastas en la cancha",g.total||0,[60,150,350]],
+    ["💫","Francotirador","Triples encestados",g.triples||0,[15,40,90]],
+    ["🔥","En llamas","Canastas seguidas (mejor racha)",g.bestStreak||0,[5,8,12]],
+    ["🎯","Limpia","Canastas sin tocar el aro ni el tablero",g.swish||0,[8,25,60]],
+    ["⚡","Tablero","Canastas rebotando en el tablero",g.bank||0,[3,10,25]],
+    ["💪","Sobre el defensa","Canastas con el defensa saltando",g.defBeat||0,[5,15,35]],
+    ["⏰","Clutch","Puntos en una Ronda Clutch de 45 s",g.clutchBest||0,[12,24,40]],
+    ["⭐","Partido","Puntos en una visita normal a la cancha",g.best||0,[15,25,35]],
+    ["🧮","Tablas perfectas","Tablas con 10 de 10",perfect,[3,6,9]],
+    ["🏆","Días MVP","Días con las 4 misiones completas",mvp,[3,10,25]],
+    ["📅","Constancia","Días distintos entrenando",days,[15,30,60]],
+    ["🔁","Semanas seguidas","Semanas seguidas entrenando",weekStreak(p.days),[3,6,10]],
+    ["📚","Palabras en inglés","Palabras marcadas como «Ya la sé»",vk,[40,70,vg]],
+    ["🗣","Speaker","Ensayos de exposición completos",p.ensayos||0,[3,8,15]],
+    ["🧠","Temas dominados","Temas con 80% o más",topicsMastered,[15,30,50]],
+    ["📖","Materia completa","Materias con todos sus temas dominados",subjFull,[1,3,6]],
+    ["💯","Respuestas correctas","Respuestas correctas en total",p.baskets||0,[800,2000,4000]],
+    ["👑","Rango","Llega a Leyenda Suprema, Titán y Salón de la Fama",p.xp||0,[45500,65000,120000]]
+  ].map(([e,n,d,v,goals])=>{const tier=goals.filter(x=>v>=x).length;const next=goals[tier];return{e,n,d,v,goals,tier,next}});
+}
+function trophiesHtml(p){
+  const tl=trophyList(p),got=tl.reduce((a,t)=>a+t.tier,0);
+  const fmt=(t,x)=>t.n==="Rango"?LEVELS.find(l=>l[0]===x)?.[1]||x:x.toLocaleString("es-EC");
+  return '<section class="card" style="display:grid;gap:12px"><div class="row spread"><h2>Trofeos · Temporada 2</h2><span class="chip">'+got+' / '+tl.length*3+' medallas</span></div>'+
+    '<p class="small muted">Cada trofeo tiene 3 medallas: bronce, plata y oro. Cuestan más que los de la temporada 1.</p><div class="badges">'+
+    tl.map(t=>{const pct=t.next?Math.min(100,Math.round(100*t.v/t.next)):100;const val=t.n==="Rango"?(t.v*10).toLocaleString("es-EC")+" poder":t.v.toLocaleString("es-EC");
+      return '<div class="badge2 t'+t.tier+(t.tier?'':' off')+'"><span class="em">'+emo(t.e)+'</span><b>'+esc(t.n)+'</b><span>'+esc(t.d)+'</span>'+
+        '<span class="medals">'+[0,1,2].map(k=>'<i class="m'+k+(k<t.tier?' on':'')+'" title="'+TIERS[k]+': '+fmt(t,t.goals[k])+'"></i>').join("")+'</span>'+
+        (t.next?'<div class="mbar" style="width:100%"><i style="width:'+pct+'%;background:var(--court)"></i></div><span>'+(t.n==="Rango"?"Siguiente: "+fmt(t,t.next):val+" / "+fmt(t,t.next))+' · '+TIERS[t.tier]+'</span>':'<span><b>¡Oro!</b></span>')+'</div>'}).join("")+'</div></section>';
 }
 function courtHtml(){
   const p=S.prog;
   if(!courtOpen()){const falta=Math.max(0,LOCK_XP-p.xp);return '<section class="card lock"><div class="em">'+emo("🔒")+emo("🏀")+'</div><h2>La cancha está cerrada</h2><p class="muted">Se abre cuando llegues a <b>Guerrero</b> (nivel de poder '+(LOCK_XP*10).toLocaleString("es-EC")+'). Te faltan <b>'+(falta*10).toLocaleString("es-EC")+'</b>.</p><div class="power-bar" style="width:100%;max-width:360px;background:var(--line)"><i style="width:'+Math.round(100*p.xp/LOCK_XP)+'%"></i></div><p class="small muted">Tiros guardados para cuando abra: '+(p.shots||0)+'</p><button class="btn" id="goTrain">Ir a entrenar</button></section>'}
-  const g=p.game||{},pro=levelOf(p.xp).i>=3,en=p.energy||0;
-  return '<section class="card" style="display:grid;gap:12px"><div class="row spread"><h1>Cancha'+(pro?' PRO':'')+'</h1><span class="chip">Récord: '+(g.best||0)+' pts</span></div>'+
-    '<div class="court-hud"><span class="pill hot" id="cShots">🏀 '+(p.shots||0)+' tiros</span><span class="pill" id="cPts">0 pts</span><span class="pill" id="cStreak">Racha 0</span></div>'+
+  const g=p.game||{},L=levelOf(p.xp),pro=L.i>=3,en=p.energy||0;
+  return '<section class="card" style="display:grid;gap:12px"><div class="row spread"><h1>Cancha'+(pro?' PRO':'')+'</h1><span class="row" style="gap:6px"><span class="chip">Récord: '+(g.best||0)+' pts</span><span class="chip">Clutch: '+(g.clutchBest||0)+' pts</span></span></div>'+
+    '<div class="court-hud"><span class="pill hot" id="cShots">🏀 '+(p.shots||0)+' tiros</span><span class="pill" id="cPts">0 pts</span><span class="pill" id="cStreak">Racha 0</span><span class="pill" id="cClock" hidden>45 s</span></div>'+
     '<div class="court-wrap"><canvas id="court" width="800" height="500" aria-label="Cancha de básquet: arrastra hacia atrás y suelta para lanzar"></canvas></div>'+
-    '<p class="small muted" id="cMsg">Pon el dedo en la cancha, arrastra hacia atrás (lejos del aro) y suelta. Los puntitos amarillos muestran el camino. Desde la línea lejana vale 3.'+(pro?' En la cancha PRO el aro se mueve.':'')+'</p>'+
+    '<div class="row spread"><p class="small muted" id="cMsg" style="flex:1;min-width:220px">Arrastra hacia atrás desde la pelota y suelta. Los puntitos solo muestran el comienzo del tiro: tú calculas el resto.</p><button class="btn small" id="cClutch"'+((p.shots||0)<5?' disabled':'')+'>⏰ Ronda Clutch 45 s · 5 tiros</button></div>'+
     '<div class="row spread"><div><p class="small"><b>Próximo tiro:</b> '+en+' de '+ENERGY_PER_SHOT+' respuestas correctas</p><div class="energy">'+Array.from({length:ENERGY_PER_SHOT},(_,i)=>'<i class="'+(i<en?'on':'')+'"></i>').join("")+'</div></div><button class="btn small ghost" id="goTrain">Ganar más tiros</button></div>'+
+    '<details class="small"><summary><b>¿Cómo se juega?</b></summary><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7"><li>Detrás de la línea de 3 vale 3 puntos.</li><li><b>Limpia:</b> entra sin tocar el aro ni el tablero.</li><li><b>Tablero:</b> rebota en el tablero y entra.</li><li><b>En llamas:</b> con 3 canastas seguidas, cada canasta vale el doble.</li><li><b>Defensa:</b> desde Maestro, a veces un defensa salta para tapar. Tira más alto.</li><li><b>Ronda Clutch:</b> 45 segundos, tiros sin límite, aro en movimiento y defensa. Cuesta 5 tiros.</li></ul></details>'+
     '<details class="small"><summary><b>¿Cómo gano tiros?</b></summary><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7"><li>3 respuestas correctas = 1 tiro</li><li>Misión completa = 1 tiro · MVP del día = 3 tiros extra</li><li>Quiz o tabla perfecta = 1 tiro</li><li>Practicar la exposición = 1 tiro por día</li><li>Máximo guardado: '+MAX_SHOTS+' tiros</li></ul></details></section>';
 }
 function initCourt(){
   const cv=$("#court");if(!cv)return;
-  const ctx=cv.getContext("2d"),W=800,H=500,FLOOR=462,R=18,G=0.45,MAXV=25;
+  const ctx=cv.getContext("2d"),W=800,H=500,FLOOR=458,R=15,G=0.36,SUB=4,MAXV=24,K=0.12;
   const DPR=Math.min(3,window.devicePixelRatio||1);cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);ctx.imageSmoothingQuality="high";
-  const p=S.prog;p.game=p.game||{best:0,total:0,played:0,triples:0,bestStreak:0};
-  const pro=levelOf(p.xp).i>=3;
-  const SPOTS=[{x:120,pts:3},{x:230,pts:2},{x:320,pts:2},{x:170,pts:3}];
-  let spot=SPOTS[Math.floor(Math.random()*SPOTS.length)];
-  let ball={x:spot.x,y:FLOOR-R-40,vx:0,vy:0},state="ready",drag=null,score=0,streak=0,t=0,scored=false,bounces=0,msg="",msgT=0,raf=0,alive=true;
-  const rimY=235;let rimX=520;
-  const upd=()=>{$("#cShots").textContent="🏀 "+(p.shots||0)+" tiros";$("#cPts").textContent=score+" pts";$("#cStreak").textContent="Racha "+streak;$("#cStreak").classList.toggle("hot",streak>=2)};
+  const p=S.prog;p.game=Object.assign({best:0,total:0,played:0,triples:0,bestStreak:0,swish:0,bank:0,defBeat:0,fire:0,clutchBest:0,clutchPlayed:0},p.game||{});
+  const g=p.game,L=levelOf(p.xp),pro=L.i>=3,defLevel=L.i>=4;
+  const RIM_W=58,RIM_Y=230,BASE_RIM=560,THREE_X=BASE_RIM+RIM_W/2-330;
+  let rimX=BASE_RIM;const BB=()=>rimX+RIM_W+6;
+  let mode="normal",roundEnd=0,score=0,streak=0,state="ready",drag=null,t=0,msg="",msgT=0,alive=true,raf=0,launchT=0;
+  let spot,ball,shot={},defender={on:false,x:0,y:0,vy:0,jumped:false},trail=[],sparks=[];
+  const crowd=Array.from({length:150},(_,i)=>({x:(i%50)*16+8+(Math.floor(i/50)%2)*8,y:60+Math.floor(i/50)*22,c:["#2EC4B6","#1E6FD9","#FFC233","#F26B1D","#E5E7EB","#A78BFA"][i%6],ph:Math.random()*6}));
+  /* red (verlet) */
+  const NS=6,NL=6,SEG=8;let net=[];
+  function anchors(){return Array.from({length:NS},(_,i)=>rimX+i*RIM_W/(NS-1))}
+  function buildNet(){const a=anchors();net=a.map((x,i)=>Array.from({length:NL},(_,k)=>{const cx=rimX+RIM_W/2+(x-(rimX+RIM_W/2))*(1-k*.1);return{x:cx,y:RIM_Y+k*SEG,px:cx,py:RIM_Y+k*SEG}}))}
+  function netStep(){const a=anchors();
+    net.forEach((col,i)=>{col[0].x=col[0].px=a[i];col[0].y=col[0].py=RIM_Y;
+      for(let k=1;k<NL;k++){const n=col[k],vx=(n.x-n.px)*.9,vy=(n.y-n.py)*.9;n.px=n.x;n.py=n.y;n.x+=vx;n.y+=vy+.25;
+        const rest=rimX+RIM_W/2+(a[i]-(rimX+RIM_W/2))*(1-k*.1);n.x+=(rest-n.x)*.06;
+        if(state==="fly"){const dx=n.x-ball.x,dy=n.y-ball.y,d=Math.hypot(dx,dy);if(d<R+1&&d>0){n.x=ball.x+dx/d*(R+1);n.y=ball.y+dy/d*(R+1)}}}
+      for(let it=0;it<3;it++)for(let k=1;k<NL;k++){const A=col[k-1],B=col[k],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1,df=(d-SEG)/d;if(k-1===0){B.x-=dx*df;B.y-=dy*df}else{A.x+=dx*df*.5;A.y+=dy*df*.5;B.x-=dx*df*.5;B.y-=dy*df*.5}}});}
+  /* sonido */
   let actx=null;
-  const beep=(f,d)=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),gn=actx.createGain();o.frequency.value=f;o.connect(gn);gn.connect(actx.destination);gn.gain.setValueAtTime(.12,actx.currentTime);gn.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d)}catch(e){}};
+  const tone=(f,d,type,vol)=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),gn=actx.createGain();o.type=type||"sine";o.frequency.value=f;o.connect(gn);gn.connect(actx.destination);gn.gain.setValueAtTime(vol||.12,actx.currentTime);gn.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.start();o.stop(actx.currentTime+d)}catch(e){}};
+  const swishSnd=()=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const len=actx.sampleRate*.25,buf=actx.createBuffer(1,len,actx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len)*.35;const s=actx.createBufferSource(),f=actx.createBiquadFilter();f.type="highpass";f.frequency.value=2500;s.buffer=buf;s.connect(f);f.connect(actx.destination);s.start()}catch(e){}};
   const toLogic=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}};
-  function reset(){spot=SPOTS[Math.floor(Math.random()*SPOTS.length)];ball={x:spot.x,y:FLOOR-R-40,vx:0,vy:0};state=(p.shots||0)>0?"ready":"empty";scored=false;bounces=0}
-  function launch(vx,vy){if((p.shots||0)<=0){state="empty";return}
-    p.shots-=1;p.game.played=(p.game.played||0)+1;state="fly";ball.vx=vx;ball.vy=vy;scored=false;bounces=0;renderHud();upd();saveProg();beep(300,.08)}
-  function endShot(){
-    if(scored){const pts=spot.pts;score+=pts;streak+=1;p.game.total=(p.game.total||0)+1;if(pts===3)p.game.triples=(p.game.triples||0)+1;
-      if(streak>(p.game.bestStreak||0))p.game.bestStreak=streak;
-      if(score>(p.game.best||0))p.game.best=score;
-      msg=pts===3?"¡TRIPLE!":streak>=3?"¡EN RACHA!":"¡CANASTA!";msgT=70;beep(660,.12);setTimeout(()=>beep(880,.15),120)}
-    else{streak=0;msg="¡Casi!";msgT=50}
-    saveProg();upd();
-    if((p.shots||0)<=0){$("#cMsg").innerHTML="<b>Se acabaron los tiros.</b> Responde preguntas y completa misiones para ganar más. Puntaje de hoy: "+score+"."}
-    setTimeout(reset,700);
+  const fire=()=>streak>=3;
+  const upd=()=>{$("#cShots").textContent="🏀 "+(p.shots||0)+" tiros";$("#cPts").textContent=score+" pts";$("#cStreak").textContent=(fire()?"🔥 ":"")+"Racha "+streak;$("#cStreak").classList.toggle("hot",streak>=2);
+    const cb=$("#cClutch");if(cb)cb.disabled=mode==="clutch"||(p.shots||0)<5};
+  function newSpot(){
+    const xs=mode==="clutch"?[110,160,215,290,350,410,450]:[120,175,230,300,360,420];
+    const x=xs[Math.floor(Math.random()*xs.length)];spot={x,pts:x<THREE_X?3:2};
+    ball={x:x+16,y:FLOOR-122,vx:0,vy:0,ang:0,spin:0};shot={rim:0,board:false,scored:false,def:false,bounces:0};trail=[];
+    const useDef=mode==="clutch"?Math.random()<.65:(defLevel&&Math.random()<.4);
+    defender={on:useDef,x:Math.min(rimX-70,x+120+Math.random()*60),y:0,vy:0,jumped:false};
+    if(mode==="clutch")state="ready";else state=(p.shots||0)>0?"ready":"empty";
   }
-  function rimPts(){return[{x:rimX,y:rimY},{x:rimX+76,y:rimY}]}
-  function collide(pt){const dx=ball.x-pt.x,dy=ball.y-pt.y,d=Math.hypot(dx,dy),min=R+4;if(d<min&&d>0){const nx=dx/d,ny=dy/d;ball.x=pt.x+nx*min;ball.y=pt.y+ny*min;const dot=ball.vx*nx+ball.vy*ny;if(dot<0){ball.vx=(ball.vx-2*dot*nx)*.72;ball.vy=(ball.vy-2*dot*ny)*.72;beep(180,.05)}}}
-  function step(){
-    t+=1;if(pro)rimX=505+Math.sin(t/70)*50;
-    if(state==="fly"){
-      const py=ball.y;ball.vy+=G;ball.x+=ball.vx;ball.y+=ball.vy;
-      rimPts().forEach(collide);
-      const BX=rimX+88;if(ball.y>145&&ball.y<285&&ball.x+R>BX&&ball.x<BX+4&&ball.vx>0){ball.x=BX-R;ball.vx=-ball.vx*.55;beep(140,.05)}
-      if(!scored&&py<rimY&&ball.y>=rimY&&ball.vy>0&&ball.x>rimX+8&&ball.x<rimX+68){scored=true;msg="";}
-      if(ball.y+R>FLOOR){ball.y=FLOOR-R;ball.vy=-ball.vy*.5;ball.vx*=.75;bounces++;if(bounces>=2||Math.abs(ball.vy)<2){state="done";endShot()}}
-      if(ball.x>W+60||ball.x<-60){state="done";endShot()}
+  function launch(vx,vy){
+    if(mode==="normal"){if((p.shots||0)<=0){state="empty";return}p.shots-=1;p.game.played=(p.game.played||0)+1;renderHud();saveProg()}
+    state="fly";launchT=t;ball.vx=vx;ball.vy=vy;ball.spin=-.18;upd();tone(320,.07,"triangle")}
+  function popMsg(m,f){msg=m;msgT=f||70}
+  function endShot(){
+    if(state==="done")return;state="done";
+    if(shot.scored){const mult=fire()?2:1,pts=spot.pts*mult;score+=pts;streak+=1;g.total++;if(spot.pts===3)g.triples++;
+      const sw=!shot.rim&&!shot.board;if(sw)g.swish++;if(shot.board)g.bank++;if(shot.def)g.defBeat++;if(mult>1)g.fire++;
+      if(streak>(g.bestStreak||0))g.bestStreak=streak;
+      if(mode==="normal"&&score>(g.best||0))g.best=score;
+      popMsg((mult>1?"🔥 x2 ":"")+(shot.board?"¡TABLERO!":sw?"¡LIMPIA!":spot.pts===3?"¡TRIPLE!":streak>=3?"¡EN LLAMAS!":"¡CANASTA!")+"  +"+pts);
+      tone(660,.12);setTimeout(()=>tone(990,.16),110);
+      for(let i=0;i<24;i++)sparks.push({x:rimX+RIM_W/2,y:RIM_Y+30,vx:(Math.random()-.5)*7,vy:-Math.random()*6-1,l:40,c:["#FFC233","#2EC4B6","#fff","#F26B1D"][i%4]})}
+    else{streak=0;popMsg(shot.rim?"¡Uy, el aro!":shot.blocked?"¡TAPÓN!":"¡Casi!",50)}
+    saveProg();upd();
+    if(mode==="normal"&&(p.shots||0)<=0)$("#cMsg").innerHTML="<b>Se acabaron los tiros.</b> Responde preguntas y completa misiones para ganar más. Puntaje: "+score+".";
+    setTimeout(()=>{if(alive&&(mode==="clutch"||state==="done"))newSpot()},mode==="clutch"?450:800);
+  }
+  function hitPoint(px,py,rad,kind){
+    const dx=ball.x-px,dy=ball.y-py,d=Math.hypot(dx,dy),min=R+rad;
+    if(d<min&&d>0){const nx=dx/d,ny=dy/d;ball.x=px+nx*min;ball.y=py+ny*min;const dot=ball.vx*nx+ball.vy*ny;
+      if(dot<0){const tx=-ny,ty=nx,tv=ball.vx*tx+ball.vy*ty;const e=kind==="hand"?.45:.55;
+        ball.vx=(ball.vx-(1+e)*dot*nx)-tv*.12*tx+ball.spin*tx*1.2;ball.vy=(ball.vy-(1+e)*dot*ny)-tv*.12*ty+ball.spin*ty*1.2;ball.spin*=.5;
+        if(kind==="rim"){shot.rim++;tone(170+Math.random()*40,.06,"square",.05)}else if(kind==="hand"){shot.blocked=true;tone(120,.1,"sawtooth",.06)}}}
+  }
+  function physics(){
+    const py0=ball.y;
+    for(let s=0;s<SUB;s++){
+      const py=ball.y;ball.vy+=G/SUB;ball.vx*=.9995;ball.x+=ball.vx/SUB;ball.y+=ball.vy/SUB;
+      hitPoint(rimX,RIM_Y,3,"rim");hitPoint(rimX+RIM_W,RIM_Y,3,"rim");
+      const bx=BB();if(ball.y>RIM_Y-100&&ball.y<RIM_Y+16&&ball.x+R>bx&&ball.x<bx+10&&ball.vx>0){ball.x=bx-R;ball.vx=-ball.vx*.62;ball.vy*=.92;shot.board=true;tone(130,.07,"square",.06)}
+      if(ball.y-R<RIM_Y+16&&ball.y+R>RIM_Y-100&&ball.x>bx&&ball.x-R<bx+10&&ball.vx<0){ball.x=bx+10+R;ball.vx=-ball.vx*.6}
+      if(defender.on&&defender.jumped){const hx=defender.x-6,hy=FLOOR-126+defender.y;hitPoint(hx,hy,12,"hand");hitPoint(hx,hy+22,10,"hand")}
+      if(!shot.scored&&py<RIM_Y&&ball.y>=RIM_Y&&ball.vy>0&&ball.x>rimX+3&&ball.x<rimX+RIM_W-3){shot.scored=true;if(defender.on&&defender.jumped)shot.def=true;if(!shot.rim&&!shot.board)swishSnd()}
+      if(ball.y+R>FLOOR){ball.y=FLOOR-R;ball.vy=-ball.vy*.62;ball.vx*=.8;ball.spin=ball.vx*.02;shot.bounces++;tone(90,.06,"sine",.08)}
     }
+    ball.ang+=ball.vx*.04+ball.spin;
+    if(fire())trail.push({x:ball.x,y:ball.y,l:14});
+    if(shot.bounces>=2||(shot.bounces>=1&&shot.scored)||ball.x>W+60||ball.x<-60||t-launchT>420)endShot();
+  }
+  function step(){
+    t++;
+    if(mode==="clutch"){const left=Math.max(0,Math.ceil((roundEnd-Date.now())/1000));const c=$("#cClock");if(c)c.textContent="⏰ "+left+" s";if(left<=0&&state!=="fly")endRound()}
+    if(pro||mode==="clutch"){const amp=mode==="clutch"?55:40,sp=mode==="clutch"?55:85;rimX=BASE_RIM+Math.sin(t/sp)*amp}
+    if(defender.on&&state==="fly"&&!defender.jumped&&t-launchT>4){defender.jumped=true;defender.vy=-9.5}
+    if(defender.on&&defender.jumped){defender.vy+=.45;defender.y+=defender.vy;if(defender.y>0){defender.y=0;defender.vy=0}}
+    if(state==="fly")physics();
+    netStep();
+    trail.forEach(q=>q.l--);trail=trail.filter(q=>q.l>0);
+    sparks.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.2;q.l--});sparks=sparks.filter(q=>q.l>0);
     draw();if(alive)raf=requestAnimationFrame(step);
   }
-  function draw(){
-    const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#16233F");gr.addColorStop(1,"#243B6B");ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
-    ctx.fillStyle="#C8773A";ctx.fillRect(0,FLOOR,W,H-FLOOR);
-    ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(195,FLOOR);ctx.lineTo(195,FLOOR+38);ctx.stroke();
-    ctx.fillStyle="rgba(255,255,255,.85)";ctx.font="700 16px Fredoka, sans-serif";ctx.fillText("3 PTS",120,FLOOR+28);ctx.fillText("2 PTS",250,FLOOR+28);
-    ctx.fillStyle="#E9EEF7";ctx.fillRect(rimX+88,145,8,140);ctx.strokeStyle="#F26B1D";ctx.lineWidth=3;ctx.strokeRect(rimX+88,190,8,45);
-    ctx.fillStyle="#9AA7BF";ctx.fillRect(rimX+96,215,40,8);ctx.fillRect(rimX+128,215,8,FLOOR-215);
-    ctx.strokeStyle="rgba(255,255,255,.8)";ctx.lineWidth=2;for(let i=0;i<=5;i++){const x1=rimX+i*15.2,x2=rimX+13+i*10;ctx.beginPath();ctx.moveTo(x1,rimY);ctx.lineTo(x2,rimY+42);ctx.stroke()}
-    ctx.beginPath();ctx.moveTo(rimX+8,rimY+20);ctx.lineTo(rimX+68,rimY+20);ctx.stroke();
-    ctx.strokeStyle="#F26B1D";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(rimX,rimY);ctx.lineTo(rimX+78,rimY);ctx.stroke();
-    if(state==="ready"&&drag){const vx=(drag.sx-drag.x)*.13,vy=(drag.sy-drag.y)*.13;const m=Math.hypot(vx,vy),k=m>MAXV?MAXV/m:1;let x=ball.x,y=ball.y,ux=vx*k,uy=vy*k;ctx.fillStyle="rgba(255,194,51,.9)";for(let i=0;i<42;i++){ux=ux;uy+=G;x+=ux;y+=uy;if(i%2===0){ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill()}}}
-    ctx.save();ctx.translate(ball.x,ball.y);ctx.rotate((ball.x+ball.y)/40);ctx.fillStyle="#F26B1D";ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.strokeStyle="#5A2A0A";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-R,0);ctx.lineTo(R,0);ctx.moveTo(0,-R);ctx.lineTo(0,R);ctx.stroke();ctx.beginPath();ctx.arc(-R*1.1,0,R*.9,-1,1);ctx.stroke();ctx.beginPath();ctx.arc(R*1.1,0,R*.9,2.14,4.14);ctx.stroke();ctx.restore();
-    if(state==="empty"){ctx.fillStyle="rgba(0,0,0,.55)";ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="700 30px Fredoka, sans-serif";ctx.fillText("Sin tiros por ahora",W/2,H/2-10);ctx.font="600 18px Fredoka, sans-serif";ctx.fillText("Responde preguntas para ganar más",W/2,H/2+24);ctx.textAlign="left"}
-    if(msgT>0){msgT--;ctx.fillStyle="#FFC233";ctx.textAlign="center";ctx.font="700 54px Fredoka, sans-serif";ctx.fillText(msg,W/2,120);ctx.textAlign="left"}
+  function player(x,colA,colB,armUp,lift,mirror){
+    const y=FLOOR+(lift||0);ctx.save();ctx.translate(x,y);if(mirror)ctx.scale(-1,1);
+    ctx.fillStyle="rgba(0,0,0,.25)";ctx.beginPath();ctx.ellipse(0,-(lift||0),24,5,0,0,7);ctx.fill();
+    ctx.strokeStyle="#3B2A20";ctx.lineCap="round";ctx.lineWidth=9;
+    ctx.beginPath();ctx.moveTo(-6,-46);ctx.lineTo(-9,-4);ctx.moveTo(6,-46);ctx.lineTo(10,-4);ctx.stroke();
+    ctx.fillStyle="#fff";ctx.fillRect(-15,-6,13,6);ctx.fillRect(3,-6,13,6);
+    ctx.fillStyle=colB;ctx.beginPath();ctx.roundRect?ctx.roundRect(-14,-58,28,18,5):ctx.rect(-14,-58,28,18);ctx.fill();
+    ctx.fillStyle=colA;ctx.beginPath();ctx.roundRect?ctx.roundRect(-13,-98,26,44,7):ctx.rect(-13,-98,26,44);ctx.fill();
+    ctx.lineWidth=7;ctx.strokeStyle="#8D5A3B";ctx.beginPath();
+    if(armUp){ctx.moveTo(-9,-92);ctx.lineTo(-2,-124);ctx.moveTo(9,-92);ctx.lineTo(14,-124)}else{ctx.moveTo(-11,-92);ctx.lineTo(-16,-62);ctx.moveTo(11,-92);ctx.lineTo(16,-62)}ctx.stroke();
+    ctx.fillStyle="#8D5A3B";ctx.beginPath();ctx.arc(0,-110,11,0,7);ctx.fill();ctx.fillStyle="#2B1B12";ctx.beginPath();ctx.arc(0,-114,11,Math.PI,0);ctx.fill();
+    ctx.restore();
   }
-  cv.onpointerdown=e=>{if(state!=="ready")return;const q=toLogic(e);drag={sx:q.x,sy:q.y,x:q.x,y:q.y};try{cv.setPointerCapture(e.pointerId)}catch(_){}};
+  function drawBall(x,y,a,flame){
+    ctx.save();ctx.fillStyle="rgba(0,0,0,.22)";const hgt=Math.max(0,FLOOR-y);ctx.beginPath();ctx.ellipse(x,FLOOR+2,R*(1-Math.min(.6,hgt/600)),4,0,0,7);ctx.fill();ctx.restore();
+    ctx.save();ctx.translate(x,y);ctx.rotate(a);
+    const gr=ctx.createRadialGradient(-5,-6,3,0,0,R);gr.addColorStop(0,flame?"#FFD27A":"#FF9A4D");gr.addColorStop(1,flame?"#E2401B":"#D9580F");
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();ctx.strokeStyle="#4A2207";ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-R,0);ctx.lineTo(R,0);ctx.moveTo(0,-R);ctx.lineTo(0,R);ctx.stroke();
+    ctx.beginPath();ctx.arc(-R*1.15,0,R*.9,-1,1);ctx.stroke();ctx.beginPath();ctx.arc(R*1.15,0,R*.9,2.14,4.14);ctx.stroke();ctx.restore();
+  }
+  function draw(){
+    const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,"#0F1A33");gr.addColorStop(1,"#22355F");ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="rgba(255,255,255,.06)";for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(80+i*170,0);ctx.lineTo(40+i*170,FLOOR);ctx.lineTo(140+i*170,FLOOR);ctx.fill()}
+    crowd.forEach(c=>{const b=Math.sin(t/12+c.ph)*(streak>=2||msgT>0?3:1);ctx.fillStyle=c.c;ctx.globalAlpha=.55;ctx.beginPath();ctx.arc(c.x,c.y+b,6,0,7);ctx.fill();ctx.fillRect(c.x-6,c.y+6+b,12,10)});ctx.globalAlpha=1;
+    ctx.fillStyle="#0B1222";ctx.fillRect(0,128,W,8);
+    // marcador
+    ctx.fillStyle="#05080F";ctx.fillRect(18,14,190,40);ctx.fillStyle="#FFC233";ctx.font="700 24px Fredoka, sans-serif";ctx.fillText("PTS "+score,30,43);
+    if(mode==="clutch"){const left=Math.max(0,Math.ceil((roundEnd-Date.now())/1000));ctx.fillStyle=left<=10?"#FF6B6B":"#2EC4B6";ctx.fillText("⏱ "+left,128,43)}
+    // piso
+    const fg=ctx.createLinearGradient(0,FLOOR,0,H);fg.addColorStop(0,"#D88A4A");fg.addColorStop(1,"#B86B32");ctx.fillStyle=fg;ctx.fillRect(0,FLOOR,W,H-FLOOR);
+    ctx.strokeStyle="rgba(120,60,20,.35)";ctx.lineWidth=1;for(let x=0;x<W;x+=46){ctx.beginPath();ctx.moveTo(x,FLOOR);ctx.lineTo(x-14,H);ctx.stroke()}
+    ctx.strokeStyle="rgba(255,255,255,.75)";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(THREE_X,FLOOR);ctx.lineTo(THREE_X-8,H);ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.9)";ctx.font="700 14px Fredoka, sans-serif";ctx.fillText("3 PTS",THREE_X-60,FLOOR+28);ctx.fillText("2 PTS",THREE_X+16,FLOOR+28);
+    // poste y tablero
+    const bx=BB();ctx.fillStyle="#5B6B86";ctx.fillRect(bx+40,RIM_Y-60,12,FLOOR-RIM_Y+60);ctx.fillRect(bx+8,RIM_Y-40,40,8);
+    ctx.fillStyle="rgba(235,242,252,.95)";ctx.fillRect(bx,RIM_Y-100,10,116);ctx.strokeStyle="#F26B1D";ctx.lineWidth=3;ctx.strokeRect(bx,RIM_Y-46,10,40);
+    // red
+    ctx.strokeStyle="rgba(255,255,255,.85)";ctx.lineWidth=1.6;
+    net.forEach(col=>{ctx.beginPath();col.forEach((n,k)=>k?ctx.lineTo(n.x,n.y):ctx.moveTo(n.x,n.y));ctx.stroke()});
+    for(let k=1;k<NL;k++){ctx.beginPath();net.forEach((col,i)=>i?ctx.lineTo(col[k].x,col[k].y):ctx.moveTo(col[k].x,col[k].y));ctx.stroke()}
+    for(let i=0;i<NS-1;i++)for(let k=0;k<NL-1;k++){ctx.beginPath();ctx.moveTo(net[i][k].x,net[i][k].y);ctx.lineTo(net[i+1][k+1].x,net[i+1][k+1].y);ctx.stroke()}
+    // aro de atrás
+    ctx.strokeStyle="#B9480F";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(rimX+RIM_W*.5,RIM_Y-2);ctx.lineTo(rimX+RIM_W+6,RIM_Y-2);ctx.stroke();
+    // jugador y defensa
+    const holding=state==="ready";
+    player(spot.x,"#1E6FD9","#2EC4B6",holding||state==="fly"&&t-launchT<12,0,false);
+    if(defender.on)player(defender.x,"#B91C1C","#7F1D1D",defender.jumped,defender.y,true);
+    // estela de fuego
+    trail.forEach(q=>{ctx.fillStyle="rgba(255,"+(120+q.l*8)+",40,"+(q.l/20)+")";ctx.beginPath();ctx.arc(q.x,q.y,R*q.l/16,0,7);ctx.fill()});
+    // guía corta
+    if(state==="ready"&&drag){const vx0=(drag.sx-drag.x)*K,vy0=(drag.sy-drag.y)*K,m=Math.hypot(vx0,vy0),k=m>MAXV?MAXV/m:1;let x=ball.x,y=ball.y,ux=vx0*k,uy=vy0*k;
+      const dots=mode==="clutch"?6:12;ctx.fillStyle="rgba(255,194,51,.9)";for(let i=0;i<dots*2;i++){uy+=G;x+=ux;y+=uy;if(i%2===0){ctx.beginPath();ctx.arc(x,y,3.5*(1-i/(dots*2.4)),0,7);ctx.fill()}}
+      const pw=Math.min(1,m/MAXV);ctx.fillStyle="rgba(0,0,0,.45)";ctx.fillRect(spot.x-40,FLOOR-160,80,10);ctx.fillStyle=pw>.92?"#FF6B6B":"#2EC4B6";ctx.fillRect(spot.x-40,FLOOR-160,80*pw,10)}
+    drawBall(ball.x,ball.y,ball.ang,fire());
+    // aro de adelante (encima de la pelota)
+    ctx.strokeStyle="#F26B1D";ctx.lineWidth=6;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(rimX,RIM_Y);ctx.lineTo(rimX+RIM_W*.55,RIM_Y);ctx.stroke();ctx.lineCap="butt";
+    sparks.forEach(q=>{ctx.fillStyle=q.c;ctx.globalAlpha=q.l/40;ctx.fillRect(q.x,q.y,4,4)});ctx.globalAlpha=1;
+    if(state==="empty"&&mode==="normal"){ctx.fillStyle="rgba(0,0,0,.55)";ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="700 30px Fredoka, sans-serif";ctx.fillText("Sin tiros por ahora",W/2,H/2-10);ctx.font="600 18px Fredoka, sans-serif";ctx.fillText("Responde preguntas para ganar más",W/2,H/2+24);ctx.textAlign="left"}
+    if(state==="over"){ctx.fillStyle="rgba(0,0,0,.6)";ctx.fillRect(0,0,W,H);ctx.fillStyle="#FFC233";ctx.textAlign="center";ctx.font="700 44px Fredoka, sans-serif";ctx.fillText("¡Tiempo! "+score+" pts",W/2,H/2-6);ctx.fillStyle="#fff";ctx.font="600 20px Fredoka, sans-serif";ctx.fillText(score>=(g.clutchBest||0)&&score>0?"¡Nuevo récord Clutch!":"Récord Clutch: "+(g.clutchBest||0),W/2,H/2+30);ctx.textAlign="left"}
+    if(msgT>0){msgT--;ctx.fillStyle="#FFC233";ctx.textAlign="center";ctx.font="700 46px Fredoka, sans-serif";ctx.fillText(msg,W/2,112);ctx.textAlign="left"}
+  }
+  function startRound(){
+    if(mode==="clutch")return;if((p.shots||0)<5){toast("Necesitas 5 tiros para la Ronda Clutch.");return}
+    p.shots-=5;g.clutchPlayed=(g.clutchPlayed||0)+1;mode="clutch";score=0;streak=0;roundEnd=Date.now()+45000;renderHud();saveProg();
+    const c=$("#cClock");if(c)c.hidden=false;$("#cMsg").innerHTML="<b>¡Ronda Clutch!</b> 45 segundos. Tira rápido: el aro se mueve y el defensa salta.";newSpot();upd();tone(520,.15);setTimeout(()=>tone(780,.2),150);
+  }
+  function endRound(){
+    const isRec=score>(g.clutchBest||0);if(isRec)g.clutchBest=score;saveProg();
+    mode="normal";state="over";const c=$("#cClock");if(c)c.hidden=true;tone(440,.3);
+    $("#cMsg").innerHTML="<b>Fin de la Ronda Clutch: "+score+" puntos.</b> "+(isRec?"¡Nuevo récord!":"Récord: "+(g.clutchBest||0)+".")+" Toca la cancha para seguir.";
+    upd();
+  }
+  cv.onpointerdown=e=>{if(state==="over"){score=0;streak=0;newSpot();upd();return}if(state!=="ready")return;const q=toLogic(e);drag={sx:q.x,sy:q.y,x:q.x,y:q.y};try{cv.setPointerCapture(e.pointerId)}catch(_){}};
   cv.onpointermove=e=>{if(!drag)return;const q=toLogic(e);drag.x=q.x;drag.y=q.y};
-  cv.onpointerup=e=>{if(!drag)return;let vx=(drag.sx-drag.x)*.13,vy=(drag.sy-drag.y)*.13;drag=null;const m=Math.hypot(vx,vy);if(m<3)return;if(m>MAXV){vx*=MAXV/m;vy*=MAXV/m}launch(vx,vy)};
-  reset();upd();step();
+  cv.onpointerup=e=>{if(!drag)return;let vx=(drag.sx-drag.x)*K,vy=(drag.sy-drag.y)*K;drag=null;const m=Math.hypot(vx,vy);if(m<3)return;if(m>MAXV){vx*=MAXV/m;vy*=MAXV/m}launch(vx,vy)};
+  const cb=$("#cClutch");if(cb)cb.onclick=startRound;
+  buildNet();newSpot();upd();step();
   S.courtStop=()=>{alive=false;cancelAnimationFrame(raf)};
+  S.court={get ball(){return ball},get state(){return state},get spot(){return spot},launch,get rimX(){return rimX},get mode(){return mode},get score(){return score},startRound,G,SUB,FLOOR};
 }
+
 function viewPoder(){
   const p=S.prog,L=levelOf(p.xp);
   const tb=p.tables||{},tablesDone=Object.values(tb).filter(x=>x.best>=.9).length;
@@ -1259,8 +1399,8 @@ function viewPoder(){
   let h='<section class="card" style="display:grid;gap:10px;text-align:center;justify-items:center"><p class="eyebrow">Tu rango</p><h1 style="font-size:36px;color:var(--court)">'+L.name+'</h1><p class="stat" style="justify-content:center">Nivel de poder '+(p.xp*10).toLocaleString("es-EC")+'</p>'+(L.next?'<p class="muted">Te faltan '+((L.to-p.xp)*10).toLocaleString("es-EC")+' para llegar a <b>'+L.next+'</b></p>':'<p class="muted">¡Rango máximo!</p>')+'</section>';
   h+='<section class="grid"><div class="card"><p class="eyebrow">Canastas</p><p class="stat" style="font-size:34px">'+p.baskets+'</p></div><div class="card"><p class="eyebrow">Tablas dominadas</p><p class="stat" style="font-size:34px">'+tablesDone+' / 9</p></div><div class="card"><p class="eyebrow">Días MVP</p><p class="stat" style="font-size:34px">'+sessions+'</p></div></section>';
   h+='<section class="card" style="display:grid;gap:12px"><h2>Dominio por materia</h2>'+SUBJ_ORDER.map(s=>{const st=subjStats(s);if(!st.total)return"";return '<div style="display:grid;gap:4px"><div class="row spread"><b>'+SUBJ[s].n+'</b><span class="small muted">'+st.mastered+'/'+st.total+'</span></div><div class="mbar"><i style="width:'+Math.round(st.pct*100)+'%;background:'+SUBJ[s].c+'"></i></div></div>'}).join("")+'</section>';
-  h+='<section class="card"><h2>Rangos</h2><div class="row" style="margin-top:10px">'+LEVELS.map((l,i)=>'<span class="chip" style="'+(i<=L.i?'background:var(--gold);color:#3A2A00':'')+'">'+l[1]+'</span>').join("")+'</div><p class="small muted" style="margin-top:8px">Guerrero abre la cancha · Guerrero Dorado abre la cancha PRO (aro en movimiento).</p></section>';
-  const bl=badgeList(p);h+='<section class="card" style="display:grid;gap:12px"><div class="row spread"><h2>Trofeos</h2><span class="chip">'+bl.filter(b=>b[3]).length+' / '+bl.length+'</span></div><div class="badges">'+bl.map(b=>'<div class="badge2'+(b[3]?'':' off')+'"><span class="em">'+emo(b[0])+'</span><b>'+esc(b[1])+'</b><span>'+esc(b[2])+'</span></div>').join("")+'</div></section>';
+  h+='<section class="card"><h2>Rangos</h2><div class="row" style="margin-top:10px">'+LEVELS.map((l,i)=>'<span class="chip" style="'+(i<=L.i?'background:var(--gold);color:#3A2A00':'')+'">'+l[1]+'</span>').join("")+'</div><p class="small muted" style="margin-top:8px">Guerrero abre la cancha · Guerrero Dorado: cancha PRO (aro en movimiento) · Maestro: aparece el defensa · Temporada 2: rangos nuevos Titán, Inmortal y Salón de la Fama.</p></section>';
+  h+=trophiesHtml(p);
   h=courtHtml()+h;
   main.innerHTML=h;initCourt();
   main.querySelectorAll("#goTrain").forEach(b=>b.onclick=()=>setView("hoy"));
