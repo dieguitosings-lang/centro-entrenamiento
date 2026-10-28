@@ -21,7 +21,7 @@ def put(coll, did, data):
 # Fecha en que cada tema llegó desde Teams (los nuevos salen primero en el plan).
 ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-valise", "f-activites", "f-jours", "d-word")},
          **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
-         "m-mult2": "2026-10-06",
+         "m-mult2": "2026-10-27",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
          "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23"}
@@ -56,7 +56,7 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-10-19", "end": "2026-10-23", "label": "Semana del 19 al 23 de octubre",
+put("meta", "week", {"start": "2026-10-26", "end": "2026-10-30", "label": "Semana del 26 al 30 de octubre",
   "ing": {"goals": ["Repasar: Unit 5 (12 animales) y was / were / wasn't / weren't",
                     "Siempre: pronouns, present simple y present continuous"],
           "topics": ["e-garden", "e-waswere", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
@@ -66,6 +66,10 @@ put("meta", "week", {"start": "2026-10-19", "end": "2026-10-23", "label": "Seman
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
 events = [
+ ("ev-1029-matasinc", "2026-10-29", "mat", "tarea", "Matemática: Actividad asincrónica (multiplicar por una cifra, vence 23:59)",
+  "Tarea publicada el 27/10: «Realizar la actividad y subirla en el tiempo establecido». Hoja de 10 puntos del segundo parcial: 10 multiplicaciones de 3 cifras por 1 cifra y ubicar los factores en forma vertical (C, D, U) antes de resolver. Se resuelve en la hoja y se sube la foto a Teams.", ["m-mult2"]),
+ ("ev-1029-lenfisico", "2026-10-29", "len", "tarea", "Lengua: presentar en físico las 2 hojas de las actividades asincrónicas",
+  "Las dos actividades asincrónicas del 27/10 (separar palabras en sílabas y escribir la sílaba tónica) ya están subidas a Teams, pero la Miss pide presentar las hojas en físico para su revisión. No dice fecha: llevarlas a la próxima clase de Lengua.", ["l-silaba"]),
  ("ev-1030-batido", "2026-10-30", "len", "otro", "Proyecto «Sabores»: enviar ingredientes del batido de frutilla (Grupo 2)",
   "Comunicado del 23/10: la semana del 26 al 30 de octubre practican el proyecto en clase y termina con una exposición interna. Thiago está en el Grupo 2, «Batido de frutilla». Ingredientes para 2 porciones por grupo: leche, frutilla, azúcar, vasos, colador y licuadora. Hay que anotar el precio por unidad de cada producto (para calcular el costo del batido, con envases y logos). Cada grupo envía 30 recuerdos para los niños que visitan y 10 para las autoridades, con el logo adhesivo de su producto.", ["l-anuncio"]),
  ("ev-1026-proyecto", "2026-10-26", "len", "otro", "Semana del proyecto interdisciplinario «Sabores que forman parte de nuestra cultura» (26 al 30/10)",
@@ -145,9 +149,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-23" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-26" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 

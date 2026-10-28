@@ -42,7 +42,8 @@ src = open(os.path.join(HERE, "build_seed.py"), encoding="utf-8").read()
 used |= set(pat.findall(src.split("ANIMALS = [")[1].split("]\n")[0]))
 page = open(os.path.join(HERE, "index.html"), encoding="utf-8").read()
 body = re.sub(r"/\*EMO_START\*/.*?/\*EMO_END\*/", "", page, flags=re.S)
-bl = body.split("function badgeList")[1].split("];")[0]
+_fn = "function badgeList" if "function badgeList" in body else "function trophyList"
+bl = body.split(_fn)[1].split("];")[0]
 used |= set(pat.findall(bl))
 used |= {"🔒", "🏀"}
 for f in ("content_eng.py", "content_mat.py", "content_len.py"):
