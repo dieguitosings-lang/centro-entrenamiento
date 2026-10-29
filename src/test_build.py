@@ -30,12 +30,17 @@ async def main(dates):
             if d: await pg.add_init_script(fake(d + "T19:00:00-05:00"))
             await pg.goto(URL); await pg.wait_for_timeout(900)
             print(d or "hoy", "->", await pg.evaluate(PLAN))
-            for v in ["materias", "palabras", "poder", "hoy"]:
+            for v in ["materias", "palabras", "musica", "poder", "hoy"]:
                 await pg.click(f'nav.tabs button[data-view="{v}"]'); await pg.wait_for_timeout(150)
             await pg.click("#hudPapas"); await pg.wait_for_timeout(150)
             await pg.evaluate("()=>Object.keys(__tc.S.topics).forEach(id=>{__tc.openTopic(id)})")
             await pg.evaluate("()=>Object.keys(__tc.S.topics).filter(id=>(__tc.S.topics[id].quiz||[]).length).forEach(id=>__tc.startQuiz(id))")
             await pg.evaluate("()=>__tc.startDrill('mix')"); await pg.wait_for_timeout(100)
+            await pg.click('nav.tabs button[data-view="musica"]'); await pg.wait_for_timeout(200)
+            for md in ["nota", "oido", "escala", "cancion", "libre"]:
+                await pg.click(f'[data-mmode="{md}"]'); await pg.wait_for_timeout(80)
+                box = await pg.query_selector('#piano .k.w'); await box.click(); await pg.wait_for_timeout(60)
+            if d is None: print("   musica:", await pg.evaluate("()=>document.querySelectorAll('#piano .k').length"), "teclas,", await pg.evaluate("()=>document.querySelectorAll('[data-stage]').length"), "etapas")
             if errs: bad += 1; print("   ERRORES:", errs)
             await pg.close()
         await b.close()

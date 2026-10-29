@@ -65,7 +65,26 @@ put("meta", "week", {"start": "2026-10-26", "end": "2026-10-30", "label": "Seman
 
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
 
+# Música (MÚSICA 4C): videos para practicar la melódica con el piano del centro.
+put("meta", "musica", {"songs": [
+  {"id": "piratas", "n": 2, "title": "Piratas del Caribe", "yt": "JwEJk_LC1JY", "key": "Re menor (Dm)", "added": "2026-10-28",
+   "task": "Actividad asincrónica del 28/10: tocar con el video de la canción #2 durante 15 minutos, subiendo la velocidad poco a poco. Si hace falta, 1 minuto de pausa entre cada velocidad.",
+   "plan": [{"r": 0.5, "min": 5}, {"r": 0.65, "min": 5}, {"r": 0.75, "min": 5}], "rest": 1}],
+  "note": "La partitura «Piratas del caribe Dm» está en Teams (Música 4C, canal General)."})
+
 events = [
+ ("ev-1030-natquiz", "2026-10-30", "nat", "leccion", "Natural Science: Pop Quiz «The Digestive System» (formulario en Teams, vence 8:00)",
+  "Tarea publicada el 28/10 (10 puntos, 1 solo envío). Es un formulario en línea que cuenta como taller acumulativo: leer bien cada pregunta, usar la presentación de PowerPoint publicada con la tarea, revisar las respuestas antes de enviar y completarlo dentro de las 48 horas. Se responde en Teams.", ["n-digestion"]),
+ ("ev-1030-natasinc", "2026-10-30", "nat", "tarea", "Natural Science: Asynchronous Activity (Wordwall, vence 7:59)",
+  "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y subir la captura de pantalla a la tarea.", ["n-digestion"]),
+ ("ev-1030-hl", "2026-10-30", "ing", "tarea", "Language Arts: Highlights «Spaghetti Catastrophe» (vence 7:00)",
+  "Asynchronous Class Activity: leer el libro en la plataforma Highlights y resolver las actividades. Se revisa en la plataforma y cuenta para la nota de deberes (Homework).", []),
+ ("ev-1103-hl", "2026-11-03", "ing", "tarea", "Language Arts: Highlights «The Case of the Missing Left Shoe»",
+  "Segundo libro de la misma tarea: leerlo en Highlights y resolver las actividades hasta el martes 3 de noviembre.", []),
+ ("ev-1104-fr7", "2026-11-04", "fr", "tarea", "Francés: Tache «Activité 7: Les destinations de vacances» (vence 7:00)",
+  "Completar la actividad 7, enviar la foto a la tarea en Teams y presentarla la próxima semana. 10 puntos. Primer ejercicio: escuchar y unir a cada niño con su destino de vacaciones (Liveworksheets). La profe adjuntó la hoja por si no la tiene.", ["f-lieux"]),
+ ("ev-1104-socasinc", "2026-11-04", "soc", "tarea", "Sociales: Actividad asincrónica de la semana 27 (imprimir, vence 10:00)",
+  "Imprimir y desarrollar la actividad; luego pegarla en el cuaderno o archivarla en la carpeta. Tema: frutas autóctonas y saludables de cada región natural del Ecuador (Sierra, Costa, Amazonía), el trabajo de los agricultores y la feria saludable. 10 puntos.", []),
  ("ev-1029-matasinc", "2026-10-29", "mat", "tarea", "Matemática: Actividad asincrónica (multiplicar por una cifra, vence 23:59)",
   "Tarea publicada el 27/10: «Realizar la actividad y subirla en el tiempo establecido». Hoja de 10 puntos del segundo parcial: 10 multiplicaciones de 3 cifras por 1 cifra y ubicar los factores en forma vertical (C, D, U) antes de resolver. Se resuelve en la hoja y se sube la foto a Teams.", ["m-mult2"]),
  ("ev-1029-lenfisico", "2026-10-29", "len", "tarea", "Lengua: presentar en físico las 2 hojas de las actividades asincrónicas",
@@ -149,9 +168,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-26" or eid in ("ev-1020-env1", "ev-1020-env2"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-28" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 

@@ -195,7 +195,7 @@ td.low{color:var(--bad);font-weight:700}
 .hud-in{flex-wrap:nowrap}
 .parents{display:grid;justify-items:center;gap:0;color:#fff;opacity:.85;font-size:11px;font-weight:700;padding:4px 8px;border-radius:12px;min-width:48px;min-height:48px}
 .parents svg{width:22px;height:22px}
-nav.tabs .in{grid-template-columns:repeat(4,1fr)!important}
+nav.tabs .in{grid-template-columns:repeat(5,1fr)!important}
 nav.tabs button{font-size:14px;min-height:62px}
 nav.tabs button svg{width:30px;height:30px}
 .hello{display:flex;align-items:center;gap:14px;padding:4px 4px 0}
@@ -299,6 +299,79 @@ details.grp[open]>summary::after{content:"–"}
 .ag .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .ag .acts .btn{min-height:44px}
 @media (max-width:520px){.ag{grid-template-columns:1fr}.ag .d{width:auto;height:auto;padding:8px;justify-self:start;font-size:18px}}
+
+/* ===== Música: piano para practicar la melódica ===== */
+.mus-video{position:relative;width:100%;max-width:calc(46vh*16/9);margin:0 auto;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#0B1220}
+.mus-video iframe,.mus-video .thumb{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mus-video .thumb{background-size:cover;background-position:center;display:grid;place-items:center}
+.mus-video .thumb::after{content:"▶";display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.92);color:#C4302B;font-size:38px;padding-left:6px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.mus-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mus-ctrl .sp{min-width:64px}
+.mus-ctrl .sp[aria-pressed="true"]{background:var(--brand);color:#fff}
+.mus-rate{font-family:var(--display);font-size:15px;color:var(--muted)}
+.stages{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
+@media (max-width:560px){.stages{grid-template-columns:1fr}}
+.stage{display:grid;gap:4px;justify-items:start;text-align:left;padding:14px;border-radius:20px;background:var(--soft);border:3px solid transparent;min-height:96px}
+.stage b{font-family:var(--display);font-size:22px}
+.stage span{font-size:14px;color:var(--muted);font-weight:700}
+.stage.now{border-color:var(--brand);background:var(--brand-soft)}
+.stage.done{background:var(--good-soft)}
+.stage.done b::after{content:" ✓";color:var(--good)}
+.mus-timer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 16px;border-radius:20px;background:var(--ink);color:#fff}
+.mus-timer .big{font-family:var(--display);font-size:40px;font-variant-numeric:tabular-nums;line-height:1}
+.mus-timer .btn{background:#fff;color:var(--ink)}
+.mus-timer.rest{background:var(--good)}
+.mus-modes{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.mus-modes button{flex:0 0 auto;padding:10px 14px;border-radius:14px;background:var(--soft);font-weight:700;font-size:15px;min-height:46px;white-space:nowrap}
+.mus-modes button[aria-pressed="true"]{background:var(--aqua);color:#fff}
+.mus-goal{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:64px}
+.mus-goal .tg{font-family:var(--display);font-size:clamp(30px,6vw,44px);line-height:1;color:var(--brand)}
+.mus-now{font-family:var(--display);font-size:22px;min-width:120px;color:var(--ink)}
+.mus-now small{font-family:var(--body);font-size:14px;color:var(--muted);margin-left:6px}
+.piano-wrap{position:relative;padding:10px 8px 8px;border-radius:22px;background:linear-gradient(#24324F,#16213A);box-shadow:inset 0 3px 0 rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.18)}
+.piano{position:relative;height:clamp(170px,30vw,250px);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.piano .k{position:absolute;top:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-family:var(--display);line-height:1.05;transition:background .06s}
+.piano .w{height:100%;background:linear-gradient(#FFFFFF,#F1F4F8);border:1px solid #9AA6B8;border-top:0;border-radius:0 0 10px 10px;color:#22314F;padding-bottom:8px;z-index:1;box-shadow:inset 0 -6px 0 #DCE3EC}
+.piano .b{height:60%;background:linear-gradient(#3A4660,#0E1524);border-radius:0 0 7px 7px;color:#DDE6F5;padding-bottom:6px;z-index:2;box-shadow:inset 0 -5px 0 #000,0 3px 4px rgba(0,0,0,.35)}
+.piano .k .nm{font-size:clamp(12px,2.1vw,17px);font-weight:700}
+.piano .k .lt{font-size:clamp(10px,1.6vw,13px);opacity:.7;font-family:var(--body);font-weight:700}
+.piano .b .nm{font-size:clamp(9px,1.4vw,12px)}
+.piano .b .lt{font-size:clamp(8px,1.2vw,10px)}
+.piano .w.on{background:linear-gradient(#C9F2EC,#8FE3D7);box-shadow:inset 0 -2px 0 #6CCFC1}
+.piano .b.on{background:linear-gradient(#18A999,#0D6F65);box-shadow:inset 0 -2px 0 #000}
+.piano .k.next{animation:glow 1s ease-in-out infinite}
+.piano .w.next{background:linear-gradient(#FFF2C4,#FFD866)}
+.piano .b.next{background:linear-gradient(#E0A100,#8A6200)}
+.piano .k.ok{background:var(--good)!important;color:#fff}
+.piano .k.bad{background:var(--bad)!important;color:#fff}
+@keyframes glow{50%{filter:brightness(1.12)}}
+@media (prefers-reduced-motion:reduce){.piano .k.next{animation:none}}
+.piano .fing{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-size:16px;display:grid;place-items:center;font-family:var(--display)}
+.piano .b .fing{width:22px;height:22px;font-size:13px;top:6px}
+.piano .w .fing{top:auto;bottom:clamp(52px,9vw,64px)}
+.piano .mid{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--court)}
+.piano.nolabel .k .nm,.piano.nolabel .k .lt{visibility:hidden}
+.piano.noletter .k .lt{display:none}
+.piano.noblack .b .nm,.piano.noblack .b .lt{display:none}
+.mus-opts{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:15px;color:var(--muted);font-weight:700}
+.mus-opts label{display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.mus-opts select{font:inherit;padding:6px 8px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.mus-opts input[type=checkbox]{width:22px;height:22px}
+.mus-opts input[type=range]{width:110px}
+.seq{display:flex;flex-wrap:wrap;gap:6px}
+.seq span{padding:4px 10px;border-radius:10px;background:var(--soft);font-weight:700;font-size:15px}
+.seq span.cur{background:var(--gold);color:var(--gold-ink)}
+.seq span.hit{background:var(--good-soft);color:var(--good)}
+.fingers{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.fingers div{padding:8px 4px;border-radius:14px;background:var(--soft);font-size:13px;font-weight:700;color:var(--muted)}
+.fingers b{display:block;font-family:var(--display);font-size:24px;color:var(--brand)}
+.tips{display:grid;gap:8px;margin:0;padding-left:22px}
+.mus-add{display:grid;gap:8px;grid-template-columns:1fr auto}
+.mus-add input{font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);min-height:48px;width:100%}
+.vlist{display:grid;gap:8px}
+.vlist button{display:flex;align-items:center;gap:12px;text-align:left;padding:8px;border-radius:16px;background:var(--soft)}
+.vlist button[aria-pressed="true"]{outline:3px solid var(--brand)}
+.vlist img{width:96px;height:54px;object-fit:cover;border-radius:10px;flex:0 0 auto;background:#000}
 </style>
 
 <header class="hud" aria-label="Mi poder">
@@ -319,6 +392,7 @@ details.grp[open]>summary::after{content:"–"}
     <button data-view="hoy" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>Hoy</button>
     <button data-view="materias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6"/></svg>Estudiar</button>
     <button data-view="palabras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 13l2-6 2 6M9.2 11h2.6M15 9.5h2.5"/></svg>Palabras</button>
+    <button data-view="musica"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Música</button>
     <button data-view="poder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10 0 13M18 5.5c-2.5 3-2.5 10 0 13"/></svg>Cancha</button>
   </div>
 </nav>
@@ -567,7 +641,7 @@ function sessionOf(date){S.prog.sessions[date]=S.prog.sessions[date]||{done:[]};
 /* ============ views ============ */
 const NAV_OF={spell:"palabras",evento:"hoy",tablas:"materias",topic:"materias",quiz:"materias",drill:"materias",vgame:"palabras",ensayo:"palabras"};
 function setView(v,sub){
-  S.view=v;S.sub=sub||null;stopTimer();stopSpeech();if(S.courtStop){S.courtStop();S.courtStop=null}
+  S.view=v;S.sub=sub||null;stopTimer();stopSpeech();if(S.courtStop){S.courtStop();S.courtStop=null}if(S.musStop){S.musStop();S.musStop=null}
   const tab=NAV_OF[v]||v;document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.view===tab)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   render();window.scrollTo(0,0);
 }
@@ -578,7 +652,7 @@ function render(){
   renderHud();
   if(!S.db){main.innerHTML=S.dbTried?'<div class="banner">Abre esta página desde claude.ai para cargar los temas y guardar el progreso.</div>':'<div class="card muted">Cargando el centro de entrenamiento…</div>';return}
   if(!S.ready.t||!S.ready.p){main.innerHTML='<div class="card muted">Cargando temas…</div>';return}
-  ({spell:viewSpell,evento:viewEvento,hoy:viewHoy,materias:viewMaterias,palabras:viewPalabras,vgame:viewVGame,ensayo:viewEnsayo,tablas:viewTablas,poder:viewPoder,papas:viewPapas,topic:viewTopic,quiz:viewQuiz,drill:viewDrill}[S.view]||viewHoy)();
+  ({spell:viewSpell,evento:viewEvento,hoy:viewHoy,materias:viewMaterias,palabras:viewPalabras,vgame:viewVGame,ensayo:viewEnsayo,tablas:viewTablas,poder:viewPoder,musica:viewMusica,papas:viewPapas,topic:viewTopic,quiz:viewQuiz,drill:viewDrill}[S.view]||viewHoy)();
 }
 
 function eventRow([id,e],extra){
@@ -670,9 +744,11 @@ function viewHoy(){
     h+='<section class="hero" style="background:var(--hero)"><div class="top"><span class="ic">'+IC.tab+'</span><div><p class="lab">Entre semana · 5 min</p><h2>Tablas del día</h2></div></div><p>La profe toma las tablas todos los días en clase. Practica 10 multiplicaciones.</p><button class="go" id="tabBtn">'+IC.play+'¡Vamos!</button></section>';
     h+='<button class="linkbtn" id="freeBtn">o haz una misión libre de 10 minutos</button>';
   }
+  h+=musHoyHtml();
   h+=agendaHtml();
   main.innerHTML=h;
   bindPlan(t);bindAgenda();
+  const mg=$("#musGo");if(mg)mg.onclick=()=>setView("musica");
   main.querySelectorAll("[data-pick]").forEach(x=>x.onclick=()=>{S.pick={date:t,i:+x.dataset.pick};viewHoy()});
   const gc=$("#goCourt");if(gc)gc.onclick=()=>setView("poder");
   const fb=$("#freeBtn");if(fb)fb.onclick=()=>{store.set("freeDate",t);viewHoy()};
@@ -1464,6 +1540,221 @@ function bindVoice(){
 function write(p,okMsg){p.then(()=>{if(okMsg)toast(okMsg)}).catch(e=>toast(e&&e.code==="invalid_argument"?"No tienes permiso para editar aquí.":"No se pudo guardar. Intenta de nuevo."))}
 
 if("speechSynthesis" in window){try{speechSynthesis.addEventListener("voiceschanged",()=>{loadVoices();if(S.view==="papas")render()})}catch(e){}}
+/* ============ música: piano para practicar la melódica ============ */
+const NOTE_ES=["Do","Do#","Re","Mi♭","Mi","Fa","Fa#","Sol","Sol#","La","Si♭","Si"];
+const NOTE_EN=["C","C#","D","E♭","E","F","F#","G","G#","A","B♭","B"];
+const isBlack=m=>[1,3,6,8,10].includes(((m%12)+12)%12);
+const nName=m=>NOTE_ES[m%12],nLet=m=>NOTE_EN[m%12]+Math.floor(m/12-1);
+const RANGES={c2:[60,84,"2 octavas (Do a Do)"],m32:[53,84,"Melódica de 32 teclas (Fa a Do)"],m37:[53,89,"Melódica de 37 teclas (Fa a Fa)"]};
+const KEYMAP={a:60,w:61,s:62,e:63,d:64,f:65,t:66,g:67,y:68,h:69,u:70,j:71,k:72,o:73,l:74,p:75,"ñ":76,";":76};
+const SCALES={
+  dm:{n:"Escala de Re menor (la de Piratas del Caribe)",notes:[62,64,65,67,69,70,72,74,72,70,69,67,65,64,62],fing:[1,2,3,1,2,3,4,5,4,3,2,1,3,2,1],tip:"Ojo con Si♭: es la tecla negra entre La y Si. Al subir, el pulgar (1) pasa por debajo para tocar Sol. Al bajar, el dedo 3 pasa por encima para tocar Fa."},
+  c:{n:"Escala de Do mayor",notes:[60,62,64,65,67,69,71,72,71,69,67,65,64,62,60],fing:[1,2,3,1,2,3,4,5,4,3,2,1,3,2,1],tip:"Solo teclas blancas. Al subir, el pulgar (1) pasa por debajo para tocar Fa. Al bajar, el dedo 3 pasa por encima para tocar Mi."},
+  cinco:{n:"Cinco dedos en Re (calentamiento)",notes:[62,64,65,67,69,67,65,64,62],fing:[1,2,3,4,5,4,3,2,1],tip:"Cada dedo en su tecla, sin mover la mano: 1 en Re, 2 en Mi, 3 en Fa, 4 en Sol, 5 en La."}
+};
+const MUS={mode:store.get("musMode","libre"),songId:null,rate:1,want:null,tries:0,time:0,state:-1,loopA:null,loopB:null,iv:null,stage:-1,left:0,rest:false,paused:false,game:null,seq:null,rec:false,scale:"dm",onPress:null,held:{},playing:null};
+function musProg(){const p=S.prog;p.music=p.music||{};const m=p.music;m.days=m.days||{};m.songs=m.songs||{};m.extra=m.extra||[];m.best=m.best||{};return m}
+function musSongs(){const base=((S.meta.musica||{}).songs||[]).slice();musProg().extra.forEach(x=>base.push(Object.assign({extra:true},x)));return base}
+function musSong(){const l=musSongs();return l.find(s=>s.id===MUS.songId)||l[0]||null}
+function musDay(){const d=musProg().days,t=today();d[t]=d[t]||{st:[],min:0};return d[t]}
+function musWeekMin(){const d=musProg().days,now=parseD(today());let n=0;for(let i=0;i<7;i++){const x=new Date(now);x.setDate(x.getDate()-i);const k=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");n+=(d[k]&&d[k].min)||0}return n}
+let musSaveT=null;function musSave(){clearTimeout(musSaveT);musSaveT=setTimeout(saveProg,600)}
+
+/* --- sonido parecido a una melódica (lengüeta: diente de sierra + cuadrada, filtro suave) --- */
+let AC=null,AMaster=null;const AV={};
+function ac(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();AMaster=AC.createGain();AMaster.gain.value=store.get("musVol",.7);const comp=AC.createDynamicsCompressor();AMaster.connect(comp);comp.connect(AC.destination)}if(AC.state==="suspended")AC.resume()}catch(e){return null}return AC}
+function noteOn(m){const c=ac();if(!c||AV[m])return;const t=c.currentTime,f=440*Math.pow(2,(m-69)/12);
+  const o1=c.createOscillator(),o2=c.createOscillator(),g2=c.createGain(),lp=c.createBiquadFilter(),g=c.createGain(),lfo=c.createOscillator(),lg=c.createGain();
+  o1.type="sawtooth";o1.frequency.value=f;o2.type="square";o2.frequency.value=f*1.004;g2.gain.value=.3;
+  lp.type="lowpass";lp.frequency.value=Math.min(6000,f*5+400);lp.Q.value=.8;
+  lfo.frequency.value=5;lg.gain.value=.012;lfo.connect(lg);lg.connect(g.gain);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.2,t+.035);g.gain.linearRampToValueAtTime(.16,t+.2);
+  o1.connect(lp);o2.connect(g2);g2.connect(lp);lp.connect(g);g.connect(AMaster);o1.start(t);o2.start(t);lfo.start(t);AV[m]={o1,o2,lfo,g}}
+function noteOff(m){const v=AV[m];if(!v||!AC)return;delete AV[m];const t=AC.currentTime;try{v.g.gain.cancelScheduledValues(t);v.g.gain.setValueAtTime(v.g.gain.value,t);v.g.gain.linearRampToValueAtTime(0,t+.08);[v.o1,v.o2,v.lfo].forEach(o=>o.stop(t+.12))}catch(e){}}
+function allOff(){Object.keys(AV).forEach(m=>noteOff(+m));MUS.held={};document.querySelectorAll("#piano .k.on").forEach(k=>k.classList.remove("on"))}
+
+/* --- piano --- */
+function musRange(){const r=store.get("musRange","c2");return RANGES[r]?r:"c2"}
+function keyEl(m){return document.querySelector('#piano .k[data-m="'+m+'"]')}
+function pianoHtml(){
+  const [lo,hi]=RANGES[musRange()];const whites=[];for(let m=lo;m<=hi;m++)if(!isBlack(m))whites.push(m);
+  const W=100/whites.length,bw=W*.62;let h="",wi=0;
+  for(let m=lo;m<=hi;m++){
+    const lab='<span class="nm">'+nName(m)+'</span><span class="lt">'+(m%12===0?nLet(m):NOTE_EN[m%12])+'</span>';
+    if(!isBlack(m)){h+='<div class="k w" data-m="'+m+'" style="left:'+(wi*W).toFixed(3)+'%;width:'+W.toFixed(3)+'%">'+(m===60?'<i class="mid" title="Do central"></i>':'')+lab+'</div>';wi++}
+    else h+='<div class="k b" data-m="'+m+'" style="left:'+(wi*W-bw/2).toFixed(3)+'%;width:'+bw.toFixed(3)+'%">'+lab+'</div>';
+  }
+  const cls=(store.get("musLabels",true)?"":" nolabel")+(store.get("musLetters",true)?"":" noletter");
+  return '<div class="piano-wrap"><div class="piano'+cls+'" id="piano" role="group" aria-label="Piano en pantalla. Toca las teclas para que suenen">'+h+'</div></div>';
+}
+function press(m){if(MUS.held[m])return;MUS.held[m]=1;noteOn(m);const k=keyEl(m);if(k)k.classList.add("on");const n=$("#musNow");if(n)n.innerHTML=esc(nName(m))+'<small>'+esc(nLet(m))+'</small>';if(MUS.onPress)MUS.onPress(m)}
+function release(m){if(!MUS.held[m])return;delete MUS.held[m];noteOff(m);const k=keyEl(m);if(k)k.classList.remove("on")}
+function flash(m,cls){const k=keyEl(m);if(!k)return;k.classList.add(cls);setTimeout(()=>k.classList.remove(cls),380)}
+function bindPiano(){
+  const pn=$("#piano");if(!pn)return;const act={};
+  const at=(x,y)=>{const el=document.elementFromPoint(x,y),k=el&&el.closest?el.closest(".k"):null;return k&&pn.contains(k)?+k.dataset.m:null};
+  pn.addEventListener("pointerdown",e=>{e.preventDefault();ac();const m=at(e.clientX,e.clientY);try{pn.setPointerCapture(e.pointerId)}catch(_){}act[e.pointerId]=m;if(m!=null)press(m)});
+  pn.addEventListener("pointermove",e=>{if(!(e.pointerId in act))return;const m=at(e.clientX,e.clientY);if(m!==act[e.pointerId]){if(act[e.pointerId]!=null)release(act[e.pointerId]);act[e.pointerId]=m;if(m!=null)press(m)}});
+  const up=e=>{if(!(e.pointerId in act))return;if(act[e.pointerId]!=null)release(act[e.pointerId]);delete act[e.pointerId]};
+  ["pointerup","pointercancel","lostpointercapture"].forEach(n=>pn.addEventListener(n,up));
+  pn.addEventListener("contextmenu",e=>e.preventDefault());
+}
+document.addEventListener("keydown",e=>{if(S.view!=="musica"||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="TEXTAREA"||tg==="SELECT")return;const m=KEYMAP[(e.key||"").toLowerCase()];if(m==null||!keyEl(m))return;e.preventDefault();press(m)});
+document.addEventListener("keyup",e=>{const m=KEYMAP[(e.key||"").toLowerCase()];if(m!=null)release(m)});
+window.addEventListener("blur",()=>{if(S.view==="musica")allOff()});
+function clearMarks(){document.querySelectorAll("#piano .k").forEach(k=>{k.classList.remove("next");const f=k.querySelector(".fing");if(f)f.remove()})}
+function markNext(m,finger){clearMarks();const k=keyEl(m);if(!k)return;k.classList.add("next");if(finger){const f=document.createElement("b");f.className="fing";f.textContent=finger;k.appendChild(f)}}
+function playSeq(notes,ms,onStep,done){stopPlay();const saved=MUS.onPress;MUS.restore=saved;MUS.onPress=null;let i=0;
+  const fin=()=>{MUS.playing=null;MUS.onPress=saved;if(done)done()};
+  const go=()=>{if(i>0)release(notes[i-1]);if(i>=notes.length)return fin();press(notes[i]);if(onStep)onStep(i);i++;MUS.playing=setTimeout(go,ms)};
+  go()}
+function stopPlay(){if(MUS.playing){clearTimeout(MUS.playing);MUS.playing=null;allOff();MUS.onPress=MUS.restore||null}}
+
+/* --- video de YouTube con control de velocidad (API por mensajes) --- */
+function ytCmd(func,args){const f=$("#mvFrame");if(!f||!f.contentWindow)return;try{f.contentWindow.postMessage(JSON.stringify({event:"command",func,args:args||[]}),"*")}catch(e){}}
+function ytListen(){const f=$("#mvFrame");if(!f||!f.contentWindow)return;try{f.contentWindow.postMessage(JSON.stringify({event:"listening",id:"mv",channel:"widget"}),"*")}catch(e){}}
+window.addEventListener("message",e=>{
+  if(!/youtube(-nocookie)?\.com$/.test((e.origin||"").replace(/^https?:\/\//,"").replace(/^www\./,"")))return;
+  let d=e.data;try{if(typeof d==="string")d=JSON.parse(d)}catch(_){return}
+  if(!d||!d.info||typeof d.info!=="object")return;const i=d.info;
+  if(typeof i.playbackRate==="number")MUS.rate=i.playbackRate;
+  if(typeof i.currentTime==="number")MUS.time=i.currentTime;
+  if(typeof i.playerState==="number")MUS.state=i.playerState;
+  if(MUS.want!=null&&MUS.state===1&&Math.abs(MUS.rate-MUS.want)>.01&&MUS.tries<4){MUS.tries++;ytCmd("setPlaybackRate",[MUS.want])}
+  if(MUS.loopB!=null&&MUS.loopA!=null&&MUS.time>=MUS.loopB)ytCmd("seekTo",[MUS.loopA,true]);
+  musRateLabel();
+});
+function musRateLabel(){const el=$("#musRate");if(!el)return;const r=Math.round(MUS.rate*100)/100;let t="Velocidad del video: "+String(r).replace(".",",");
+  if(MUS.want!=null&&MUS.tries>=4&&Math.abs(MUS.rate-MUS.want)>.01)t+=" · No cambió sola a "+String(MUS.want).replace(".",",")+": toca ⚙ en el video → Velocidad → Personalizada.";
+  if(MUS.loopA!=null)t+=" · Repite desde "+fmtT(MUS.loopA)+(MUS.loopB!=null?" hasta "+fmtT(MUS.loopB):"");
+  el.textContent=t;document.querySelectorAll("[data-rate]").forEach(b=>b.setAttribute("aria-pressed",Math.abs(+b.dataset.rate-(MUS.want!=null?MUS.want:MUS.rate))<.01?"true":"false"))}
+function fmtT(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+function ytOpen(autoplay){const s=musSong(),box=$("#mv");if(!s||!box)return;if($("#mvFrame"))return;
+  const f=document.createElement("iframe");f.id="mvFrame";f.title="Video: "+s.title;
+  f.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(s.yt)+"?enablejsapi=1&rel=0&playsinline=1&modestbranding=1"+(autoplay?"&autoplay=1":"")+"&origin="+encodeURIComponent(location.origin&&location.origin!=="null"?location.origin:"https://dieguitosings-lang.github.io");
+  f.allow="autoplay; encrypted-media; picture-in-picture";f.allowFullscreen=true;
+  f.onload=()=>{ytListen();setTimeout(ytListen,800);if(MUS.want!=null)setTimeout(()=>ytCmd("setPlaybackRate",[MUS.want]),1200)};
+  box.innerHTML="";box.appendChild(f)}
+function setRate(r){MUS.want=r;MUS.tries=0;if(!$("#mvFrame"))ytOpen(false);ytCmd("setPlaybackRate",[r]);musRateLabel()}
+
+/* --- plan del profe: etapas con tiempo --- */
+function stageTxt(st){return String(st.r).replace(".",",")+" de velocidad · "+st.min+" min"}
+function musStopAll(){if(MUS.iv){clearInterval(MUS.iv);MUS.iv=null}stopPlay();allOff();MUS.stage=-1;MUS.rest=false;MUS.paused=false}
+function startStage(i){const s=musSong();if(!s||!s.plan||!s.plan[i])return;if(MUS.iv)clearInterval(MUS.iv);
+  MUS.stage=i;MUS.rest=false;MUS.paused=false;MUS.left=s.plan[i].min*60;
+  if(!$("#mvFrame"))ytOpen(true);setRate(s.plan[i].r);ytCmd("playVideo");
+  MUS.iv=setInterval(tick,1000);drawTimer();drawStages()}
+function startRest(){const s=musSong();MUS.rest=true;MUS.paused=false;MUS.left=((s&&s.rest)||1)*60;ytCmd("pauseVideo");if(MUS.iv)clearInterval(MUS.iv);MUS.iv=setInterval(tick,1000);drawTimer()}
+function tick(){if(MUS.paused)return;MUS.left--;if(MUS.left<=0){MUS.left=0;clearInterval(MUS.iv);MUS.iv=null;MUS.rest?restDone():stageDone()}drawTimer()}
+function stageDone(){const s=musSong(),d=musDay(),i=MUS.stage;ytCmd("pauseVideo");
+  const key=s.id;d.songs=d.songs||{};d.songs[key]=d.songs[key]||[];if(!d.songs[key].includes(i)){d.songs[key].push(i);d.min+=s.plan[i].min;addXp(XP_BLOCK)}else{d.min+=s.plan[i].min}
+  musSave();
+  if(s.plan.every((_,k)=>d.songs[key].includes(k))){MUS.stage=-1;drawTimer();drawStages();if(!d.full){d.full=true;giveShots(2,"por practicar melódica");musSave()}celebrate("¡Práctica completa!","Hiciste las "+s.plan.length+" velocidades. Ahora toca la canción en tu melódica, despacio y con aire parejo.");return}
+  if(i+1<s.plan.length){MUS.next=i+1;startRest();toast("¡Muy bien! Descansa 1 minuto.")}else{MUS.stage=-1;drawTimer();drawStages()}}
+function restDone(){MUS.rest=false;const n=MUS.next;MUS.next=null;MUS.stage=-1;drawTimer();if(n!=null){toast("¡A tocar! Etapa "+(n+1));startStage(n)}}
+function drawTimer(){const el=$("#musTimer");if(!el)return;const s=musSong();
+  if(MUS.stage<0&&!MUS.rest){el.hidden=true;return}el.hidden=false;el.className="mus-timer"+(MUS.rest?" rest":"");
+  const lab=MUS.rest?"Descanso":"Etapa "+(MUS.stage+1)+" · "+stageTxt(s.plan[MUS.stage]);
+  el.innerHTML='<span class="big">'+fmtT(MUS.left)+'</span><span style="flex:1 1 160px"><b>'+esc(lab)+'</b><br><span class="small" style="opacity:.85">'+(MUS.rest?'Mueve los dedos y respira. Luego sigue la siguiente velocidad.':'Mira el video y toca las mismas teclas en el piano.')+'</span></span>'+
+    (MUS.rest?'<button class="btn small" id="mtSkip">Seguir ya</button>':'<button class="btn small" id="mtPause">'+(MUS.paused?'Seguir':'Pausa')+'</button>')+'<button class="btn small" id="mtStop">Terminar</button>';
+  const p=$("#mtPause");if(p)p.onclick=()=>{MUS.paused=!MUS.paused;ytCmd(MUS.paused?"pauseVideo":"playVideo");drawTimer()};
+  const k=$("#mtSkip");if(k)k.onclick=()=>{MUS.left=0;tick()};
+  $("#mtStop").onclick=()=>{if(MUS.iv)clearInterval(MUS.iv);MUS.iv=null;MUS.stage=-1;MUS.rest=false;MUS.next=null;ytCmd("pauseVideo");drawTimer();drawStages()}}
+function drawStages(){const el=$("#musStages"),s=musSong();if(!el||!s)return;if(!s.plan||!s.plan.length){el.innerHTML="";return}
+  const done=((musDay().songs||{})[s.id])||[];
+  el.innerHTML=s.plan.map((st,i)=>'<button class="stage'+(done.includes(i)?' done':'')+(MUS.stage===i?' now':'')+'" data-stage="'+i+'"><span>Etapa '+(i+1)+'</span><b>'+String(st.r).replace(".",",")+'</b><span>de velocidad · '+st.min+' min</span></button>').join("");
+  el.querySelectorAll("[data-stage]").forEach(b=>b.onclick=()=>startStage(+b.dataset.stage))}
+
+/* --- modos de práctica en el piano --- */
+const MODES=[["libre","Tocar libre"],["nota","Encuentra la nota"],["oido","¿Qué nota suena?"],["escala","Escalas y dedos"],["cancion","Mi canción"]];
+function musGoal(html){const g=$("#musGoal");if(g)g.innerHTML=html}
+function setMode(m){stopPlay();clearMarks();MUS.mode=m;store.set("musMode",m);MUS.onPress=null;MUS.game=null;MUS.seq=null;MUS.rec=false;
+  document.querySelectorAll("[data-mmode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mmode===m?"true":"false"));
+  ({libre:modeLibre,nota:()=>modeGame(false),oido:()=>modeGame(true),escala:modeEscala,cancion:modeCancion}[m]||modeLibre)()}
+function modeLibre(){musGoal('<p>Pon el video, mira qué tecla se ilumina y tócala aquí. En la computadora también sirven las letras <b>A S D F G H J K</b> (blancas) y <b>W E T Y U</b> (negras).</p>')}
+const GAME_POOL=[60,62,64,65,67,69,70,71,72];
+function modeGame(ear){const g=MUS.game={ear,i:0,n:10,ok:0,miss:0,target:null};
+  const next=()=>{clearMarks();if(g.i>=g.n)return end();g.i++;g.miss=0;let t;do{t=GAME_POOL[Math.floor(Math.random()*GAME_POOL.length)]}while(t===g.target);g.target=t;draw();if(ear)setTimeout(()=>hear(),250)};
+  const hear=()=>{const t=g.target;if(t==null)return;noteOn(t);setTimeout(()=>noteOff(t),750)};
+  const draw=()=>{musGoal('<div class="mus-goal"><span class="chip">'+g.i+' de '+g.n+' · '+g.ok+' bien</span>'+(ear?'<button class="btn small soft" id="gHear">'+SPEAK+' Escuchar otra vez</button><span class="muted">Escucha la nota y búscala en el piano.</span>':'<span class="muted">Toca:</span><span class="tg">'+esc(nName(g.target))+'</span>')+'</div>');const b=$("#gHear");if(b)b.onclick=hear};
+  const end=()=>{MUS.onPress=null;const best=musProg().best,k=ear?"oido":"nota";best[k]=Math.max(best[k]||0,g.ok);addXp(g.ok>=8?XP_PERFECT:XP_OK);musSave();
+    musGoal('<div class="mus-goal"><span class="tg">'+g.ok+' / '+g.n+'</span><span>'+(g.ok>=8?'¡Excelente oído y vista!':g.ok>=5?'¡Bien! Practica un poco más.':'Vamos de nuevo, despacio.')+' Tu mejor marca: '+best[k]+'.</span><button class="btn small" id="gAgain">Otra vez</button></div>');$("#gAgain").onclick=()=>modeGame(ear)};
+  MUS.onPress=m=>{if(!g.target)return;if(m%12===g.target%12){if(!g.miss)g.ok++;flash(m,"ok");g.target=null;setTimeout(next,ear?700:450)}else{flash(m,"bad");g.miss++;if(g.miss>=2){markNext(g.target);if(ear)toast("Era "+nName(g.target)+". Tócala.")}}};
+  next()}
+function modeEscala(){const sc=SCALES[MUS.scale]||SCALES.dm;MUS.seq={notes:sc.notes,fing:sc.fing,i:0};
+  const draw=()=>{const q=MUS.seq;musGoal('<div style="display:grid;gap:10px"><div class="row">'+Object.entries(SCALES).map(([k,v])=>'<button class="btn small '+(k===MUS.scale?'':'soft')+'" data-sc="'+k+'">'+esc(v.n.replace(/ \(.*\)/,""))+'</button>').join("")+'</div><b>'+esc(sc.n)+'</b><p class="small muted">Toca la tecla amarilla con el dedo que dice el número. '+esc(sc.tip)+'</p><div class="seq">'+q.notes.map((m,i)=>'<span class="'+(i<q.i?'hit':i===q.i?'cur':'')+'">'+esc(nName(m))+' <small>'+q.fing[i]+'</small></span>').join("")+'</div><div class="row"><button class="btn small soft" id="scHear">'+SPEAK+' Escuchar la escala</button><button class="btn small ghost" id="scReset">Empezar de nuevo</button></div></div>');
+    main.querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{MUS.scale=b.dataset.sc;modeEscala()});
+    $("#scHear").onclick=()=>{const q2=MUS.seq;playSeq(q2.notes,520,i=>markNext(q2.notes[i],q2.fing[i]),()=>{MUS.onPress=onp;q2.i=0;draw();markNext(q2.notes[0],q2.fing[0])})};
+    $("#scReset").onclick=()=>{MUS.seq.i=0;draw();markNext(sc.notes[0],sc.fing[0])}};
+  const onp=m=>{const q=MUS.seq;if(!q||q.i>=q.notes.length)return;if(m===q.notes[q.i]){q.i++;if(q.i>=q.notes.length){clearMarks();addXp(XP_OK);musSave();draw();toast("¡Escala completa! +"+XP_OK+" de poder");return}draw();markNext(q.notes[q.i],q.fing[q.i])}else flash(m,"bad")};
+  MUS.onPress=onp;draw();markNext(sc.notes[0],sc.fing[0])}
+function modeCancion(){const s=musSong();if(!s){musGoal('<p class="muted">Primero agrega un video.</p>');return}
+  const sp=musProg().songs;sp[s.id]=sp[s.id]||{notes:[]};const my=sp[s.id];let ms=store.get("musTempo",500),pi=-1;
+  const draw=()=>{musGoal('<div style="display:grid;gap:10px"><p class="small">Arma la canción con las notas del video o de la partitura: pausa el video, mira qué tecla toca, toca <b>Grabar</b> y luego esa tecla aquí. Después practica con las teclas amarillas.</p>'+
+    '<div class="seq" aria-label="Notas de mi canción">'+(my.notes.length?my.notes.map((m,i)=>'<span class="'+(pi>=0&&i<pi?'hit':i===pi?'cur':'')+'">'+esc(nName(m))+'</span>').join(""):'<span class="muted">Todavía no hay notas.</span>')+'</div>'+
+    '<div class="row"><button class="btn small'+(MUS.rec?' good':'')+'" id="cRec">'+(MUS.rec?'■ Parar de grabar':'● Grabar notas')+'</button><button class="btn small soft" id="cUndo"'+(my.notes.length?'':' disabled')+'>Borrar la última</button><button class="btn small soft" id="cPlay"'+(my.notes.length?'':' disabled')+'>'+SPEAK+' Escuchar</button><button class="btn small" id="cPrac"'+(my.notes.length?'':' disabled')+'>Practicar</button><button class="btn small ghost" id="cClear"'+(my.notes.length?'':' disabled')+'>Borrar todo</button></div>'+
+    '<label class="mus-opts">Rapidez al escuchar <input type="range" id="cTempo" min="250" max="1000" step="50" value="'+(1250-ms)+'"></label></div>');
+    $("#cRec").onclick=()=>{MUS.rec=!MUS.rec;pi=-1;clearMarks();MUS.onPress=MUS.rec?m=>{my.notes.push(m);musSave();draw()}:null;draw()};
+    $("#cUndo").onclick=()=>{my.notes.pop();musSave();draw()};
+    let armed=false;$("#cClear").onclick=e=>{if(!armed){armed=true;e.target.textContent="Toca otra vez para borrar";setTimeout(()=>{armed=false;const b=$("#cClear");if(b)b.textContent="Borrar todo"},3000);return}my.notes=[];musSave();pi=-1;draw()};
+    $("#cTempo").oninput=e=>{ms=1250-(+e.target.value);store.set("musTempo",ms)};
+    $("#cPlay").onclick=()=>{MUS.rec=false;MUS.onPress=null;playSeq(my.notes,ms,i=>{pi=i;markNext(my.notes[i])},()=>{pi=-1;clearMarks();draw()})};
+    $("#cPrac").onclick=()=>{MUS.rec=false;pi=0;draw();markNext(my.notes[0]);MUS.onPress=m=>{if(pi<0)return;if(m===my.notes[pi]){pi++;if(pi>=my.notes.length){pi=-1;clearMarks();MUS.onPress=null;addXp(XP_OK);musSave();draw();toast("¡Canción completa! +"+XP_OK+" de poder");return}draw();markNext(my.notes[pi])}else flash(m,"bad")}}};
+  draw()}
+
+/* --- pantalla --- */
+const IC_MUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>';
+function ytId(u){const m=String(u||"").trim().match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([\w-]{11})/)||String(u||"").trim().match(/^([\w-]{11})$/);return m?m[1]:null}
+function viewMusica(){
+  musStopAll();const songs=musSongs();if(!MUS.songId||!songs.find(s=>s.id===MUS.songId))MUS.songId=(songs[0]||{}).id||null;const s=musSong(),info=S.meta.musica||{};
+  let h='<section class="hello"><div><h1>Música · Melódica</h1><p class="muted">Mira el video, toca el piano en la pantalla y luego hazlo en tu melódica.</p></div></section>';
+  if(s){
+    h+='<section class="card" style="display:grid;gap:12px"><div class="row spread"><div><p class="eyebrow">'+esc(s.n?'Canción #'+s.n:'Video agregado')+(s.key?' · '+esc(s.key):'')+'</p><h2>'+esc(s.title)+'</h2></div><span class="chip">Esta semana: '+musWeekMin()+' min</span></div>'+
+      (s.task?'<p class="small muted">'+esc(s.task)+'</p>':'')+
+      '<div class="mus-video" id="mv"><button class="thumb" id="mvPlay" style="background-image:url(https://i.ytimg.com/vi/'+esc(s.yt)+'/hqdefault.jpg)" aria-label="Ver el video '+esc(s.title)+'"></button></div>'+
+      '<div class="row spread"><span class="muted small" style="font-weight:700">Toca aquí lo mismo que en el video</span><span class="mus-now" id="musNow" aria-live="polite">—</span></div>'+pianoHtml()+
+      '<div class="mus-ctrl"><span class="muted small" style="font-weight:700">Velocidad:</span>'+[0.5,0.65,0.75,1].map(r=>'<button class="btn small soft sp" data-rate="'+r+'" aria-pressed="false">'+String(r).replace(".",",")+'</button>').join("")+
+      '<button class="btn small soft" id="mvBack">⏪ 5 s</button><button class="btn small soft" id="mvA">Repetir desde aquí</button><button class="btn small soft" id="mvB">…hasta aquí</button><button class="btn small ghost" id="mvAB">Quitar repetición</button></div>'+
+      '<p class="mus-rate" id="musRate">Velocidad del video: 1</p>'+
+      '<a class="small" href="https://www.youtube.com/watch?v='+esc(s.yt)+'" target="_blank" rel="noopener">Si el video no carga aquí, ábrelo en YouTube ↗</a>'+
+      (s.plan&&s.plan.length?'<h3 style="margin-top:4px">Plan del profe ('+s.plan.reduce((a,b)=>a+b.min,0)+' minutos)</h3><p class="small muted">Toca una etapa: el video se pone a esa velocidad y empieza el reloj. Entre etapas hay 1 minuto de descanso.</p><div class="stages" id="musStages"></div><div class="mus-timer" id="musTimer" hidden></div>':'')+
+    '</section>';
+  }
+  h+='<section class="card" style="display:grid;gap:12px">'+(s?'<h2>Juegos y ejercicios en el piano</h2>':'<div class="row spread"><h2>Piano</h2><span class="mus-now" id="musNow" aria-live="polite">—</span></div>'+pianoHtml())+
+    '<div class="mus-opts"><label>Teclado <select id="musRange">'+Object.entries(RANGES).map(([k,v])=>'<option value="'+k+'"'+(k===musRange()?' selected':'')+'>'+esc(v[2])+'</option>').join("")+'</select></label>'+
+    '<label><input type="checkbox" id="musLab"'+(store.get("musLabels",true)?' checked':'')+'> Nombres (Do, Re, Mi)</label><label><input type="checkbox" id="musLet"'+(store.get("musLetters",true)?' checked':'')+'> Letras (C, D, E)</label>'+
+    '<label>Volumen <input type="range" id="musVol" min="0" max="1" step="0.05" value="'+store.get("musVol",.7)+'"></label></div>'+
+    '<div class="mus-modes" role="group" aria-label="Modo de práctica">'+MODES.map(([k,n])=>'<button data-mmode="'+k+'" aria-pressed="false">'+esc(n)+'</button>').join("")+'</div><div id="musGoal"></div></section>';
+  {
+    h+='<section class="card" style="display:grid;gap:10px"><h2>Videos para practicar</h2>'+(songs.length?'<div class="vlist">'+songs.map(x=>'<button data-song="'+esc(x.id)+'" aria-pressed="'+(x.id===MUS.songId)+'"><img alt="" src="https://i.ytimg.com/vi/'+esc(x.yt)+'/mqdefault.jpg"><span><b>'+esc(x.title)+'</b><br><span class="small muted">'+esc(x.n?'Canción #'+x.n+' · de Teams':'Agregado aquí')+'</span></span></button>').join("")+'</div>':'')+
+      '<p class="small muted">¿El profe mandó otro video? Pega el enlace de YouTube aquí.</p><form class="mus-add" id="musAdd"><input id="musUrl" placeholder="https://youtu.be/…" aria-label="Enlace de YouTube" autocomplete="off"><button class="btn small" type="submit">Agregar</button></form>'+
+      (songs.some(x=>x.extra)?'<button class="linkbtn" id="musDel" style="justify-self:start">Quitar el video agregado que está elegido</button>':'')+'</section>';
+  }
+  h+='<section class="card" style="display:grid;gap:10px"><h2>Del piano a la melódica</h2><div class="fingers">'+[["1","Pulgar"],["2","Índice"],["3","Medio"],["4","Anular"],["5","Meñique"]].map(f=>'<div><b>'+f[0]+'</b>'+f[1]+'</div>').join("")+'</div>'+
+    '<ol class="tips"><li>Las teclas de la melódica son las mismas del piano: Do, Re, Mi… están en el mismo lugar. Busca el grupo de 2 teclas negras: la blanca de la izquierda es <b>Do</b>.</li><li>Primero pon el dedo en la tecla y <b>después</b> sopla. Si soplas antes, sale un ruido.</li><li>Sopla suave y parejo, como si dijeras «tuuu». No infles los cachetes.</li><li>Para repetir la misma nota, no levantes el dedo: di «tu-tu» con la lengua.</li><li>Dedos curvos, como si tuvieras una pelota en la mano. Usa el número de dedo que muestra el piano.</li><li>Empieza lento (0,5) aunque te salga fácil. La rapidez llega sola.</li><li>Al terminar, aprieta el botón de la melódica para sacar la saliva y guárdala seca.</li></ol></section>';
+  if(info.note)h+='<p class="muted small" style="text-align:center">'+esc(info.note)+'</p>';
+  main.innerHTML=h;
+  bindPiano();
+  const pb=$("#mvPlay");if(pb)pb.onclick=()=>{ytOpen(true)};
+  main.querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>setRate(+b.dataset.rate));
+  const bk=$("#mvBack");if(bk)bk.onclick=()=>{ytCmd("seekTo",[Math.max(0,MUS.time-5),true])};
+  const A=$("#mvA");if(A)A.onclick=()=>{if(!$("#mvFrame"))return toast("Primero pon el video.");MUS.loopA=MUS.time;MUS.loopB=null;musRateLabel();toast("Marcado el inicio: "+fmtT(MUS.time))};
+  const B=$("#mvB");if(B)B.onclick=()=>{if(MUS.loopA==null)return toast("Primero toca «Repetir desde aquí».");if(MUS.time<=MUS.loopA+1)return toast("Deja avanzar el video un poco más.");MUS.loopB=MUS.time;musRateLabel();toast("Se repetirá esa parte")};
+  const AB=$("#mvAB");if(AB)AB.onclick=()=>{MUS.loopA=MUS.loopB=null;musRateLabel()};
+  $("#musRange").onchange=e=>{store.set("musRange",e.target.value);const wrap=main.querySelector(".piano-wrap");allOff();wrap.outerHTML=pianoHtml();bindPiano();setMode(MUS.mode)};
+  $("#musLab").onchange=e=>{store.set("musLabels",e.target.checked);$("#piano").classList.toggle("nolabel",!e.target.checked)};
+  $("#musLet").onchange=e=>{store.set("musLetters",e.target.checked);$("#piano").classList.toggle("noletter",!e.target.checked)};
+  $("#musVol").oninput=e=>{const v=+e.target.value;store.set("musVol",v);if(AMaster)AMaster.gain.value=v};
+  main.querySelectorAll("[data-mmode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mmode));
+  main.querySelectorAll("[data-song]").forEach(b=>b.onclick=()=>{MUS.songId=b.dataset.song;MUS.want=null;MUS.loopA=MUS.loopB=null;viewMusica();window.scrollTo(0,0)});
+  const fa=$("#musAdd");if(fa)fa.onsubmit=e=>{e.preventDefault();const id=ytId($("#musUrl").value);if(!id)return toast("Ese enlace no parece de YouTube.");const ex=musProg().extra;if(musSongs().some(x=>x.yt===id))return toast("Ese video ya está en la lista.");const nid="v-"+id;ex.push({id:nid,yt:id,title:"Video "+(ex.length+1)+" del profe",added:today(),plan:[{r:.5,min:5},{r:.65,min:5},{r:.75,min:5}],rest:1});saveProg();MUS.songId=nid;viewMusica();toast("Video agregado")};
+  const del=$("#musDel");if(del)del.onclick=()=>{const cur=musSong();if(!cur||!cur.extra)return toast("Ese video vino de Teams; no se puede quitar aquí.");const ex=musProg().extra;const i=ex.findIndex(x=>x.id===cur.id);if(i>=0)ex.splice(i,1);saveProg();MUS.songId=null;viewMusica()};
+  drawStages();musRateLabel();setMode(MODES.some(m=>m[0]===MUS.mode)?MUS.mode:"libre");
+  S.musStop=()=>{musStopAll();MUS.onPress=null};
+}
+
+function musHoyHtml(){const s=musSongs()[0];if(!s||!s.plan)return "";const done=((musDay().songs||{})[s.id])||[];const all=s.plan.every((_,k)=>done.includes(k));
+  return '<button class="soon" id="musGo"><span class="d" style="background:#8E44AD">'+IC_MUS+'</span><span><b>Melódica: '+esc(s.title)+'</b><span>'+(all?'¡Hoy ya practicaste! Puedes tocar libre en el piano.':'Practica con el video y el piano · '+s.plan.reduce((a,b)=>a+b.min,0)+' min'+(done.length?' · llevas '+done.length+' de '+s.plan.length:''))+'</span></span></button>'}
 /* ============ boot ============ */
 render();
 (async()=>{
@@ -1477,7 +1768,7 @@ render();
   db.collection("events").onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.events=o;if(["hoy","papas"].includes(S.view))render()},err);
   db.collection("vocab").onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.vocab=o;if(["palabras"].includes(S.view))render()},err);
   db.collection("todos").onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.todos=o;if(S.view==="papas")render()},err);
-  db.collection("meta").onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.meta=o;if(["papas","materias","hoy","ensayo"].includes(S.view))render()},err);
+  db.collection("meta").onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.meta=o;if(["papas","materias","hoy","ensayo","musica"].includes(S.view)&&!(S.view==="musica"&&main.querySelector("#piano")))render()},err);
   try{const p=await db.doc("progress/thiago").get();S.prog=p.exists?Object.assign(defaultProg(),JSON.parse(JSON.stringify(p.data()))):defaultProg()}catch(e){S.prog=defaultProg()}
   if(migrateProg(S.prog))saveProg();
   S.ready.p=true;render();
