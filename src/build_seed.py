@@ -21,7 +21,7 @@ def put(coll, did, data):
 # Fecha en que cada tema llegó desde Teams (los nuevos salen primero en el plan).
 ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-valise", "f-activites", "f-jours", "d-word")},
          **{k: "2026-10-03" for k in ("l-verbo", "m-propiedades")},
-         "m-mult2": "2026-10-27",
+         "m-mult2": "2026-10-27", "n-digquiz": "2026-10-29",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
          "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23"}
@@ -74,7 +74,7 @@ put("meta", "musica", {"songs": [
 
 events = [
  ("ev-1030-natquiz", "2026-10-30", "nat", "leccion", "Natural Science: Pop Quiz «The Digestive System» (formulario en Teams, vence 8:00)",
-  "Tarea publicada el 28/10 (10 puntos, 1 solo envío). Es un formulario en línea que cuenta como taller acumulativo: leer bien cada pregunta, usar la presentación de PowerPoint publicada con la tarea, revisar las respuestas antes de enviar y completarlo dentro de las 48 horas. Se responde en Teams.", ["n-digestion"]),
+  "Tarea publicada el 28/10 (10 puntos, 1 solo envío). Es un formulario en línea que cuenta como taller acumulativo: leer bien cada pregunta, usar la presentación de PowerPoint publicada con la tarea, revisar las respuestas antes de enviar y completarlo dentro de las 48 horas. Se responde en Teams.", ["n-digquiz", "n-digestion"]),
  ("ev-1030-natasinc", "2026-10-30", "nat", "tarea", "Natural Science: Asynchronous Activity (Wordwall, vence 7:59)",
   "Abrir el enlace de Wordwall que está en la tarea de Teams, resolverlo y subir la captura de pantalla a la tarea.", ["n-digestion"]),
  ("ev-1030-hl", "2026-10-30", "ing", "tarea", "Language Arts: Highlights «Spaghetti Catastrophe» (vence 7:00)",
@@ -170,7 +170,7 @@ events = [
 ]
 PRIO = {"ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-28" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-28" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
