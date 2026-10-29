@@ -426,7 +426,7 @@ DIG = [
         ("Escribir con MAYÚSCULAS es…", ["letras grandes: ABC", "letras pequeñas: abc", "letras inclinadas"], 0, "Mayúsculas = letras grandes.")]),
  # Publicación del 13/10/2026 (Miss Jennifer): fichas de cartulina con los iconos de la pestaña Inicio de Word y lección.
  dict(id="d-iconos", s="dig", q=2, st="actual", p=1, t="Los iconos de la pestaña Inicio de Word",
-  kid="La profe pidió fichas de cartulina (10 cm × 5 cm): adelante el icono y atrás su nombre. Hay que estudiarlos para la lección.",
+  kid="Mira cada icono y di su nombre. Papá te hace las fichas: adelante el icono y atrás el nombre. Úsalas para jugar y estudiar para la lección.",
   pts=["K = Cursiva (letra inclinada)", "S = Subrayado (raya debajo)", "abc con una raya en medio = Tachado",
        "x₂ = Subíndice (letra pequeña abajo)", "x² = Superíndice (letra pequeña arriba)",
        "ab con marcador amarillo = Resaltado de texto", "A con una raya de color debajo = Color de fuente",
