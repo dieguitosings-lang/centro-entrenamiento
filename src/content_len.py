@@ -411,9 +411,10 @@ FR = [
 
 # Entornos Digitales (Miss Jennifer Alvarado). Fuente: publicación del 21/08/2026 en Teams (práctica de Word en casa).
 DIG = [
- dict(id="d-word", s="dig", q=1, st="repaso", p=2, t="Word: letras, bordes y formas",
-  kid="En el laboratorio aprendes Word. La profe pide practicar en casa: escribir una lectura corta y darle formato.",
-  pts=["Escribe una lectura corta de 10 líneas", "N = Negrita · K = Cursiva · S = Subrayado",
+ dict(id="d-word", s="dig", q=1, st="actual", p=1, t="Word: letras, bordes y formas",
+  kid="Nueva actividad de la Miss Jennifer: copia en Word la lectura «El gato Manolo» con letra tamaño 16, el título centrado y en rojo, una imagen y un borde en la página. Luego se sube a Teams.",
+  pts=["Actividad «El gato Manolo»: letra tamaño 16 · título centrado y de color rojo · cualquier tipo de letra · una imagen de internet · borde de página",
+       "Escribe una lectura corta de 10 líneas", "N = Negrita · K = Cursiva · S = Subrayado",
        "Cambia el tamaño, el tipo y el color de la letra", "Mayúsculas (ABC) y minúsculas (abc)",
        "Pestaña Diseño → Bordes de página y Color de página", "Pestaña Insertar → Formas (y transformarlas en 3D)",
        "Copiar una imagen del navegador: clic derecho → Copiar imagen, y en Word: Pegar (Ctrl + V)"],
@@ -423,7 +424,12 @@ DIG = [
         ("Para poner un borde a toda la hoja usas…", ["Bordes de página", "Negrita", "Formas"], 0, "Bordes de página, en la pestaña Diseño."),
         ("Para copiar una imagen del navegador haces…", ["clic derecho → Copiar imagen", "doble clic en la imagen", "cerrar el navegador"], 0, "Clic derecho → Copiar imagen."),
         ("Para pegar la imagen en Word usas…", ["Ctrl + V", "Ctrl + Z", "Ctrl + P"], 0, "Ctrl + V = pegar."),
-        ("Escribir con MAYÚSCULAS es…", ["letras grandes: ABC", "letras pequeñas: abc", "letras inclinadas"], 0, "Mayúsculas = letras grandes.")]),
+        ("Escribir con MAYÚSCULAS es…", ["letras grandes: ABC", "letras pequeñas: abc", "letras inclinadas"], 0, "Mayúsculas = letras grandes."),
+        ("La Miss pide letra tamaño 16. ¿Dónde lo cambias?", ["En el número de Tamaño de fuente, en Inicio", "En Bordes de página", "En Insertar → Formas"], 0, "En la pestaña Inicio, el cuadrito con el número (11) es el tamaño: lo cambias a 16."),
+        ("Para poner el título en el medio de la hoja usas…", ["Centrar", "Justificar", "Subrayado"], 0, "Centrar pone el título en el medio."),
+        ("Para que el título salga rojo usas…", ["Color de fuente (la A con raya de color)", "Resaltado (marcador amarillo)", "Negrita"], 0, "Color de fuente cambia el color de las letras. Resaltado solo pinta el fondo."),
+        ("Antes de cambiar el color del título tienes que…", ["seleccionar (pintar) el título", "cerrar Word", "borrar el título"], 0, "Primero seleccionas el texto y luego eliges el color."),
+        ("¿Dónde pones el borde a toda la página?", ["Diseño → Bordes de página", "Inicio → Negrita", "Archivo → Guardar"], 0, "Pestaña Diseño → Bordes de página.")]),
  # Publicación del 13/10/2026 (Miss Jennifer): fichas de cartulina con los iconos de la pestaña Inicio de Word y lección.
  dict(id="d-iconos", s="dig", q=2, st="actual", p=1, t="Los iconos de la pestaña Inicio de Word",
   kid="Mira cada icono y di su nombre. Papá te hace las fichas: adelante el icono y atrás el nombre. Úsalas para jugar y estudiar para la lección.",
