@@ -1620,12 +1620,12 @@ window.addEventListener("message",e=>{
   if(typeof i.playbackRate==="number")MUS.rate=i.playbackRate;
   if(typeof i.currentTime==="number")MUS.time=i.currentTime;
   if(typeof i.playerState==="number")MUS.state=i.playerState;
-  if(MUS.want!=null&&MUS.state===1&&Math.abs(MUS.rate-MUS.want)>.01&&MUS.tries<4){MUS.tries++;ytCmd("setPlaybackRate",[MUS.want])}
+  if(MUS.want!=null&&MUS.state===1&&Math.abs(MUS.rate-MUS.want)>.01&&MUS.tries<40&&Date.now()-(MUS.lastTry||0)>1500){MUS.tries++;MUS.lastTry=Date.now();ytCmd("setPlaybackRate",[MUS.want])}
   if(MUS.loopB!=null&&MUS.loopA!=null&&MUS.time>=MUS.loopB)ytCmd("seekTo",[MUS.loopA,true]);
   musRateLabel();
 });
 function musRateLabel(){const el=$("#musRate");if(!el)return;const r=Math.round(MUS.rate*100)/100;let t="Velocidad del video: "+String(r).replace(".",",");
-  if(MUS.want!=null&&MUS.tries>=4&&Math.abs(MUS.rate-MUS.want)>.01)t+=" · No cambió sola a "+String(MUS.want).replace(".",",")+": toca ⚙ en el video → Velocidad → Personalizada.";
+  if(MUS.want!=null&&MUS.tries>=40&&Math.abs(MUS.rate-MUS.want)>.01)t+=" · No cambió sola a "+String(MUS.want).replace(".",",")+": toca ⚙ en el video → Velocidad → Personalizada.";
   if(MUS.loopA!=null)t+=" · Repite desde "+fmtT(MUS.loopA)+(MUS.loopB!=null?" hasta "+fmtT(MUS.loopB):"");
   el.textContent=t;document.querySelectorAll("[data-rate]").forEach(b=>b.setAttribute("aria-pressed",Math.abs(+b.dataset.rate-(MUS.want!=null?MUS.want:MUS.rate))<.01?"true":"false"))}
 function fmtT(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
@@ -1715,7 +1715,7 @@ function viewMusica(){
       '<div class="row spread"><span class="muted small" style="font-weight:700">Toca aquí lo mismo que en el video</span><span class="mus-now" id="musNow" aria-live="polite">—</span></div>'+pianoHtml()+
       '<div class="mus-ctrl"><span class="muted small" style="font-weight:700">Velocidad:</span>'+[0.5,0.65,0.75,1].map(r=>'<button class="btn small soft sp" data-rate="'+r+'" aria-pressed="false">'+String(r).replace(".",",")+'</button>').join("")+
       '<button class="btn small soft" id="mvBack">⏪ 5 s</button><button class="btn small soft" id="mvA">Repetir desde aquí</button><button class="btn small soft" id="mvB">…hasta aquí</button><button class="btn small ghost" id="mvAB">Quitar repetición</button></div>'+
-      '<p class="mus-rate" id="musRate">Velocidad del video: 1</p>'+
+      '<p class="mus-rate" id="musRate">Velocidad del video: 1</p><p class="small muted">Si sale un anuncio al inicio, espera a que termine: después la velocidad se pone sola.</p>'+
       '<a class="small" href="https://www.youtube.com/watch?v='+esc(s.yt)+'" target="_blank" rel="noopener">Si el video no carga aquí, ábrelo en YouTube ↗</a>'+
       (s.plan&&s.plan.length?'<h3 style="margin-top:4px">Plan del profe ('+s.plan.reduce((a,b)=>a+b.min,0)+' minutos)</h3><p class="small muted">Toca una etapa: el video se pone a esa velocidad y empieza el reloj. Entre etapas hay 1 minuto de descanso.</p><div class="stages" id="musStages"></div><div class="mus-timer" id="musTimer" hidden></div>':'')+
     '</section>';
