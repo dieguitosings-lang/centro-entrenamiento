@@ -24,7 +24,8 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          "m-mult2": "2026-10-27", "n-digquiz": "2026-10-29", "d-word": "2026-10-29",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
-         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23"}
+         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23",
+         **{k: "2026-11-03" for k in ("m-sabores", "s-sabores", "l-sabores", "e-therewas", "e-tens")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
     for t in group:
@@ -56,10 +57,11 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-10-26", "end": "2026-10-30", "label": "Semana del 26 al 30 de octubre",
-  "ing": {"goals": ["Repasar: Unit 5 (12 animales) y was / were / wasn't / weren't",
+put("meta", "week", {"start": "2026-11-02", "end": "2026-11-06", "label": "Semana del 2 al 6 de noviembre",
+  "ing": {"goals": ["Cumulative Workshop del jueves 5: there was / there were, números (thirteen o thirty) y was / were",
+                    "Navio: practicar Unit 5 y 6 para el Pop Workshop Quiz",
                     "Siempre: pronouns, present simple y present continuous"],
-          "topics": ["e-garden", "e-waswere", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
+          "topics": ["e-therewas", "e-tens", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
           "vocab": ["garden", "animalparts", "describe"]},
   "animals": [{"w": a[0], "emoji": a[1], "is": a[2], "has": a[3], "can": a[4]} for a in ANIMALS]})
 
@@ -92,7 +94,15 @@ events = [
  ("ev-1030-batido", "2026-10-30", "len", "otro", "Proyecto «Sabores»: práctica de los batidos (enviar ingredientes para 1 batido de 1 litro)",
   "Comunicado de la Miss Andrea del 29/10: el viernes 30/10 practican los batidos en clase. Hay que enviar la cantidad de ingredientes necesaria para hacer 1 batido (1 litro). Thiago está en el Grupo 2, «Batido de frutilla» (leche, frutilla, azúcar; el grupo también usa vasos, colador y licuadora). Anotar el precio por unidad de cada producto: sirve para calcular el costo en Matemática.", ["l-anuncio"]),
  ("ev-1106-proyecto", "2026-11-06", "len", "exposicion", "Proyecto «Sabores»: presentación final (nota de Lengua, Matemática y Sociales)",
-  "Comunicado del 29/10: la presentación se cambió del miércoles 4 al viernes 6 de noviembre. Visitan compañeros de 2 salones con sus docentes y autoridades. Ese día evalúan a cada niño en las 3 materias: Lengua (anuncio publicitario: nombre, eslogan, imagen y texto), Matemática (porciones, precios y costos) y Sociales (de dónde vienen los ingredientes). Practicar en voz alta qué hizo su grupo durante la semana.", ["l-anuncio"]),
+  "OJO, la fecha no está clara: la Miss Andrea escribió el 29/10 que pasa al viernes 6 de noviembre, pero el comunicado general de las docentes de Español del 30/10 dice miércoles 4 de noviembre. Estar listo desde el miércoles 4. Visitan compañeros de 2 salones con sus docentes y autoridades. Nota individual de las 3 materias (cuenta como lección acumulativa del 1er parcial del 2do quimestre). Matemática (10): registro de ingredientes, costo de cada fruta, organización, explicación, costo total, comparar precios y sumar sin errores. Sociales (10): ubicar las frutas en el mapa por región, origen de los alimentos, identidad cultural, valorar al agricultor y exposición. Lengua: anuncio con nombre, eslogan, imagen y texto (la rúbrica de Lengua aún no está en Teams). Hablar con naturalidad, no de memoria.", ["m-sabores", "s-sabores", "l-sabores", "l-anuncio"]),
+ ("ev-1104-rubsoc", "2026-11-04", "soc", "tarea", "Sociales: llevar impresa la rúbrica del proyecto con el nombre (vence 12:00)",
+  "Tarea «RÚBRICA_FERIA POSTRES SALUDABLES»: «Traer para el próximo miércoles la rúbrica con su respectivo nombre». Son 5 criterios de 2 puntos: mapa, origen de los alimentos, identidad cultural, trabajo agrícola y exposición.", ["s-sabores"]),
+ ("ev-1105-rubmat", "2026-11-05", "mat", "tarea", "Matemática: llevar impresa la rúbrica del proyecto (vence 13:30)",
+  "Tarea «RUBRICA A EVALUAR»: «Traer la rúbrica impresa para evaluar el trabajo del proyecto interdisciplinario. Tomar en cuenta los aspectos a calificar». 7 aspectos, 10 puntos.", ["m-sabores"]),
+ ("ev-1105-laws", "2026-11-05", "ing", "examen", "Language Arts: Cumulative Workshop en clase (llevarlo impreso)",
+  "Miss Sheyla: imprimir el Cumulative Workshop para el jueves 5 y hacerlo en clase (10 puntos). Repasar con libros, cuaderno y la plataforma Navio. Temas: vocabulario con imágenes, there was / there were, leer un texto y decir True o False, ordenar oraciones con was / were y escribir bien los números (30, 50, 60, 100).", ["e-therewas", "e-tens", "e-waswere"]),
+ ("ev-1105-navio", "2026-11-05", "ing", "tarea", "Language Arts: practicar Unit 5 y 6 en Navio (sin fecha)",
+  "Publicado el 30/10 en «3. Class Resources»: «Please solve Unit #5 and 6 from Navio Platform to practise for your Pop Workshop Quiz!». No tiene fecha: conviene hacerlo antes del jueves 5.", ["e-therewas", "e-waswere"]),
  ("ev-1030-word", "2026-10-30", "dig", "tarea", "Computación: escribir en Word la lectura «El gato Manolo» y subirla a Teams",
   "Actividad en clases del 27/10 (Miss Jennifer, canal «Actividad en Clases» de Entorno Digital). Copiar en Word la lectura de la imagen: letra tamaño 16, el título centrado y de color rojo, cualquier tipo de letra para el texto, poner una imagen bajada de internet y un borde a la página. Subir el archivo como comentario en esa misma publicación. La profe no puso fecha exacta: dice «en el transcurso del día o la semana», pero todos deben subirlo.", ["d-word"]),
  ("ev-1026-proyecto", "2026-10-26", "len", "otro", "Semana del proyecto interdisciplinario «Sabores que forman parte de nuestra cultura» (26 al 30/10)",
@@ -172,9 +182,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-10-29" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-03" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
