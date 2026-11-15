@@ -24,7 +24,7 @@ ENG = [
         ("¿Cómo se dice «carretera / camino»?", ["road", "roof", "rose"], 0, "road = carretera."),
         ("Listen. Which sentence do you hear?", ["There were two birds.", "There was a bird."], 0, "You heard «There were two birds».", "There were two birds on the tree.")]),
  dict(id="e-tens", s="ing", q=2, st="actual", p=1, t="Numbers: thirteen or thirty?",
-  kid="Los números que terminan en -teen (13 a 19) y en -ty (20, 30… 90) se parecen. Entran en el Cumulative Workshop del jueves 5.",
+  kid="Los números que terminan en -teen (13 a 19) y en -ty (20, 30… 90) se parecen. Repásalos para el Homework #1 Numbers del martes 17 (2 juegos de Wordwall).",
   pts=["13 thirteen · 30 thirty", "14 fourteen · 40 forty (sin u)", "15 fifteen · 50 fifty", "16 sixteen · 60 sixty",
        "17 seventeen · 70 seventy", "18 eighteen · 80 eighty", "19 nineteen · 90 ninety", "100 one hundred",
        "Truco: -teen suena largo al final (thir-TEEN); -ty suena corto (THIR-ty)"],

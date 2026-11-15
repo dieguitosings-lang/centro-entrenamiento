@@ -57,11 +57,11 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-11-09", "end": "2026-11-13", "label": "Semana del 9 al 13 de noviembre",
-  "ing": {"goals": ["Repasar there was / there were, números (thirteen o thirty) y was / were",
-                    "Navio: practicar Unit 5 y 6 (la Miss lo pidió para practicar)",
-                    "Siempre: pronouns, present simple y present continuous"],
-          "topics": ["e-therewas", "e-tens", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
+put("meta", "week", {"start": "2026-11-16", "end": "2026-11-20", "label": "Semana del 16 al 20 de noviembre",
+  "ing": {"goals": ["Homework #1 Numbers (martes 17): resolver los 2 juegos de Wordwall de números",
+                    "Homework #2 Highlights (jueves 19): leer «Charm the Fancy Horse» y «The Timid Rabbit»",
+                    "Siempre: there was / there were, was / were, pronouns y present simple"],
+          "topics": ["e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
           "vocab": ["garden", "animalparts", "describe"]},
   "animals": [{"w": a[0], "emoji": a[1], "is": a[2], "has": a[3], "can": a[4]} for a in ANIMALS]})
 
@@ -75,8 +75,12 @@ put("meta", "musica", {"songs": [
   "note": "La partitura «Piratas del caribe Dm» está en Teams (Música 4C, canal General)."})
 
 events = [
- ("ev-1118-natcoed", "2026-11-18", "nat", "tarea", "Natural Science: tarea «COEDUCATIVES WORKSHEETS» (vence el miércoles 18/11)",
-  "Tarea nueva de Miss Sheyla para la clase Coeducative. Papá te prepara lo que haya que llevar. Tú repasa el tema Energy: los 6 tipos de energía y las fuentes renovables y no renovables.", ["n-energy"]),
+ ("ev-1117-hw1num", "2026-11-17", "ing", "tarea", "Language Arts: Homework #1 Numbers (vence martes 17/11, 7:00)",
+  "Abre los 2 enlaces de Wordwall que están en la tarea de Teams (Language Arts → 2. Homework), resuélvelos y toma una captura de cada uno al terminar. Papá te ayuda a subir las 2 capturas. Vale 10 puntos. Antes, repasa los números en inglés.", ["e-tens"]),
+ ("ev-1119-hw2hl", "2026-11-19", "ing", "tarea", "Language Arts: Homework #2 Highlights (vence jueves 19/11, 7:00)",
+  "Lee tus 2 libros de Highlights: «Charm the Fancy Horse» y «The Timid Rabbit». La Miss solo pide leerlos.", []),
+ ("ev-1118-natcoed", "2026-11-18", "nat", "tarea", "Natural Science: COEDUCATIVES WORKSHEETS (llevar el miércoles 18/11, 7:30)",
+  "Papá te imprime las hojas de trabajo del II parcial (tema Types of Energy). Llévalas en una carpeta o funda plástica a cada clase Coeducative: después de cada clase se pegan en el cuaderno. Tú repasa los 6 tipos de energía y las fuentes renovables y no renovables.", ["n-energy"]),
  ("ev-1112-len7", "2026-11-12", "len", "tarea", "Tarea #7 de Lengua: William Shakespeare (vence 23:59)",
   "Mira la imagen de la Miss sobre William Shakespeare. Copia las 5 preguntas en el cuaderno, respóndelas, toma una foto y súbela a Teams. Marca las tildes y cuida mayúsculas y puntos: la Miss baja 0,10 por cada falta.", ["l-shakespeare", "l-teatro"]),
  ("ev-1112-mat6", "2026-11-12", "mat", "tarea", "Tarea N°6 de Matemática (en hojas de carpeta, NO imprimir, vence 13:30)",
@@ -190,9 +194,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-12" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-14" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
