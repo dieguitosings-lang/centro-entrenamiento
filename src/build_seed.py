@@ -24,7 +24,7 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          "m-mult2": "2026-10-27", "n-digquiz": "2026-10-29", "d-word": "2026-10-29",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
-         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11",
+         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11", "v-weather": "2026-11-16",
          **{k: "2026-11-02" for k in ("m-sabores", "s-sabores", "l-sabores", "e-therewas", "e-tens")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
@@ -71,10 +71,19 @@ put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": 
 put("meta", "musica", {"songs": [
   {"id": "piratas", "n": 2, "title": "Piratas del Caribe", "yt": "JwEJk_LC1JY", "key": "Re menor (Dm)", "added": "2026-10-28",
    "task": "Actividad asincrónica del 28/10: tocar con el video de la canción #2 durante 15 minutos, subiendo la velocidad poco a poco. Si hace falta, 1 minuto de pausa entre cada velocidad.",
+   "plan": [{"r": 0.5, "min": 5}, {"r": 0.65, "min": 5}, {"r": 0.75, "min": 5}], "rest": 1},
+  {"id": "carol", "n": 3, "title": "Carol of the Bells", "yt": "gktRgB-l_PA", "key": "", "added": "2026-11-16",
+   "task": "Canción 3: el Mister compartió este video (tutorial lento con partitura) el 16/11 para practicar. Empieza despacio y sube la velocidad poco a poco.",
    "plan": [{"r": 0.5, "min": 5}, {"r": 0.65, "min": 5}, {"r": 0.75, "min": 5}], "rest": 1}],
   "note": "La partitura «Piratas del caribe Dm» está en Teams (Música 4C, canal General)."})
 
 events = [
+ ("ev-1117-envweather", "2026-11-17", "env", "tarea", "Env. Science: «The weather in the place where you live» (vence martes 17/11, 7:00)",
+  "Actividad de clase (10 puntos): dibuja y describe el tiempo del lugar donde vives (libro, página 74). Ejemplo: I live in Ecuador. The weather today is rainy. Repasa sunny, rainy, cloudy, windy, hot, cold y humid.", ["v-weather"]),
+ ("ev-1119-mat7", "2026-11-19", "mat", "tarea", "Tarea N°7 de Matemática (en hojas de carpeta, NO imprimir, vence jueves 19/11, 13:30)",
+  "Hazla en hojas de carpeta; después de la revisión se pega en el cuaderno. Tiene 3 partes: 28 productos de las tablas del 7, 8 y 9 (panal de abejas), 4 multiplicaciones de 3 cifras por 1 cifra con reagrupación y 2 problemas (datos, operación, pregunta y respuesta). Hazla tú solo, con buena letra.", ["m-mult2", "m-probmult", "m-mult"]),
+ ("ev-1120-pleno", "2026-11-20", "mat", "tarea", "Matemática: nuevo refuerzo en PLENO (cierra viernes 20/11, 23:59)",
+  "La Miss subió esta semana el nuevo refuerzo en la plataforma PLENO. Hazlo con calma y termínalo antes del viernes en la noche.", ["m-mult2", "m-propiedades"]),
  ("ev-1117-hw1num", "2026-11-17", "ing", "tarea", "Language Arts: Homework #1 Numbers (vence martes 17/11, 7:00)",
   "Abre los 2 enlaces de Wordwall que están en la tarea de Teams (Language Arts → 2. Homework), resuélvelos y toma una captura de cada uno al terminar. Papá te ayuda a subir las 2 capturas. Vale 10 puntos. Antes, repasa los números en inglés.", ["e-tens"]),
  ("ev-1119-hw2hl", "2026-11-19", "ing", "tarea", "Language Arts: Homework #2 Highlights (vence jueves 19/11, 7:00)",
@@ -196,7 +205,7 @@ events = [
 ]
 PRIO = {"ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-14" or eid in ("ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-15" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 

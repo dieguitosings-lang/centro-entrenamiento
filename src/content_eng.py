@@ -392,6 +392,18 @@ NAT = [
 ]
 
 ENV = [
+ dict(id="v-weather", s="env", q=2, st="actual", p=1, t="The weather where I live",
+  kid="The weather is how the sky and the air are today: sunny, rainy, cloudy, windy, hot or cold. In class you draw and describe the weather where you live (book page 74).",
+  pts=["sunny = hay sol ☀️", "rainy = está lloviendo 🌧️", "cloudy = está nublado ☁️", "windy = hace viento 🌬️",
+       "hot = hace calor, cold = hace frío, humid = está húmedo",
+       "Model: I live in Ecuador. The weather today is rainy. When the rain stops, it gets humid."],
+  listen=["I live in Ecuador.", "The weather today is rainy.", "When the rain stops, it gets humid.", "Today it is sunny and hot."],
+  quiz=[("The sun is shining. The weather is…", ["sunny", "rainy", "snowy"], 0, "Hay sol: sunny."),
+        ("Water is falling from the clouds. It is…", ["rainy", "sunny", "windy"], 0, "Llueve: rainy."),
+        ("There are many grey clouds and no sun. It is…", ["cloudy", "hot", "sunny"], 0, "Nublado: cloudy."),
+        ("The trees are moving a lot because of the air. It is…", ["windy", "rainy", "snowy"], 0, "Hace viento: windy."),
+        ("Which sentence is correct?", ["The weather today is rainy.", "The weather today it rainy.", "Weather rainy is today."], 0, "The weather today is rainy."),
+        ("After the rain, the air feels wet. It is…", ["humid", "cold", "snowy"], 0, "Aire mojado después de la lluvia: humid.")]),
  dict(id="v-matter", s="env", q=1, st="repaso", p=2, t="States of matter",
   kid="Everything is made of matter. Matter can be solid, liquid or gas.",
   pts=["Solid: has its own shape (a ball, a rock, ice)", "Liquid: takes the shape of its container and flows (water, milk, juice)",
