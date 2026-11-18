@@ -2,6 +2,19 @@
 # (palabra, español, emoji, tipo, ejemplo)
 # group: id, name, week (semana en que se agregó / se usa en clase), note
 VOCAB = [
+ dict(id="unit7verbs", name="Unit 7: 12 verbs (Pop Quiz #1)", week="2026-11-16", note="Las 12 palabras del Pop Quiz #1 de Language Arts (jueves 19/11): reconocerlas en dibujos y usarlas en oraciones.",
+  words=[("carry", "cargar / llevar", "📦", "verb", "I carry my books."),
+         ("dress up", "disfrazarse", "🦸", "verb", "We dress up for the party."),
+         ("drop", "dejar caer", "🍦", "verb", "Don't drop your ice cream!"),
+         ("help", "ayudar", "🤝", "verb", "I help my friend."),
+         ("laugh", "reírse", "😂", "verb", "We laugh at the funny clown."),
+         ("look for", "buscar", "🔍", "verb", "I look for my shoes."),
+         ("paint my face", "pintarme la cara", "🎨", "verb", "I paint my face like a tiger."),
+         ("share", "compartir", "🍪", "verb", "I share my cookies."),
+         ("shout", "gritar", "📣", "verb", "Don't shout in class."),
+         ("show", "mostrar", "🖼️", "verb", "I show my drawing to Mom."),
+         ("wait", "esperar", "⏳", "verb", "We wait for the bus."),
+         ("watch a movie", "ver una película", "🍿", "verb", "We watch a movie on Friday.")]),
  dict(id="garden", name="Unit 5: Garden animals", week="2026-09-28", note="Los 12 animales de la Unit 5 (Learning Well 3). Entran en el Written Quiz del 1 de octubre.",
   words=[("ant", "hormiga", "🐜", "noun", "The ant can run."),
          ("bat", "murciélago", "🦇", "noun", "The bat can fly at night."),

@@ -24,7 +24,7 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          "m-mult2": "2026-10-27", "n-digquiz": "2026-10-29", "d-word": "2026-10-29",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
-         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11", "v-weather": "2026-11-16",
+         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11", "v-weather": "2026-11-16", **{k: "2026-11-18" for k in ("m-mult10", "m-mult2c", "l-rimas", "e-unit7verbs")},
          **{k: "2026-11-02" for k in ("m-sabores", "s-sabores", "l-sabores", "e-therewas", "e-tens")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
@@ -58,11 +58,11 @@ ANIMALS = [
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
 put("meta", "week", {"start": "2026-11-16", "end": "2026-11-20", "label": "Semana del 16 al 20 de noviembre",
-  "ing": {"goals": ["Homework #1 Numbers (martes 17): resolver los 2 juegos de Wordwall de números",
-                    "Homework #2 Highlights (jueves 19): leer «Charm the Fancy Horse» y «The Timid Rabbit»",
+  "ing": {"goals": ["Pop Quiz #1 (jueves 19): las 12 palabras de la Unit 7 (carry, dress up, drop, help, laugh, look for, paint my face, share, shout, show, wait, watch a movie): reconocerlas en dibujos y usarlas en oraciones",
+                    "Homework #3 (jueves 19): Wellness Book, páginas 24 y 25. Homework #4 (jueves 19): Workbook, página 94",
                     "Siempre: there was / there were, was / were, pronouns y present simple"],
-          "topics": ["e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
-          "vocab": ["garden", "animalparts", "describe"]},
+          "topics": ["e-unit7verbs", "e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
+          "vocab": ["unit7verbs", "garden", "animalparts", "describe"]},
   "animals": [{"w": a[0], "emoji": a[1], "is": a[2], "has": a[3], "can": a[4]} for a in ANIMALS]})
 
 put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": SPELLING})
@@ -78,6 +78,26 @@ put("meta", "musica", {"songs": [
   "note": "La partitura «Piratas del caribe Dm» está en Teams (Música 4C, canal General)."})
 
 events = [
+ ("ev-1119-popquiz", "2026-11-19", "ing", "leccion", "Language Arts: Pop Quiz #1 – Vocabulary Unit 7 (jueves 19/11, 7:00)",
+  "Repasa las 12 palabras de la Unit 7: carry, dress up, drop, help, laugh, look for, paint my face, share, shout, show, wait y watch a movie. Tienes que reconocerlas en dibujos y usarlas en oraciones. Ejemplo: I share my cookies.", ["e-unit7verbs"]),
+ ("ev-1119-hw3", "2026-11-19", "ing", "tarea", "Language Arts: Homework #3 – Wellness Book págs. 24 y 25 (jueves 19/11, 7:00)",
+  "Resuelve las páginas 24 y 25 de tu Wellness Book y llévalo el jueves. Vale 10 puntos.", []),
+ ("ev-1119-hw4", "2026-11-19", "ing", "tarea", "Language Arts: Homework #4 – Workbook pág. 94 (jueves 19/11, 7:00)",
+  "Tema: vocabulario de la Unit 7. Resuelve la página 94 de tu Workbook. Te sirve también para el Pop Quiz.", ["e-unit7verbs"]),
+ ("ev-1123-envhw1", "2026-11-23", "env", "tarea", "Env. Science: Homework #1 – Dry Weather, libro pág. 78 (lunes 23/11, 7:00)",
+  "Página 78 del libro: haz la actividad 6. En la actividad 7 dibuja en un cartoncito pequeño cómo puedes ahorrar agua, explica en 2 líneas (en inglés) y pégalo en la página 78.", ["v-weather"]),
+ ("ev-1124-word", "2026-11-24", "dig", "tarea", "Computación: trabajo navideño en Word con WordArt (revisión martes 24/11)",
+  "En Word: borde de página navideño, una imagen navideña detrás del texto, tu nombre y curso, y un mensaje navideño con WordArt que ocupe toda la hoja. Papá lo imprime y lo llevas en un protector de hojas el martes 24/11. No se sube a Teams.", ["d-word"]),
+ ("ev-1124-socti7", "2026-11-24", "soc", "tarea", "Sociales: Trabajo individual #7 – Cambios en la población (martes 24/11, 9:00)",
+  "Papá te imprime la hoja del trabajo individual #7 (semana 30) y los anexos. Llévalos con tu nombre. El trabajo se hace en clase.", []),
+ ("ev-1124-mat8", "2026-11-24", "mat", "tarea", "Tarea N°8 de Matemática (en hojas de carpeta, NO imprimir, martes 24/11, 12:30)",
+  "Hazla en hojas de carpeta; después de la revisión se pega en el cuaderno. Hazla tú solo, con buena letra.", ["m-mult2", "m-mult10"]),
+ ("ev-1124-lenpleno", "2026-11-24", "len", "tarea", "Lengua: tarea de refuerzo en PLENO Santillana (martes 24/11, 23:59)",
+  "Haz las actividades de PLENO Santillana: Presaberes 1 (los gestos – contexto de teatro).", ["l-teatro"]),
+ ("ev-1124-lenlec1", "2026-11-24", "len", "leccion", "Lección #1 de Lengua (martes 24/11)",
+  "Temas: sílaba tónica y átona; rimas, coplas y amorfinos; análisis de rimas y coplas; cantidad de versos y rimas en cada una; el texto teatral.", ["l-rimas", "l-silaba", "l-teatro", "l-shakespeare"]),
+ ("ev-1127-matlec1", "2026-11-27", "mat", "leccion", "Lección N°1 de Matemática (viernes 27/11)",
+  "Temas: variables; tabla de frecuencia; seguro, posible e imposible; multiplicación por 10, 100 y 1 000; multiplicación por una y dos cifras; problemas de razonamiento. Repasa las tablas.", ["m-azar", "m-mult10", "m-mult2", "m-mult2c", "m-probmult"]),
  ("ev-1117-envweather", "2026-11-17", "env", "tarea", "Env. Science: «The weather in the place where you live» (vence martes 17/11, 7:00)",
   "Actividad de clase (10 puntos): dibuja y describe el tiempo del lugar donde vives (libro, página 74). Ejemplo: I live in Ecuador. The weather today is rainy. Repasa sunny, rainy, cloudy, windy, hot, cold y humid.", ["v-weather"]),
  ("ev-1119-mat7", "2026-11-19", "mat", "tarea", "Tarea N°7 de Matemática (en hojas de carpeta, NO imprimir, vence jueves 19/11, 13:30)",
@@ -203,9 +223,9 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1119-popquiz": 1, "ev-1119-hw3": 2, "ev-1119-hw4": 3, "ev-1119-mat7": 4, "ev-1124-lenlec1": 1, "ev-1124-socti7": 2, "ev-1124-mat8": 3, "ev-1124-word": 4, "ev-1124-lenpleno": 5, "ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-15" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-17" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1118-natcoed", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
