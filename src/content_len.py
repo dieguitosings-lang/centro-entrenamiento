@@ -1,7 +1,7 @@
 # Lengua y Literatura y Estudios Sociales
 # Fuentes: comunicados semanales y canal EVALUACIONES (Teams), guías 1Q.
 LEN = [
- dict(id="l-sabores", s="len", q=2, st="actual", p=1, t="Proyecto «Sabores»: anuncio y exposición",
+ dict(id="l-sabores", s="len", q=2, st="repaso", p=1, t="Proyecto «Sabores»: anuncio y exposición",
   kid="En Lengua tu grupo hizo un anuncio publicitario para su batido y lo vas a presentar. La Miss aún no publicó la rúbrica de Lengua en Teams; esto es lo que ella pidió.",
   pts=["El anuncio lleva: nombre del producto, eslogan, imagen y texto (lo pidió la Miss Andrea)",
        "Eslogan: una frase corta y fácil de recordar sobre el batido",
@@ -123,7 +123,7 @@ LEN = [
         ("En «te-le-vi-sor», ¿cuál es la sílaba tónica?", ["sor", "te", "vi"], 0, "televiSOR: suena más fuerte al final."),
         ("En «lá-gri-mas», ¿cuál es la sílaba tónica?", ["lá", "gri", "mas"], 0, "LÁgrimas, con tilde en la primera a."),
         ("En «a-zú-car», ¿cuál es la sílaba tónica?", ["zú", "a", "car"], 0, "aZÚcar, con tilde en la u.")]),
- dict(id="l-catalogo", s="len", q=2, st="actual", p=1, t="El catálogo",
+ dict(id="l-catalogo", s="len", q=2, st="repaso", p=1, t="El catálogo",
   kid="Un catálogo muestra productos para que la gente los conozca y los compre.",
   pts=["Imagen del producto", "Nombre", "Descripción corta (con adjetivos)", "Precio",
        "Está ordenado por secciones"],
@@ -131,7 +131,7 @@ LEN = [
         ("¿Qué NO suele tener un catálogo?", ["Precio", "Imagen", "Nudo y desenlace"], 2, "Nudo y desenlace son partes de un cuento."),
         ("«Zapatillas rojas, ligeras y cómodas» es la…", ["descripción", "firma", "fecha"], 0, "Describe el producto con adjetivos."),
         ("En un catálogo los productos se ordenan en…", ["secciones", "estrofas", "párrafos de cuento"], 0, "Secciones: ropa, juguetes, etc.")]),
- dict(id="l-anuncio", s="len", q=2, st="actual", p=1, t="El anuncio publicitario",
+ dict(id="l-anuncio", s="len", q=2, st="repaso", p=1, t="El anuncio publicitario",
   kid="Un anuncio quiere convencerte de comprar o usar algo. Entra en la Lección #2 del martes 13 de octubre (concepto, elementos y ejemplos).",
   pts=["Nombre del producto", "Imagen llamativa", "Eslogan: frase corta y fácil de recordar",
        "Adjetivos que convencen: rico, rápido, nuevo", "Dónde comprarlo o precio"],
@@ -140,7 +140,7 @@ LEN = [
         ("¿Cuál es un buen eslogan para una pelota?", ["¡Rebota y gana!", "La pelota es un objeto.", "Había una vez una pelota."], 0, "Corto y llamativo."),
         ("¿Qué palabras ayudan a convencer en un anuncio?", ["rico, nuevo, rápido", "había una vez", "querido amigo"], 0, "Adjetivos que hacen ver bonito el producto."),
         ("¿Qué parte del anuncio llama la atención con colores?", ["La imagen", "La firma", "El nudo"], 0, "La imagen llamativa atrae a la gente.")]),
- dict(id="l-roles", s="len", q=2, st="actual", p=1, t="Juego de roles",
+ dict(id="l-roles", s="len", q=2, st="repaso", p=1, t="Juego de roles",
   kid="En un juego de roles actúas como un personaje: hablas y te mueves como él.",
   pts=["Cada uno tiene un papel (rol)", "Se respetan los turnos para hablar", "Se usa la voz y los gestos",
        "Se escucha a los compañeros"],
@@ -214,7 +214,7 @@ LEN = [
 ]
 
 SOC = [
- dict(id="s-sabores", s="soc", q=2, st="actual", p=1, t="Proyecto «Sabores»: frutas, regiones y agricultores (rúbrica)",
+ dict(id="s-sabores", s="soc", q=2, st="repaso", p=1, t="Proyecto «Sabores»: frutas, regiones y agricultores (rúbrica)",
   kid="En Sociales te califican sobre 10 (5 partes de 2 puntos) lo que sabes de dónde vienen las frutas, cómo se relacionan con nuestra cultura y por qué hay que valorar a los agricultores.",
   pts=["1. Ubicación en el mapa y geografía (2 puntos): ubicar cada fruta en su región natural y colorear limpio, sin salirse de los límites",
        "2. Origen de los alimentos (2 puntos): decir qué productos son autóctonos de cada región y por qué son tradicionales",
@@ -519,7 +519,7 @@ DIG = [
         ("Antes de cambiar el color del título tienes que…", ["seleccionar (pintar) el título", "cerrar Word", "borrar el título"], 0, "Primero seleccionas el texto y luego eliges el color."),
         ("¿Dónde pones el borde a toda la página?", ["Diseño → Bordes de página", "Inicio → Negrita", "Archivo → Guardar"], 0, "Pestaña Diseño → Bordes de página.")]),
  # Publicación del 13/10/2026 (Miss Jennifer): fichas de cartulina con los iconos de la pestaña Inicio de Word y lección.
- dict(id="d-iconos", s="dig", q=2, st="actual", p=1, t="Los iconos de la pestaña Inicio de Word",
+ dict(id="d-iconos", s="dig", q=2, st="repaso", p=1, t="Los iconos de la pestaña Inicio de Word",
   kid="Mira cada icono y di su nombre. Papá te hace las fichas: adelante el icono y atrás el nombre. Úsalas para jugar y estudiar para la lección.",
   pts=["K = Cursiva (letra inclinada)", "S = Subrayado (raya debajo)", "abc con una raya en medio = Tachado",
        "x₂ = Subíndice (letra pequeña abajo)", "x² = Superíndice (letra pequeña arriba)",

@@ -1,7 +1,7 @@
 # Matemática — contenido para el Centro de Estudios de Thiago
 # Fuentes: resúmenes semanales y canal EVALUACIONES de 4°C_MATEMÁTICAS (Teams), libreta 1Q.
 MAT = [
- dict(id="m-sabores", s="mat", q=2, st="actual", p=1, t="Proyecto «Sabores»: costos del batido (rúbrica)",
+ dict(id="m-sabores", s="mat", q=2, st="repaso", p=1, t="Proyecto «Sabores»: costos del batido (rúbrica)",
   kid="En el proyecto «Sabores» tu grupo hace un batido de frutilla. En Matemática te califican sobre 10 cómo calculas lo que cuesta. Usa los precios reales que anotó tu grupo: los de este juego son solo ejemplos.",
   pts=["Registro de ingredientes (1 punto): escribir la lista completa de lo que se usa (leche, frutilla, azúcar, vasos…)",
        "Costo de cada fruta por separado (2 puntos): saber cuánto cuesta cada producto por unidad",

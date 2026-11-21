@@ -355,7 +355,7 @@ NAT = [
         ("Which part turns the food into a thick liquid?", ["stomach", "esophagus", "mouth"], 0, "The stomach."),
         ("What comes after the stomach?", ["small intestine", "esophagus", "mouth"], 0, "Stomach → small intestine."),
         ("The journey of your food is called…", ["digestion", "saliva", "intestine"], 0, "Digestion: el viaje de la comida por el cuerpo.")]),
- dict(id="n-digquiz", s="nat", q=2, st="actual", p=1, t="Pop Quiz: The Digestive System (las 10 preguntas)",
+ dict(id="n-digquiz", s="nat", q=2, st="repaso", p=1, t="Pop Quiz: The Digestive System (las 10 preguntas)",
   kid="These are the 10 questions of Miss Sheyla's Pop Quiz. Digestion breaks down food so your body can use the nutrients.",
   pts=["Main job: to break down food and absorb nutrients", "Digestion begins in the mouth",
        "Teeth: break food into smaller pieces", "Esophagus: carries food from the mouth to the stomach",

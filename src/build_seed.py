@@ -57,11 +57,11 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-11-16", "end": "2026-11-20", "label": "Semana del 16 al 20 de noviembre",
-  "ing": {"goals": ["Pop Quiz #1 (jueves 19): las 12 palabras de la Unit 7 (carry, dress up, drop, help, laugh, look for, paint my face, share, shout, show, wait, watch a movie): reconocerlas en dibujos y usarlas en oraciones",
-                    "Homework #3 (jueves 19): Wellness Book, páginas 24 y 25. Homework #4 (jueves 19): Workbook, página 94",
+put("meta", "week", {"start": "2026-11-23", "end": "2026-11-27", "label": "Semana del 23 al 27 de noviembre",
+  "ing": {"goals": ["Env. Science Homework #1 (lunes 23): «Dry Weather», libro página 78 (dibujo de cómo ahorrar agua en un cartoncito)",
+                    "Repasar las 12 palabras de la Unit 7 (carry, dress up, drop, help, laugh, look for, paint my face, share, shout, show, wait, watch a movie)",
                     "Siempre: there was / there were, was / were, pronouns y present simple"],
-          "topics": ["e-unit7verbs", "e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
+          "topics": ["e-unit7verbs", "v-weather", "e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
           "vocab": ["unit7verbs", "garden", "animalparts", "describe"]},
   "animals": [{"w": a[0], "emoji": a[1], "is": a[2], "has": a[3], "can": a[4]} for a in ANIMALS]})
 
@@ -69,13 +69,10 @@ put("meta", "spelling", {"title": "4th Grade Spelling Bee Study List", "words": 
 
 # Música (MÚSICA 4C): videos para practicar la melódica con el piano del centro.
 put("meta", "musica", {"songs": [
-  {"id": "piratas", "n": 2, "title": "Piratas del Caribe", "yt": "JwEJk_LC1JY", "key": "Re menor (Dm)", "added": "2026-10-28",
-   "task": "Actividad asincrónica del 28/10: tocar con el video de la canción #2 durante 15 minutos, subiendo la velocidad poco a poco. Si hace falta, 1 minuto de pausa entre cada velocidad.",
-   "plan": [{"r": 0.5, "min": 5}, {"r": 0.65, "min": 5}, {"r": 0.75, "min": 5}], "rest": 1},
   {"id": "carol", "n": 3, "title": "Carol of the Bells", "yt": "gktRgB-l_PA", "key": "", "added": "2026-11-16",
-   "task": "Canción 3: el Mister compartió este video (tutorial lento con partitura) el 16/11 para practicar. Empieza despacio y sube la velocidad poco a poco.",
+   "task": "Canción 3 (la que están aprendiendo ahora): el Mister compartió este video (tutorial lento con partitura) para practicar. Empieza despacio y sube la velocidad poco a poco.",
    "plan": [{"r": 0.5, "min": 5}, {"r": 0.65, "min": 5}, {"r": 0.75, "min": 5}], "rest": 1}],
-  "note": "La partitura «Piratas del caribe Dm» está en Teams (Música 4C, canal General)."})
+  "note": "Canción actual: «Carol of the Bells» (canción 3). El video está en Teams (Música 4C, canal General)."})
 
 events = [
  ("ev-1125-soctarea1", "2026-11-25", "soc", "tarea", "Sociales: Tarea #1 – Cambios en la población, en el CUADERNO (miércoles 25/11, 10:00)",
@@ -227,7 +224,7 @@ events = [
 ]
 PRIO = {"ev-1119-popquiz": 1, "ev-1119-hw3": 2, "ev-1119-hw4": 3, "ev-1119-mat7": 4, "ev-1124-lenlec1": 1, "ev-1124-socti7": 2, "ev-1124-mat8": 3, "ev-1124-word": 4, "ev-1124-lenpleno": 5, "ev-1125-soctarea1": 1, "ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
-    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-18" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1119-popquiz", "ev-1119-hw3", "ev-1119-hw4", "ev-1119-mat7", "ev-1118-natcoed", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
+    doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-20" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1119-popquiz", "ev-1119-hw3", "ev-1119-hw4", "ev-1119-mat7", "ev-1118-natcoed", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
     put("events", eid, doc)
 
