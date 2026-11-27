@@ -24,7 +24,7 @@ ADDED = {**{k: "2026-09-29" for k in ("s-nombres", "f-lieux", "f-temps", "f-vali
          "m-mult2": "2026-10-27", "n-digquiz": "2026-10-29", "d-word": "2026-10-29",
          **{k: "2026-10-09" for k in ("l-conjugacion", "l-silaba", "s-autoridades")},
          **{k: "2026-10-14" for k in ("v-forces", "v-magnets", "s-tradiciones")},
-         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11", "v-weather": "2026-11-16", **{k: "2026-11-18" for k in ("m-mult10", "m-mult2c", "l-rimas", "e-unit7verbs")}, "s-ocupaciones": "2026-11-19", "e-pastreg": "2026-11-25", "v-savewater": "2026-11-25", "s-trabajoregiones": "2026-11-26",
+         "m-azar": "2026-10-18", "s-turismo": "2026-10-20", "d-iconos": "2026-10-22", "l-teatro": "2026-10-23", "l-shakespeare": "2026-11-10", "n-energy": "2026-11-11", "v-weather": "2026-11-16", **{k: "2026-11-18" for k in ("m-mult10", "m-mult2c", "l-rimas", "e-unit7verbs")}, "s-ocupaciones": "2026-11-19", "e-pastreg": "2026-11-25", "v-savewater": "2026-11-25", "s-trabajoregiones": "2026-11-26", "m-patron": "2026-11-27",
          **{k: "2026-11-02" for k in ("m-sabores", "s-sabores", "l-sabores", "e-therewas", "e-tens")}}
 order = 0
 for group in (MAT, ENG, NAT, ENV, LEN, SOC, FR, DIG):
@@ -57,9 +57,9 @@ ANIMALS = [
  ("grasshopper", "🦗", "green", "six long legs", "jump very high"),
  ("frog", "🐸", "green", "four legs", "jump and swim"),
 ]
-put("meta", "week", {"start": "2026-11-23", "end": "2026-11-27", "label": "Semana del 23 al 27 de noviembre",
-  "ing": {"goals": ["Pop Quiz #2 (jueves 26): pasado de los verbos regulares (reglas de -ed) y oraciones afirmativas y negativas con didn't",
-                    "Env. Science (lunes 30): preparar y grabar el video de máximo 2 minutos sobre el agua (cuándo la uso y cómo ahorrarla)",
+put("meta", "week", {"start": "2026-11-30", "end": "2026-12-04", "label": "Semana del 30 de noviembre al 4 de diciembre",
+  "ing": {"goals": ["Env. Science (lunes 30, 7:00): grabar y subir el video de máximo 2 minutos sobre el agua (cuándo la uso y cómo ahorrarla)",
+                    "Repasar el pasado de los verbos regulares (reglas de -ed) y oraciones con didn't",
                     "Siempre: las 12 palabras de la Unit 7, was / were, pronouns y present simple"],
           "topics": ["e-pastreg", "v-savewater", "e-unit7verbs", "v-weather", "e-tens", "e-therewas", "e-waswere", "e-garden", "e-spelling", "e-pronouns", "e-simple", "e-continuous"],
           "vocab": ["unit7verbs", "garden", "animalparts", "describe"]},
@@ -75,6 +75,14 @@ put("meta", "musica", {"songs": [
   "note": "Canción actual: «Carol of the Bells» (canción 3). El video está en Teams (Música 4C, canal General)."})
 
 events = [
+ ("ev-1130-efiasinc2", "2026-11-30", "Ed. Física", "tarea", "Ed. Física: Clase asincrónica – Actividad de Educación Física (vence lunes 30/11, 23:59)",
+  "Es un Word de 2 hojas (Teams → Tareas → CLASE ASINCRONICAS → Mi trabajo): 1) escribe la palabra correcta (correr, saltar, lanzar, equilibrio o atrapar); 2) verdadero o falso sobre reglas y cuidado del cuerpo; 3) inventa un juego (nombre, participantes, materiales, reglas y cómo se gana); 4) dibuja una medalla deportiva. Papá te ayuda a entregarla.", []),
+ ("ev-1201-matasinc3", "2026-12-01", "mat", "tarea", "Matemática: Actividad asincrónica N°3 – sucesiones, × 10/100/1 000 y multiplicaciones (vence martes 1/12, 23:59)",
+  "Papá te imprime la hoja (1 hoja). Tiene 3 partes: 1) encontrar el patrón de 3 sucesiones y escribir el número que sigue; 2) completar 2 tablas de × 10, × 100 y × 1 000; 3) 4 multiplicaciones de 3 cifras por 2 cifras. Hazla tú solito y luego papá te ayuda a subir la foto a Teams.", ["m-patron", "m-mult10", "m-mult2c"]),
+ ("ev-1201-lenasinc2", "2026-12-01", "len", "tarea", "Lengua: Actividad asincrónica #2 – el aviso clasificado (vence martes 1/12, 23:59)",
+  "Papá te imprime la hoja (1 hoja). Lee el aviso «Se buscan voluntarios ante el Fenómeno de El Niño» y responde: el título o propósito del aviso, encierra el cuerpo del texto, qué provincias menciona y cómo podrías ayudar tú. Escribe con letra clara y revisa la ortografía (la Miss baja 0,10 por cada falta). Papá te ayuda a subir la foto.", []),
+ ("ev-1201-fcasinc", "2026-12-01", "F. Cristiana", "tarea", "Formación Cristiana: Clase asincrónica – «La naturaleza nos habla de su Creador» (vence martes 1/12, 14:00)",
+  "Mira el video del enlace de la tarea (cuidado de la naturaleza). Luego completa la ficha de 2 hojas: responde cómo puedes respetar y cuidar la naturaleza, dibuja y colorea un paisaje, escribe tu compromiso y encierra el sol (sí) o la tormenta (no). Vale 10 puntos. Papá te ayuda a subir las fotos.", []),
  ("ev-1201-matasinc2", "2026-12-01", "mat", "tarea", "Matemática: Actividad asincrónica N°2 – multiplicaciones de dos cifras (vence martes 1/12, 23:59)",
   "Papá te imprime la hoja (1 hoja). Resuelve las 6 multiplicaciones de 3 cifras por 2 cifras: primero por las unidades, luego por las decenas, y sumas las dos filas. Hazlas tú solito y luego papá te ayuda a subir la foto a Teams.", ["m-mult2c", "m-mult2"]),
  ("ev-1202-socsinc", "2026-12-02", "soc", "tarea", "Sociales: copiar en el cuaderno «¿En qué trabaja la gente de mi provincia?» (vence miércoles 2/12, 9:30)",
@@ -111,8 +119,8 @@ events = [
   "Haz las actividades de PLENO Santillana: Presaberes 1 (los gestos – contexto de teatro).", ["l-teatro"]),
  ("ev-1124-lenlec1", "2026-11-24", "len", "leccion", "Lección #1 de Lengua (martes 24/11)",
   "Temas: sílaba tónica y átona; rimas, coplas y amorfinos; análisis de rimas y coplas; cantidad de versos y rimas en cada una; el texto teatral.", ["l-rimas", "l-silaba", "l-teatro", "l-shakespeare"]),
- ("ev-1127-matlec1", "2026-11-27", "mat", "leccion", "Lección N°1 de Matemática (viernes 27/11)",
-  "Temas: variables; tabla de frecuencia; seguro, posible e imposible; multiplicación por 10, 100 y 1 000; multiplicación por una y dos cifras; problemas de razonamiento. Repasa las tablas.", ["m-azar", "m-mult10", "m-mult2", "m-mult2c", "m-probmult"]),
+ ("ev-1204-matlec1", "2026-12-04", "mat", "leccion", "Lección N°1 de Matemática (se cambió para el viernes 4/12)",
+  "La Miss la cambió del viernes 27/11 al viernes 4/12. Temas: variables; tabla de frecuencia; seguro, posible e imposible; multiplicación por 10, 100 y 1 000; multiplicación por una y dos cifras; problemas de razonamiento. Repasa las tablas todos los días.", ["m-azar", "m-mult10", "m-mult2", "m-mult2c", "m-probmult"]),
  ("ev-1117-envweather", "2026-11-17", "env", "tarea", "Env. Science: «The weather in the place where you live» (vence martes 17/11, 7:00)",
   "Actividad de clase (10 puntos): dibuja y describe el tiempo del lugar donde vives (libro, página 74). Ejemplo: I live in Ecuador. The weather today is rainy. Repasa sunny, rainy, cloudy, windy, hot, cold y humid.", ["v-weather"]),
  ("ev-1119-mat7", "2026-11-19", "mat", "tarea", "Tarea N°7 de Matemática (en hojas de carpeta, NO imprimir, vence jueves 19/11, 13:30)",
@@ -238,7 +246,7 @@ events = [
  ("ev-1002-mat", "2026-10-02", "mat", "leccion", "Lección semanal N°1 de Matemática",
   "La multiplicación (concepto, términos, suma abreviada), graficar monedas según su valor, problemas de razonamiento.", ["m-mult", "m-monedas", "m-probmult"]),
 ]
-PRIO = {"ev-1126-popquiz2": 1, "ev-1126-socasinc1": 2, "ev-1126-lenavisos": 3, "ev-1119-popquiz": 1, "ev-1119-hw3": 2, "ev-1119-hw4": 3, "ev-1119-mat7": 4, "ev-1124-lenlec1": 1, "ev-1124-socti7": 2, "ev-1124-mat8": 3, "ev-1124-word": 4, "ev-1124-lenpleno": 5, "ev-1125-soctarea1": 1, "ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
+PRIO = {"ev-1201-matasinc3": 1, "ev-1201-lenasinc2": 2, "ev-1201-fcasinc": 3, "ev-1201-matasinc2": 4, "ev-1126-popquiz2": 1, "ev-1126-socasinc1": 2, "ev-1126-lenavisos": 3, "ev-1119-popquiz": 1, "ev-1119-hw3": 2, "ev-1119-hw4": 3, "ev-1119-mat7": 4, "ev-1124-lenlec1": 1, "ev-1124-socti7": 2, "ev-1124-mat8": 3, "ev-1124-word": 4, "ev-1124-lenpleno": 5, "ev-1125-soctarea1": 1, "ev-1117-hw1num": 1, "ev-1119-hw2hl": 1, "ev-1118-natcoed": 1, "ev-1112-mat6": 1, "ev-1112-len7": 2, "ev-1113-pleno": 2, "ev-1104-rubsoc": 1, "ev-1105-laws": 1, "ev-1105-rubmat": 2, "ev-1105-navio": 3, "ev-1106-proyecto": 1, "ev-1030-natquiz": 1, "ev-1030-natasinc": 2, "ev-1030-hl": 3, "ev-1104-fr7": 1, "ev-1104-socasinc": 2, "ev-1030-word": 4, "ev-1030-batido": 5, "ev-1029-matasinc": 1, "ev-1029-lenfisico": 2, "ev-1027-mat5": 1, "ev-1027-hl": 2, "ev-1028-fr": 1, "ev-1021-nat": 1, "ev-1021-socti5": 2, "ev-1020-env2": 1, "ev-1020-env1": 2, "ev-1015-hw5": 1, "ev-1015-lt4": 2, "ev-1014-socti4": 1, "ev-1013-len": 1, "ev-1013-lt3": 2, "ev-1013-lt2": 3, "ev-1014-soc": 1, "ev-1014-fr": 2, "ev-1014-mat": 3, "ev-1016-mat": 1, "ev-1016-pleno": 2, "ev-1008-mat": 1, "ev-1008-hw3": 2, "ev-1008-hw4": 3, "ev-0930-soc": 1, "ev-0930-nat": 2, "ev-0930-spell": 3, "ev-1001-quiz": 1, "ev-1001-mat": 2}
 for eid, d, s, k, title, detail, tops in events:
     doc = {"date": d, "subject": s, "kind": k, "title": title, "detail": detail, "topics": tops, "done": d <= "2026-11-26" or eid in ("ev-1117-hw1num", "ev-1119-hw2hl", "ev-1119-popquiz", "ev-1119-hw3", "ev-1119-hw4", "ev-1119-mat7", "ev-1118-natcoed", "ev-1020-env1", "ev-1020-env2", "ev-1029-matasinc", "ev-1030-natquiz", "ev-1104-fr7", "ev-1104-socasinc"), "prio": PRIO.get(eid, 5)}
     if "e-spelling" in tops: doc["spell"] = True
